@@ -1,0 +1,128 @@
+// Prisma Schema — Smart Small Rack Warehouse Monitoring System
+// Database: SQLite (lightweight, no server needed for edge/IoT deployment)
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "sqlite"
+  url      = env("DATABASE_URL")
+}
+
+// ============================================================================
+// RACK — Physical storage unit containing multiple rows
+// ============================================================================
+model Rack {
+  id          String   @id @default(cuid())
+  rackId      String   @unique  // e.g. "RACK-001"
+  location    String   @default("Warehouse A")
+  description String?
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  rows        RackRow[]
+  telemetrySnapshots TelemetrySnapshot[]
+  ledgerEntries      InventoryLedger[]
+}
+
+// ============================================================================
+// RACK ROW — Single horizontal shelf within a rack (one SKU per row)
+// ============================================================================
+model RackRow {
+  id              String   @id @default(cuid())
+  rowId           String   @unique  // e.g. "Row 01"
+  rowNumber       Int
+  rackId          String
+  rack            Rack     @relation(fields: [rackId], references: [id])
+  sku             String
+  product         Product  @relation(fields: [sku], references: [sku])
+  capacity        Int      // max boxes
+  rowSpanCm       Float    // total shelf length in cm
+  leftSensorId    String
+  rightSensorId   String
+  leftDistanceCm  Float    @default(0)
+  rightDistanceCm Float    @default(0)
+  lastUpdated     DateTime @default(now())
+  createdAt       DateTime @default(now())
+  updatedAt       DateTime @updatedAt
+
+  ledgerEntries   InventoryLedger[]
+  sensorLeft      Sensor   @relation("LeftSensor",  fields: [leftSensorId],  references: [sensorId])
+  sensorRight     Sensor   @relation("RightSensor", fields: [rightSensorId], references: [sensorId])
+}
+
+// ============================================================================
+// PRODUCT — Registered SKU with axial (ultrasonic measurement axis) dimensions
+// ============================================================================
+model Product {
+  id          String   @id @default(cuid())
+  sku         String   @unique  // e.g. "SKU-001"
+  name        String
+  lengthCm    Float    // axial length along measurement axis (key for stock calc)
+  widthCm     Float
+  heightCm    Float
+  description String?
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  rows        RackRow[]
+  ledgerEntries InventoryLedger[]
+}
+
+// ============================================================================
+// SENSOR — Any hardware sensor node attached to a rack row
+// ============================================================================
+model Sensor {
+  id          String    @id @default(cuid())
+  sensorId    String    @unique  // e.g. "US-01", "GAS-01", "ENV-01"
+  name        String
+  type        String    // ULTRASONIC | GAS | ENV
+  rowId       String    // "Row 01" or "Ambient Frame"
+  position    String    // "Left End" | "Right End" | "Upper Right Post"
+  gpio        String    // e.g. "TRIG: GPIO12 / ECHO: GPIO13"
+  online      Boolean   @default(true)
+  signalRssi  Int       @default(-60)
+  lastSeen    DateTime  @default(now())
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime  @updatedAt
+
+  rowAsLeft   RackRow[] @relation("LeftSensor")
+  rowAsRight  RackRow[] @relation("RightSensor")
+}
+
+// ============================================================================
+// INVENTORY LEDGER — Immutable audit trail of every stock change event
+// ============================================================================
+model InventoryLedger {
+  id            String   @id @default(cuid())
+  txId          String   @unique  // human-readable "TX-1048"
+  rackId        String
+  rack          Rack     @relation(fields: [rackId], references: [id])
+  rowId         String
+  row           RackRow  @relation(fields: [rowId], references: [id])
+  sku           String
+  product       Product  @relation(fields: [sku], references: [sku])
+  prevStock     Int
+  currentStock  Int
+  diff          Int      // positive = Stock In, negative = Stock Out
+  eventType     String   // "Stock In" | "Stock Out"
+  trigger       String   // e.g. "US-01/US-02 Delta (-20cm)"
+  leftDistCm    Float    // sensor readings at time of event
+  rightDistCm   Float
+  createdAt     DateTime @default(now())
+}
+
+// ============================================================================
+// TELEMETRY SNAPSHOT — Point-in-time environmental readings (ring-buffer kept)
+// ============================================================================
+model TelemetrySnapshot {
+  id              String   @id @default(cuid())
+  rackId          String
+  rack            Rack     @relation(fields: [rackId], references: [id])
+  temperatureC    Float
+  humidityRh      Float
+  gasPpm          Float
+  soundSpeedMs    Float    // computed: 331.3 + 0.606 * temperatureC
+  createdAt       DateTime @default(now())
+}

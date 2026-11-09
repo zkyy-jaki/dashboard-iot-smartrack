@@ -1,0 +1,9 @@
+# .gitignore — SmarTrack WMS Backend
+node_modules/
+dist/
+*.js.map
+dev.db
+dev.db-journal
+.env
+*.log
+
