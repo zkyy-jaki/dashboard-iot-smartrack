@@ -188,7 +188,7 @@ function printMenu() {
   console.log(' [2] Rak Terisi Sebagian     (L1: 1, L2: 2, L3: 3)  -> 3 LED: BLUE');
   console.log(' [3] Rak Penuh Kapasitas     (L1: 4, L2: 4, L3: 4)  -> 3 LED: GREEN');
   console.log(' [4] Campuran Tiap Lantai    (L1: 0, L2: 4, L3: 2)  -> L1: RED, L2: GREEN, L3: BLUE');
-  console.log(' [5] SIMULASI BAHAYA GAS     (MQ-2: 750 ppm)        -> Alarm + Semua BLINK_RED + Buzzer');
+  console.log(' [5] SIMULASI BAHAYA GAS     (MQ-2: 2100 ppm)       -> Alarm + Semua BLINK_RED + Buzzer');
   console.log(' [6] SIMULASI BAHAYA SUHU    (DHT11: 54°C)          -> Alarm + Semua BLINK_RED + Buzzer');
   console.log(' [7] AUTO-LOOP REAL-TIME     (Simulasi dinamis tiap 3 detik)');
   console.log(' [8] Hentikan Auto-Loop');
@@ -228,8 +228,8 @@ rl.on('line', (line) => {
       break;
     case '5':
       stopAuto();
-      console.log('\n▶ Mengirim Skenario 5: Bahaya Gas 750 ppm...');
-      sendTelemetry({ f1Items: 2, f2Items: 2, f3Items: 2, gasPpm: 750 });
+      console.log('\n▶ Mengirim Skenario 5: Bahaya Gas 2100 ppm...');
+      sendTelemetry({ f1Items: 2, f2Items: 2, f3Items: 2, gasPpm: 2100 });
       break;
     case '6':
       stopAuto();

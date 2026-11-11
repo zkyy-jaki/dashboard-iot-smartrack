@@ -42,16 +42,16 @@ export const APP_CONFIG = {
   // --------------------------------------------------------------------------
   THRESHOLDS: {
     /**
-     * Ambang batas waspada kebocoran gas/asap (PPM) dari sensor MQ-2.
+     * Ambang batas waspada kebocoran gas/asap (PPM / ADC) dari sensor MQ-2.
      * Nilai di atas ini akan memunculkan status 'Warning' (Kuning).
      */
-    GAS_WARNING_PPM: 350,
+    GAS_WARNING_PPM: 700,
 
     /**
-     * Ambang batas bahaya gas/asap (PPM).
+     * Ambang batas bahaya gas/asap (PPM / ADC).
      * Nilai di atas ini memicu status 'Danger' (Merah) dan menyalakan buzzer darurat.
      */
-    GAS_DANGER_PPM: 600,
+    GAS_DANGER_PPM: 1800,
 
     /**
      * Ambang batas bahaya suhu tinggi (°C) dari sensor SHT31.
@@ -75,7 +75,14 @@ export const APP_CONFIG = {
      * URL API Backend Express.
      * Dapat dioverride melalui file `.env` dengan variabel `VITE_BACKEND_URL`.
      */
-    BACKEND_URL: import.meta.env.VITE_BACKEND_URL || 'http://localhost:3001',
+    BACKEND_URL: (() => {
+      let url = String(import.meta.env.VITE_BACKEND_URL || 'http://localhost:3001').trim();
+      url = url.replace(/\/+$/, '');
+      if (typeof window !== 'undefined' && window.location.protocol === 'https:' && url.startsWith('http://') && !url.includes('localhost')) {
+        url = url.replace(/^http:\/\//, 'https://');
+      }
+      return url;
+    })(),
 
     /**
      * Alamat default broker MQTT tempat ESP32 mengirim data.

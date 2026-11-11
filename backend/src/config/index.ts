@@ -68,8 +68,8 @@ export const config = {
 
   thresholds: {
     tempDangerC: parseFloat('TEMP_DANGER_THRESHOLD_C', 50.0),
-    gasDangerPpm: parseFloat('GAS_DANGER_THRESHOLD_PPM', 600),
-    gasWarningPpm: parseFloat('GAS_WARNING_THRESHOLD_PPM', 350),
+    gasDangerPpm: parseFloat('GAS_DANGER_THRESHOLD_PPM', 1800),
+    gasWarningPpm: parseFloat('GAS_WARNING_THRESHOLD_PPM', 700),
   },
 
   rack: {
