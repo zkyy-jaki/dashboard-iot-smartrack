@@ -96,14 +96,19 @@ export const SensorMonitoringPage: React.FC<SensorMonitoringPageProps> = ({
   const disconnectedSensors = sensors.filter((s) => !s.online);
 
   const handleLogGasTestAlert = () => {
+    const now = new Date();
+    const pad = (n: number) => String(n).padStart(2, '0');
+    const currentTs = `${now.getFullYear()}-${pad(now.getMonth() + 1)}-${pad(now.getDate())} ${pad(now.getHours())}:${pad(now.getMinutes())}:${pad(now.getSeconds())}`;
+    const currentGas = telemetryPayload?.environment?.gas_raw ?? envData.gasPpm;
+
     const newAlert: GasAlert = {
-      id: `GA-0${gasAlerts.length + 1}`,
-      timestamp: '2026-11-03 16:36:10',
-      readingPpm: envData.gasPpm,
+      id: `GA-${Date.now().toString().slice(-4)}`,
+      timestamp: currentTs,
+      readingPpm: currentGas,
       status: gasStatus as 'Normal' | 'Warning' | 'Danger',
-      message: `Diagnostik ambang batas manual tercatat pada ${envData.gasPpm} ppm.`
+      message: `Snapshot diagnostik manual tercatat pada ${currentGas} ADC (${gasStatus}).`
     };
-    setGasAlerts([newAlert, ...gasAlerts]);
+    setGasAlerts([newAlert, ...gasAlerts.slice(0, 19)]);
     triggerToast('Snapshot status sensor gas berhasil dicatat ke riwayat.');
   };
 
@@ -425,26 +430,46 @@ export const SensorMonitoringPage: React.FC<SensorMonitoringPageProps> = ({
               <span className="text-xs font-mono font-bold uppercase text-[#1C100C]">
                 Riwayat Peringatan Gas
               </span>
-              <button
-                onClick={handleLogGasTestAlert}
-                className="px-2 py-1 text-[11px] font-mono bg-[#F5F6F4] border border-[#E3E7E5] hover:border-orange-500 rounded-sm"
-              >
-                + Catat Snapshot
-              </button>
+              <div className="flex items-center gap-1.5">
+                {gasAlerts.length > 0 && (
+                  <button
+                    onClick={() => {
+                      setGasAlerts([]);
+                      triggerToast('Riwayat peringatan gas telah dibersihkan.');
+                    }}
+                    className="px-2 py-1 text-[11px] font-mono text-stone-500 hover:text-red-700 bg-white border border-[#E3E7E5] hover:border-red-300 rounded-sm transition-colors"
+                    title="Kosongkan riwayat log gas"
+                  >
+                    Bersihkan
+                  </button>
+                )}
+                <button
+                  onClick={handleLogGasTestAlert}
+                  className="px-2 py-1 text-[11px] font-mono bg-[#F5F6F4] border border-[#E3E7E5] hover:border-orange-500 rounded-sm"
+                >
+                  + Catat Snapshot
+                </button>
+              </div>
             </div>
             <div className="border border-[#E3E7E5] rounded-sm divide-y divide-[#E3E7E5] max-h-44 overflow-y-auto">
-              {gasAlerts.map((alert) => (
-                <div key={alert.id} className="p-2.5 text-xs font-mono flex items-start justify-between gap-2">
-                  <div>
-                    <div className="flex items-center gap-2">
-                      <span className="font-bold text-[#1C100C]">{alert.timestamp}</span>
-                      <span className="text-orange-700 font-semibold">{alert.readingPpm} ppm</span>
-                    </div>
-                    <div className="text-[11px] font-sans text-[#77827D] mt-0.5 break-words">{alert.message}</div>
-                  </div>
-                  <StatusBadge status={alert.status} />
+              {gasAlerts.length === 0 ? (
+                <div className="p-4 text-center text-xs font-mono text-[#77827D]">
+                  Kondisi Aman: Belum ada insiden kebocoran gas terdeteksi.
                 </div>
-              ))}
+              ) : (
+                gasAlerts.map((alert) => (
+                  <div key={alert.id} className="p-2.5 text-xs font-mono flex items-start justify-between gap-2">
+                    <div>
+                      <div className="flex items-center gap-2">
+                        <span className="font-bold text-[#1C100C]">{alert.timestamp}</span>
+                        <span className="text-orange-700 font-semibold">{alert.readingPpm} ADC</span>
+                      </div>
+                      <div className="text-[11px] font-sans text-[#77827D] mt-0.5 break-words">{alert.message}</div>
+                    </div>
+                    <StatusBadge status={alert.status} />
+                  </div>
+                ))
+              )}
             </div>
           </div>
         </div>

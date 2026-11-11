@@ -34,7 +34,7 @@ export default function App() {
   const [activePage, setActivePage] = useState('overview');
   const [selectedRowId, setSelectedRowId] = useState('Row 01');
   const [isTutorialOpen, setIsTutorialOpen] = useState(true);
-  const [lastSyncTime, setLastSyncTime] = useState('2026-11-03 16:34:52');
+  const [lastSyncTime, setLastSyncTime] = useState(new Date().toLocaleTimeString('id-ID'));
   const [systemNotification, setSystemNotification] = useState<{ msg: string; type: string } | null>(null);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
 
@@ -94,16 +94,17 @@ export default function App() {
   const getFormattedTimestamp = () => {
     const now = new Date();
     const pad = (n: number) => String(n).padStart(2, '0');
-    return `2026-11-03 ${pad(now.getHours())}:${pad(now.getMinutes())}:${pad(now.getSeconds())}`;
+    return `${now.getFullYear()}-${pad(now.getMonth() + 1)}-${pad(now.getDate())} ${pad(now.getHours())}:${pad(now.getMinutes())}:${pad(now.getSeconds())}`;
   };
 
   // Load master data dinamis dari Backend REST API (SQLite via Prisma)
   const refreshBackendData = useCallback(async () => {
     try {
-      const [fetchedProducts, fetchedHistory, fetchedSensors] = await Promise.all([
+      const [fetchedProducts, fetchedHistory, fetchedSensors, fetchedAlerts] = await Promise.all([
         IoTApiService.getProducts(),
         IoTApiService.getInventoryHistory(100),
         IoTApiService.getSensors(),
+        IoTApiService.getSensorAlerts(20),
       ]);
 
       if (fetchedProducts && fetchedProducts.length > 0) {
@@ -114,6 +115,26 @@ export default function App() {
       }
       if (fetchedSensors && fetchedSensors.length > 0) {
         setSensors(fetchedSensors);
+      }
+      if (fetchedAlerts && Array.isArray(fetchedAlerts) && fetchedAlerts.length > 0) {
+        const formattedAlerts: GasAlert[] = fetchedAlerts.map((a: any, idx: number) => {
+          let timeFormatted = a.timestamp;
+          try {
+            const d = new Date(a.timestamp);
+            if (!isNaN(d.getTime())) {
+              const pad = (n: number) => String(n).padStart(2, '0');
+              timeFormatted = `${d.getFullYear()}-${pad(d.getMonth() + 1)}-${pad(d.getDate())} ${pad(d.getHours())}:${pad(d.getMinutes())}:${pad(d.getSeconds())}`;
+            }
+          } catch {}
+          return {
+            id: a.id || `GA-${idx + 1}`,
+            timestamp: timeFormatted,
+            readingPpm: a.readingPpm ?? a.gasPpm ?? 0,
+            status: a.status || 'Normal',
+            message: a.message || `Telemetri gas tercatat pada ${a.readingPpm ?? 0} ADC.`,
+          };
+        });
+        setGasAlerts(formattedAlerts);
       }
     } catch (err) {
       console.warn('[App] Gagal memuat data awal dari backend:', err);
@@ -201,6 +222,30 @@ export default function App() {
 
         return next.length > 10 ? next.slice(next.length - 10) : next;
       });
+
+      // Auto-catat peringatan gas jika ambang batas terlampaui secara real-time
+      if (curGas >= envData.gasWarningThreshold || telemetryPayload.environment?.hazard_detected) {
+        const alertStatus: 'Normal' | 'Warning' | 'Danger' =
+          curGas >= envData.gasDangerThreshold || telemetryPayload.environment?.hazard_detected ? 'Danger' : 'Warning';
+        const alertMsg =
+          alertStatus === 'Danger'
+            ? `Peringatan BAHAYA kebocoran gas: ${curGas} ADC (≥ ambang bahaya ${envData.gasDangerThreshold})!`
+            : `Peringatan WASPADA konsentrasi gas naik: ${curGas} ADC (≥ ambang waspada ${envData.gasWarningThreshold}).`;
+
+        setGasAlerts((prevAlerts) => {
+          if (prevAlerts.length > 0 && prevAlerts[0].status === alertStatus && Math.abs(prevAlerts[0].readingPpm - curGas) < 20) {
+            return prevAlerts;
+          }
+          const autoAlert: GasAlert = {
+            id: `GA-${Date.now().toString().slice(-4)}`,
+            timestamp: getFormattedTimestamp(),
+            readingPpm: curGas,
+            status: alertStatus,
+            message: alertMsg,
+          };
+          return [autoAlert, ...prevAlerts.slice(0, 19)];
+        });
+      }
     }
 
     if (telemetryPayload.floors && telemetryPayload.floors.length > 0) {
@@ -279,6 +324,30 @@ export default function App() {
 
         return next.length > 10 ? next.slice(next.length - 10) : next;
       });
+
+      // Auto-catat peringatan gas jika ambang batas terlampaui secara real-time
+      if (curGas >= envData.gasWarningThreshold || telemetryPayload.environment?.hazard_detected) {
+        const alertStatus: 'Normal' | 'Warning' | 'Danger' =
+          curGas >= envData.gasDangerThreshold || telemetryPayload.environment?.hazard_detected ? 'Danger' : 'Warning';
+        const alertMsg =
+          alertStatus === 'Danger'
+            ? `Peringatan BAHAYA kebocoran gas: ${curGas} ADC (≥ ambang bahaya ${envData.gasDangerThreshold})!`
+            : `Peringatan WASPADA konsentrasi gas naik: ${curGas} ADC (≥ ambang waspada ${envData.gasWarningThreshold}).`;
+
+        setGasAlerts((prevAlerts) => {
+          if (prevAlerts.length > 0 && prevAlerts[0].status === alertStatus && Math.abs(prevAlerts[0].readingPpm - curGas) < 20) {
+            return prevAlerts;
+          }
+          const autoAlert: GasAlert = {
+            id: `GA-${Date.now().toString().slice(-4)}`,
+            timestamp: getFormattedTimestamp(),
+            readingPpm: curGas,
+            status: alertStatus,
+            message: alertMsg,
+          };
+          return [autoAlert, ...prevAlerts.slice(0, 19)];
+        });
+      }
     }, 3000);
 
     return () => clearInterval(timer);
@@ -468,10 +537,14 @@ export default function App() {
           // If estimated stock quantity changed, create an Inventory History transaction
           if (sensorsOnline && nextCalc.estimatedStock !== prevCalc.estimatedStock) {
             const diff = nextCalc.estimatedStock - prevCalc.estimatedStock;
+            const nowD = new Date();
+            const padD = (n: number) => String(n).padStart(2, '0');
+            const todayStr = `${nowD.getFullYear()}-${padD(nowD.getMonth() + 1)}-${padD(nowD.getDate())}`;
+
             const newTx: InventoryHistory = {
               id: `TX-${Math.floor(1050 + Math.random() * 8900)}`,
               timestamp: ts,
-              dateOnly: '2026-11-03',
+              dateOnly: todayStr,
               rackId: 'RACK-001',
               rowId: row.rowId,
               sku: row.sku,

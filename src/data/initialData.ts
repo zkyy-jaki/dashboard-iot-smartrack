@@ -294,29 +294,7 @@ export const INITIAL_ENV_HISTORY: EnvHistoryPoint[] = [
   { time: '16:30', temp: 27.5, humidity: 65, gasPpm: 185 }
 ];
 
-export const INITIAL_GAS_ALERTS: GasAlert[] = [
-  {
-    id: 'GA-03',
-    timestamp: '2026-11-03 08:15:00',
-    readingPpm: 182,
-    status: 'Normal',
-    message: 'Pemeriksaan mandiri ambang batas gas pagi hari normal.'
-  },
-  {
-    id: 'GA-02',
-    timestamp: '2026-10-29 14:12:44',
-    readingPpm: 430,
-    status: 'Warning',
-    message: 'Kenaikan sementara uap VOC di dekat pintu bongkar muat (kembali normal dlm 4m).'
-  },
-  {
-    id: 'GA-01',
-    timestamp: '2026-10-18 11:02:10',
-    readingPpm: 690,
-    status: 'Danger',
-    message: 'Pelewatan ambang batas bahaya selama uji kalibrasi gas kaleng.'
-  }
-];
+export const INITIAL_GAS_ALERTS: GasAlert[] = [];
 
 export const TUTORIAL_SCENES: TutorialScene[] = [
   {
