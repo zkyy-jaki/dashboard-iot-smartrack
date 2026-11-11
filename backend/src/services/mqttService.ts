@@ -726,14 +726,47 @@ function normalizeTelemetryPayload(parsed: unknown): MqttTelemetryPayload | null
       };
     });
 
-    const tempC =
-      parseFloat(String(envObj['temperature_c'] ?? envObj['temperatureC'] ?? 27.5)) || 27.5;
+    const rawTemp =
+      envObj['temperature_c'] ??
+      envObj['temperatureC'] ??
+      envObj['temperature'] ??
+      envObj['temp'] ??
+      envObj['temp_c'] ??
+      envObj['suhu'] ??
+      envObj['t'] ??
+      obj['temperature_c'] ??
+      obj['temperatureC'] ??
+      obj['temperature'] ??
+      obj['temp'] ??
+      obj['suhu'];
+    const tempC = rawTemp !== undefined && !isNaN(parseFloat(String(rawTemp))) ? parseFloat(String(rawTemp)) : 27.5;
 
-    const humPct =
-      parseFloat(String(envObj['humidity_pct'] ?? envObj['humidityRh'] ?? 65.0)) || 65.0;
+    const rawHum =
+      envObj['humidity_pct'] ??
+      envObj['humidityRh'] ??
+      envObj['humidity'] ??
+      envObj['hum'] ??
+      envObj['hum_pct'] ??
+      envObj['kelembaban'] ??
+      envObj['rh'] ??
+      obj['humidity_pct'] ??
+      obj['humidityRh'] ??
+      obj['humidity'] ??
+      obj['hum'] ??
+      obj['kelembaban'];
+    const humPct = rawHum !== undefined && !isNaN(parseFloat(String(rawHum))) ? parseFloat(String(rawHum)) : 65.0;
 
-    const gasRaw =
-      parseInt(String(envObj['gas_raw'] ?? envObj['gasPpm'] ?? 185), 10) || 185;
+    const rawGasVal =
+      envObj['gas_raw'] ??
+      envObj['gasPpm'] ??
+      envObj['gas'] ??
+      envObj['mq2'] ??
+      envObj['gas_ppm'] ??
+      obj['gas_raw'] ??
+      obj['gasPpm'] ??
+      obj['gas'] ??
+      obj['mq2'];
+    const gasRaw = rawGasVal !== undefined && !isNaN(parseInt(String(rawGasVal), 10)) ? parseInt(String(rawGasVal), 10) : 185;
 
     const gasPct = envObj['gas_pct'] !== undefined ? parseFloat(String(envObj['gas_pct'])) : undefined;
     const hazardDetected =
@@ -848,19 +881,54 @@ function extractDirectEdgeTelemetry(obj: Record<string, unknown>): any | null {
       ? (obj['actuators'] as Record<string, unknown>)
       : {};
 
-  const tempC =
-    parseFloat(String(envObj['temperature_c'] ?? envObj['temperatureC'] ?? 27.5)) || 27.5;
-  const humPct =
-    parseFloat(String(envObj['humidity_pct'] ?? envObj['humidityRh'] ?? 65.0)) || 65.0;
-  const gasRaw =
-    parseInt(String(envObj['gas_raw'] ?? envObj['gasPpm'] ?? 185), 10) || 185;
+  const rawDirectTemp =
+    envObj['temperature_c'] ??
+    envObj['temperatureC'] ??
+    envObj['temperature'] ??
+    envObj['temp'] ??
+    envObj['temp_c'] ??
+    envObj['suhu'] ??
+    envObj['t'] ??
+    obj['temperature_c'] ??
+    obj['temperatureC'] ??
+    obj['temperature'] ??
+    obj['temp'] ??
+    obj['suhu'];
+  const tempC = rawDirectTemp !== undefined && !isNaN(parseFloat(String(rawDirectTemp))) ? parseFloat(String(rawDirectTemp)) : 27.5;
+
+  const rawDirectHum =
+    envObj['humidity_pct'] ??
+    envObj['humidityRh'] ??
+    envObj['humidity'] ??
+    envObj['hum'] ??
+    envObj['hum_pct'] ??
+    envObj['kelembaban'] ??
+    envObj['rh'] ??
+    obj['humidity_pct'] ??
+    obj['humidityRh'] ??
+    obj['humidity'] ??
+    obj['hum'] ??
+    obj['kelembaban'];
+  const humPct = rawDirectHum !== undefined && !isNaN(parseFloat(String(rawDirectHum))) ? parseFloat(String(rawDirectHum)) : 65.0;
+
+  const rawDirectGas =
+    envObj['gas_raw'] ??
+    envObj['gasPpm'] ??
+    envObj['gas'] ??
+    envObj['mq2'] ??
+    envObj['gas_ppm'] ??
+    obj['gas_raw'] ??
+    obj['gasPpm'] ??
+    obj['gas'] ??
+    obj['mq2'];
+  const gasRaw = rawDirectGas !== undefined && !isNaN(parseInt(String(rawDirectGas), 10)) ? parseInt(String(rawDirectGas), 10) : 185;
   const gasPct =
     envObj['gas_pct'] !== undefined
       ? parseFloat(String(envObj['gas_pct']))
       : Number(((gasRaw / 1000) * 100).toFixed(1));
   const isEmergency = Boolean(
     envObj['hazard_detected'] ||
-      envObj['safety_state'] === 'ALARM_TRIGGERED' ||
+      String(envObj['safety_state'] || '').includes('ALARM') ||
       tempC >= config.thresholds.tempDangerC ||
       gasRaw >= config.thresholds.gasDangerPpm,
   );

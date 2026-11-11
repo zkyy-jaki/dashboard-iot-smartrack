@@ -120,9 +120,40 @@ function normalizeToTelemetryPayload(raw: any): TelemetryPayload {
 
   // 3. Ekstraksi environment
   const envRaw = raw.environment || raw.env || {};
-  const tempC = Number(envRaw.temperature_c ?? envRaw.temperatureC ?? 27.0);
-  const humPct = Number(envRaw.humidity_pct ?? envRaw.humidityRh ?? 60.0);
-  const gasRaw = Number(envRaw.gas_raw ?? envRaw.gasPpm ?? 150);
+  const tempC = Number(
+    envRaw.temperature_c ??
+    envRaw.temperatureC ??
+    envRaw.temperature ??
+    envRaw.temp ??
+    envRaw.suhu ??
+    raw.temperature_c ??
+    raw.temperatureC ??
+    raw.temperature ??
+    raw.temp ??
+    27.5
+  );
+  const humPct = Number(
+    envRaw.humidity_pct ??
+    envRaw.humidityRh ??
+    envRaw.humidity ??
+    envRaw.hum ??
+    envRaw.kelembaban ??
+    raw.humidity_pct ??
+    raw.humidityRh ??
+    raw.humidity ??
+    raw.hum ??
+    65.0
+  );
+  const gasRaw = Number(
+    envRaw.gas_raw ??
+    envRaw.gasPpm ??
+    envRaw.gas ??
+    envRaw.mq2 ??
+    raw.gas_raw ??
+    raw.gasPpm ??
+    raw.gas ??
+    185
+  );
   const gasPct = Number(envRaw.gas_pct ?? ((gasRaw / 1000) * 100).toFixed(1));
   const isEmergency = Boolean(envRaw.hazard_detected || raw.alerts?.isEmergency || raw.actuatorState?.emergency || tempC >= 50.0 || gasRaw >= 600);
   const safetyState: 'SAFE_NORMAL' | 'ALARM_TRIGGERED' =

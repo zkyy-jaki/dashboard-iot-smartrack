@@ -464,7 +464,7 @@ export const OverviewPage: React.FC<OverviewPageProps> = ({
                       Suhu Sekitar
                     </div>
                     <div className="text-lg font-bold font-mono text-[#1C100C] mt-1 tabular-nums">
-                      {envData.temperatureC.toFixed(1)} °C
+                      {temperatureC.toFixed(1)} °C
                     </div>
                   </div>
                   <div className="bg-white p-2.5 border border-[#E3E7E5] rounded-sm">
@@ -473,7 +473,7 @@ export const OverviewPage: React.FC<OverviewPageProps> = ({
                       Kelembaban Udara
                     </div>
                     <div className="text-lg font-bold font-mono text-[#1C100C] mt-1 tabular-nums">
-                      {envData.humidityRh} %RH
+                      {humidityPct} %RH
                     </div>
                   </div>
                 </div>

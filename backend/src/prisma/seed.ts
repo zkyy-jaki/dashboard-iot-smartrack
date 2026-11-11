@@ -71,21 +71,22 @@ async function main(): Promise<void> {
   }
 
   // ── 3. Upsert Sensors ───────────────────────────────────────────────────────
+  // Pinout mapping hardware sesuai Firmware Dual ESP32 (Master + Slave Serial2)
   const sensors = [
-    { sensorId: 'US-01', name: 'Ultrasonic Left — Row 01',   type: 'ULTRASONIC', rowId: 'Row 01', position: 'Left End',                        gpio: 'TRIG: GPIO27 / ECHO: GPIO35', online: true, signalRssi: -54 },
-    { sensorId: 'US-02', name: 'Ultrasonic Right — Row 01',  type: 'ULTRASONIC', rowId: 'Row 01', position: 'Right End',                       gpio: 'TRIG: GPIO27 / ECHO: GPIO34', online: true, signalRssi: -56 },
-    { sensorId: 'US-03', name: 'Ultrasonic Left — Row 02',   type: 'ULTRASONIC', rowId: 'Row 02', position: 'Left End',                        gpio: 'TRIG: GPIO27 / ECHO: GPIO33', online: true, signalRssi: -52 },
-    { sensorId: 'US-04', name: 'Ultrasonic Right — Row 02',  type: 'ULTRASONIC', rowId: 'Row 02', position: 'Right End',                       gpio: 'TRIG: GPIO27 / ECHO: GPIO32', online: true, signalRssi: -58 },
-    { sensorId: 'US-05', name: 'Ultrasonic Left — Row 03',   type: 'ULTRASONIC', rowId: 'Row 03', position: 'Left End',                        gpio: 'TRIG: GPIO27 / ECHO: GPIO26', online: true, signalRssi: -55 },
-    { sensorId: 'US-06', name: 'Ultrasonic Right — Row 03',  type: 'ULTRASONIC', rowId: 'Row 03', position: 'Right End',                       gpio: 'TRIG: GPIO27 / ECHO: GPIO25', online: true, signalRssi: -57 },
-    { sensorId: 'GAS-01', name: 'Gas Leakage Monitoring',    type: 'GAS',        rowId: 'Ambient Frame', position: 'Upper Right Post',          gpio: 'ADC1_CH0 (GPIO36)',           online: true, signalRssi: -51 },
-    { sensorId: 'ENV-01', name: 'Temperature & Humidity Monitoring', type: 'ENV', rowId: 'Ambient Frame', position: 'Lower Right Post (DHT11)', gpio: 'DATA: GPIO04 (1-Wire Digital)', online: true, signalRssi: -51 },
+    { sensorId: 'US-01', name: 'Ultrasonic Left — Row 01',   type: 'ULTRASONIC', rowId: 'Row 01', position: 'Left End',                        gpio: 'TRIG: GPIO27 / ECHO: GPIO34 (Slave)', online: true, signalRssi: -54 },
+    { sensorId: 'US-02', name: 'Ultrasonic Right — Row 01',  type: 'ULTRASONIC', rowId: 'Row 01', position: 'Right End',                       gpio: 'TRIG: GPIO14 / ECHO: GPIO35 (Slave)', online: true, signalRssi: -56 },
+    { sensorId: 'US-03', name: 'Ultrasonic Left — Row 02',   type: 'ULTRASONIC', rowId: 'Row 02', position: 'Left End',                        gpio: 'TRIG: GPIO13 / ECHO: GPIO32 (Slave)', online: true, signalRssi: -52 },
+    { sensorId: 'US-04', name: 'Ultrasonic Right — Row 02',  type: 'ULTRASONIC', rowId: 'Row 02', position: 'Right End',                       gpio: 'TRIG: GPIO04 / ECHO: GPIO33 (Slave)', online: true, signalRssi: -58 },
+    { sensorId: 'US-05', name: 'Ultrasonic Left — Row 03',   type: 'ULTRASONIC', rowId: 'Row 03', position: 'Left End',                        gpio: 'TRIG: GPIO05 / ECHO: GPIO25 (Slave)', online: true, signalRssi: -55 },
+    { sensorId: 'US-06', name: 'Ultrasonic Right — Row 03',  type: 'ULTRASONIC', rowId: 'Row 03', position: 'Right End',                       gpio: 'TRIG: GPIO18 / ECHO: GPIO26 (Slave)', online: true, signalRssi: -57 },
+    { sensorId: 'GAS-01', name: 'Gas Leakage Monitoring',    type: 'GAS',        rowId: 'Ambient Frame', position: 'Upper Right Post',          gpio: 'ADC1_CH0 (GPIO36 - Master)',           online: true, signalRssi: -51 },
+    { sensorId: 'ENV-01', name: 'Temperature & Humidity Monitoring', type: 'ENV', rowId: 'Ambient Frame', position: 'Lower Right Post (DHT11)', gpio: 'DATA: GPIO04 (1-Wire Digital - Master)', online: true, signalRssi: -51 },
   ];
 
   for (const s of sensors) {
     await prisma.sensor.upsert({
       where: { sensorId: s.sensorId },
-      update: { name: s.name, online: s.online, signalRssi: s.signalRssi },
+      update: { name: s.name, gpio: s.gpio, position: s.position, online: s.online, signalRssi: s.signalRssi },
       create: { ...s, lastSeen: new Date() },
     });
     console.log(`[Seed] ✓ Sensor: ${s.sensorId} (${s.name})`);

@@ -167,6 +167,49 @@ export const SensorMonitoringPage: React.FC<SensorMonitoringPageProps> = ({
         )}
       </div>
 
+      {/* TOPOLOGI HARDWARE DUAL ESP32 (MASTER & SLAVE UART) */}
+      <div className="bg-[#1C100C] border border-[#2E180E] text-stone-200 p-4 rounded-sm shadow-xs font-mono text-xs">
+        <div className="flex flex-wrap items-center justify-between gap-2 border-b border-orange-900/40 pb-2 mb-3">
+          <div className="flex items-center gap-2">
+            <Cpu className="w-4 h-4 text-orange-400" />
+            <span className="font-bold text-orange-200 uppercase tracking-wide">
+              Topologi Hardware Dual ESP32 (Master + Slave UART Serial2)
+            </span>
+          </div>
+          <span className="text-[10px] text-amber-400/90 bg-amber-950/60 border border-amber-800/40 px-2 py-0.5 rounded-sm">
+            Baudrate: 115200 • Serial2 (RX2/TX2)
+          </span>
+        </div>
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-3 text-[11px]">
+          <div className="p-2.5 bg-black/40 border border-orange-900/30 rounded-sm space-y-1">
+            <div className="font-bold text-orange-400 flex items-center justify-between">
+              <span>ESP32 MASTER (Wi-Fi, MQTT &amp; Lingkungan)</span>
+              <span className="text-[10px] text-stone-400 font-normal">UART RX: GPIO26 / TX: GPIO27</span>
+            </div>
+            <ul className="text-stone-300 space-y-0.5 text-[10px]">
+              <li>• <strong className="text-white">GAS-01 (MQ-2):</strong> GPIO36 (ADC1_CH0 Analog)</li>
+              <li>• <strong className="text-white">ENV-01 (DHT11):</strong> GPIO04 (1-Wire Digital)</li>
+              <li>• <strong className="text-white">Buzzer Fisik:</strong> GPIO13 (Active High)</li>
+              <li>• <strong className="text-white">RGB LED Rak 1:</strong> R: GPIO23 / G: GPIO22 / B: GPIO21</li>
+              <li>• <strong className="text-white">RGB LED Rak 2:</strong> R: GPIO19 / G: GPIO18 / B: GPIO05</li>
+              <li>• <strong className="text-white">RGB LED Rak 3:</strong> R: GPIO17 / G: GPIO16 / B: GPIO14</li>
+            </ul>
+          </div>
+          <div className="p-2.5 bg-black/40 border border-orange-900/30 rounded-sm space-y-1">
+            <div className="font-bold text-amber-400 flex items-center justify-between">
+              <span>ESP32 SLAVE (6x Ultrasonik HC-SR04)</span>
+              <span className="text-[10px] text-stone-400 font-normal">UART TX: GPIO17 / RX: GPIO16</span>
+            </div>
+            <ul className="text-stone-300 space-y-0.5 text-[10px]">
+              <li>• <strong className="text-white">Rak 1 (F1):</strong> Kiri TRIG: 27 / ECHO: 34 • Kanan TRIG: 14 / ECHO: 35</li>
+              <li>• <strong className="text-white">Rak 2 (F2):</strong> Kiri TRIG: 13 / ECHO: 32 • Kanan TRIG: 04 / ECHO: 33</li>
+              <li>• <strong className="text-white">Rak 3 (F3):</strong> Kiri TRIG: 05 / ECHO: 25 • Kanan TRIG: 18 / ECHO: 26</li>
+              <li className="text-stone-400 pt-0.5 italic">Telemetri jarak dikirim periodik ke Master melalui Serial2 UART</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+
       {/* CONNECTED SENSORS CONTAINER */}
       <div className="bg-white border border-[#E3E7E5] rounded-sm overflow-hidden shadow-xs">
         <div className="px-5 py-4 border-b border-[#E3E7E5] flex items-center justify-between">
@@ -175,7 +218,7 @@ export const SensorMonitoringPage: React.FC<SensorMonitoringPageProps> = ({
               Sensor Aktif Terhubung ({connectedSensors.length} Online)
             </h2>
             <p className="text-xs text-[#77827D] mt-0.5">
-              Transduser jarak ultrasonik (US-01 s/d US-06) dan modul lingkungan yang terhubung ke bus ESP32.
+              Transduser jarak ultrasonik (US-01 s/d US-06 Slave) dan modul lingkungan (Master) yang terhubung ke sistem.
             </p>
           </div>
         </div>
@@ -256,7 +299,7 @@ export const SensorMonitoringPage: React.FC<SensorMonitoringPageProps> = ({
             <div className="p-3 bg-[#F5F6F4] border border-[#E3E7E5] rounded-sm">
               <div className="text-[10px] uppercase text-[#77827D]">Kadar Saat Ini</div>
               <div className="text-xl font-bold text-[#263238] mt-1 tabular-nums">
-                {envData.gasPpm} ppm
+                {telemetryPayload?.environment?.gas_raw ?? envData.gasPpm} {telemetryPayload?.environment?.gas_raw !== undefined ? 'ADC' : 'ppm'}
               </div>
             </div>
             <div className="p-3 bg-[#F5F6F4] border border-[#E3E7E5] rounded-sm">
@@ -479,7 +522,7 @@ export const SensorMonitoringPage: React.FC<SensorMonitoringPageProps> = ({
           </div>
 
           <div className="p-3 bg-[#F5F6F4] border border-[#E3E7E5] rounded-sm text-[11px] font-mono text-[#77827D] flex flex-wrap items-center justify-between gap-2">
-            <span>Modul Sensor: DHT11 Digital (1-Wire GPIO04)</span>
+            <span>Modul Sensor: DHT11 Digital (1-Wire GPIO04 - Master)</span>
             <span>Kompensasi Suhu Kecepatan Suara: Aktif (347.6 m/s @ 27.5°C)</span>
           </div>
         </div>

@@ -317,10 +317,10 @@ export const RackMonitoringPage: React.FC<RackMonitoringPageProps> = ({
                   <div className="w-2 sm:w-3 h-[2px] bg-[#1C100C] absolute -left-2 sm:-left-3 top-4" />
                   <div className="flex items-center gap-1 text-orange-400 font-bold text-[9px] sm:text-[10px]">
                     <Cpu className="w-3 h-3" />
-                    <span>ESP32 NODE</span>
+                    <span>DUAL ESP32</span>
                   </div>
                   <div className="text-[8px] sm:text-[9px] text-orange-200/70 mt-1">
-                    6x US + MQ2 + DHT11
+                    Master + Slave UART
                   </div>
                   <div className="text-[8px] sm:text-[9px] text-amber-400 mt-0.5">Wi-Fi / MQTT</div>
                 </div>
@@ -332,6 +332,7 @@ export const RackMonitoringPage: React.FC<RackMonitoringPageProps> = ({
                   <div className="text-xs font-bold text-orange-700 mt-0.5">
                     {telemetryPayload?.environment?.gas_raw ?? envData.gasPpm} ADC
                   </div>
+                  <div className="text-[8px] sm:text-[9px] text-[#77827D] mt-0.5">GPIO 36 (Master)</div>
                   <div className="mt-1">
                     <StatusBadge status={gasStatus} />
                   </div>
@@ -344,7 +345,7 @@ export const RackMonitoringPage: React.FC<RackMonitoringPageProps> = ({
                   <div className="text-orange-700 font-bold mt-1 text-[9px] sm:text-xs">
                     {(telemetryPayload?.environment?.temperature_c ?? envData.temperatureC).toFixed(1)}°C / {telemetryPayload?.environment?.humidity_pct ?? envData.humidityRh}%RH
                   </div>
-                  <div className="text-[8px] sm:text-[9px] text-[#77827D] mt-0.5">GPIO 04 (1-Wire)</div>
+                  <div className="text-[8px] sm:text-[9px] text-[#77827D] mt-0.5">GPIO 04 (Master 1-Wire)</div>
                 </div>
               </div>
             </div>

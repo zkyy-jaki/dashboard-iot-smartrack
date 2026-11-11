@@ -98,6 +98,7 @@ export const APP_CONFIG = {
 
   // --------------------------------------------------------------------------
   // 4. PEMETAAN PIN HARDWARE SENSOR ESP32 (HARDWARE PINOUT CONTRACT)
+  // Sesuai Firmware ESP32 Master + ESP32 Slave UART Serial2
   // --------------------------------------------------------------------------
   SENSORS: {
     ROWS: [
@@ -107,13 +108,13 @@ export const APP_CONFIG = {
         leftSensor: {
           id: 'US-01',
           name: 'Ultrasonik Kiri — Baris 01',
-          gpio: 'TRIG: GPIO27 / ECHO: GPIO35',
+          gpio: 'TRIG: GPIO27 / ECHO: GPIO34 (Slave)',
           position: 'Ujung Kiri Ambalan',
         },
         rightSensor: {
           id: 'US-02',
           name: 'Ultrasonik Kanan — Baris 01',
-          gpio: 'TRIG: GPIO27 / ECHO: GPIO34',
+          gpio: 'TRIG: GPIO14 / ECHO: GPIO35 (Slave)',
           position: 'Ujung Kanan Ambalan',
         },
       },
@@ -123,13 +124,13 @@ export const APP_CONFIG = {
         leftSensor: {
           id: 'US-03',
           name: 'Ultrasonik Kiri — Baris 02',
-          gpio: 'TRIG: GPIO27 / ECHO: GPIO33',
+          gpio: 'TRIG: GPIO13 / ECHO: GPIO32 (Slave)',
           position: 'Ujung Kiri Ambalan',
         },
         rightSensor: {
           id: 'US-04',
           name: 'Ultrasonik Kanan — Baris 02',
-          gpio: 'TRIG: GPIO27 / ECHO: GPIO32',
+          gpio: 'TRIG: GPIO04 / ECHO: GPIO33 (Slave)',
           position: 'Ujung Kanan Ambalan',
         },
       },
@@ -139,13 +140,13 @@ export const APP_CONFIG = {
         leftSensor: {
           id: 'US-05',
           name: 'Ultrasonik Kiri — Baris 03',
-          gpio: 'TRIG: GPIO27 / ECHO: GPIO26',
+          gpio: 'TRIG: GPIO05 / ECHO: GPIO25 (Slave)',
           position: 'Ujung Kiri Ambalan',
         },
         rightSensor: {
           id: 'US-06',
           name: 'Ultrasonik Kanan — Baris 03',
-          gpio: 'TRIG: GPIO27 / ECHO: GPIO25',
+          gpio: 'TRIG: GPIO18 / ECHO: GPIO26 (Slave)',
           position: 'Ujung Kanan Ambalan',
         },
       },
@@ -154,13 +155,13 @@ export const APP_CONFIG = {
       GAS_MQ2: {
         id: 'GAS-01',
         name: 'Sensor Gas MQ-2',
-        gpio: 'ADC1_CH0 (GPIO36)',
+        gpio: 'ADC1_CH0 (GPIO36 - Master)',
         position: 'Tiang Kanan Atas',
       },
       TEMP_HUMIDITY_DHT11: {
         id: 'ENV-01',
         name: 'Sensor Suhu & Kelembapan DHT11',
-        gpio: 'DATA: GPIO04 (1-Wire Digital)',
+        gpio: 'DATA: GPIO04 (1-Wire Digital - Master)',
         position: 'Tiang Kanan Bawah',
       },
     },
@@ -168,34 +169,42 @@ export const APP_CONFIG = {
       RGB_LED_ROW1: {
         id: 'ACT-LED-01',
         name: 'Indikator RGB LED Lantai 1',
-        gpio: 'R: GPIO23 / G: GPIO22 / B: GPIO21',
+        gpio: 'R: GPIO23 / G: GPIO22 / B: GPIO21 (Master)',
         position: 'Rangka Ambalan Baris 01',
       },
       RGB_LED_ROW2: {
         id: 'ACT-LED-02',
         name: 'Indikator RGB LED Lantai 2',
-        gpio: 'R: GPIO19 / G: GPIO18 / B: GPIO05',
+        gpio: 'R: GPIO19 / G: GPIO18 / B: GPIO05 (Master)',
         position: 'Rangka Ambalan Baris 02',
       },
       RGB_LED_ROW3: {
         id: 'ACT-LED-03',
         name: 'Indikator RGB LED Lantai 3',
-        gpio: 'R: GPIO17 / G: GPIO16 / B: GPIO14',
+        gpio: 'R: GPIO17 / G: GPIO16 / B: GPIO14 (Master)',
         position: 'Rangka Ambalan Baris 03',
       },
       RGB_LED: {
         id: 'ACT-LED-01',
         name: 'Lampu Indikator RGB Terintegrasi',
-        gpio: 'R: GPIO23 / G: GPIO22 / B: GPIO21',
+        gpio: 'R: GPIO23 / G: GPIO22 / B: GPIO21 (Master)',
         position: 'Rangka Rak',
       },
       BUZZER: {
         id: 'ACT-BUZ-01',
         name: 'Buzzer Alarm Peringatan',
-        gpio: 'GPIO13 (Active High)',
+        gpio: 'GPIO13 (Active High - Master)',
         position: 'Modul Samping Rak',
       },
     },
+    COMMUNICATION: {
+      UART_SERIAL2: {
+        MASTER: 'RX: GPIO26 / TX: GPIO27 (Master)',
+        SLAVE: 'TX: GPIO17 / RX: GPIO16 (Slave)',
+        BAUD_RATE: 115200,
+        DESCRIPTION: 'Inter-ESP32 UART Serial2 Bridge'
+      }
+    }
   },
 
   // --------------------------------------------------------------------------

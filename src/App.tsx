@@ -165,6 +165,13 @@ export default function App() {
 
     if (liveLastUpdated) {
       setLastSyncTime(liveLastUpdated);
+      setSensors((prev) =>
+        prev.map((s) => ({
+          ...s,
+          online: true,
+          lastSeen: liveLastUpdated
+        }))
+      );
     }
   }, [telemetryPayload, liveLastUpdated]);
 
@@ -227,26 +234,25 @@ export default function App() {
     });
   }, [rows, products, sensors, telemetryPayload]);
 
-  // Compute Gas Condition based on thresholds
+  // Compute Gas Condition based on thresholds (Normal / Warning / Danger)
   const gasStatus = useMemo(() => {
-    // 1. Jika ada live telemetri dari ESP32, prioritaskan status nyata dari hardware
-    if (telemetryPayload?.environment) {
-      if (telemetryPayload.environment.safety_state === 'ALARM_TRIGGERED' || telemetryPayload.environment.hazard_detected) {
-        return 'Danger';
-      }
-      const rawGas = telemetryPayload.environment.gas_raw;
-      if (rawGas >= envData.gasDangerThreshold) return 'Danger';
-      if (rawGas >= envData.gasWarningThreshold) return 'Warning';
-      return 'Normal';
+    // 1. Ambil nilai gas aktual (prioritaskan telemetri ESP32, fallback ke envData)
+    const currentGas = telemetryPayload?.environment?.gas_raw ?? envData.gasPpm;
+
+    // 2. Evaluasi bahaya jika ada pemicu safety state atau hazard dari ESP32
+    if (
+      String(telemetryPayload?.environment?.safety_state || '').includes('ALARM') ||
+      telemetryPayload?.environment?.hazard_detected
+    ) {
+      return 'Danger';
     }
 
-    // 2. Evaluasi berdasarkan pembacaan lokal / fallback
-    const gasSensor = sensors.find((s) => s.id === 'GAS-01' || (s as any).sensorId === 'GAS-01');
-    if (gasSensor && !gasSensor.online) return 'SENSOR FAULT';
-    if (envData.gasPpm >= envData.gasDangerThreshold) return 'Danger';
-    if (envData.gasPpm >= envData.gasWarningThreshold) return 'Warning';
+    // 3. Evaluasi ambang batas bahaya gas (Default: Bahaya >= 1800, Waspada >= 700)
+    if (currentGas >= envData.gasDangerThreshold) return 'Danger';
+    if (currentGas >= envData.gasWarningThreshold) return 'Warning';
+
     return 'Normal';
-  }, [envData, sensors, telemetryPayload]);
+  }, [envData, telemetryPayload]);
 
   // Compute aggregate metrics from Edge Telemetry summary
   const summaryMetrics = useMemo(() => {
@@ -474,7 +480,7 @@ export default function App() {
         onOpenTutorial={() => setIsTutorialOpen(true)}
         isFireAlert={
           gasStatus === 'Danger' ||
-          telemetryPayload?.environment?.safety_state === 'ALARM_TRIGGERED' ||
+          String(telemetryPayload?.environment?.safety_state || '').includes('ALARM') ||
           telemetryPayload?.actuators?.buzzer === true
         }
         gasPpm={telemetryPayload?.environment?.gas_raw ?? envData.gasPpm}

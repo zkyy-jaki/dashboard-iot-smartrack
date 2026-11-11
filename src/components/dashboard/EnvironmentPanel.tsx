@@ -150,7 +150,7 @@ export const EnvironmentPanel: React.FC<EnvironmentPanelProps> = ({
             )}
             <div>
               <h4 className="text-sm font-extrabold font-mono text-[#1C100C] uppercase">
-                Kontrol Sirene Buzzer Fisik (GPIO 13)
+                Kontrol Sirene Buzzer Fisik (GPIO 13 - Master)
               </h4>
               <p className="text-xs text-stone-500">
                 Status Hardware Saat Ini:{' '}
