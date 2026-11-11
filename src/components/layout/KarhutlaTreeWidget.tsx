@@ -14,14 +14,14 @@ export const KarhutlaTreeWidget: React.FC<KarhutlaTreeWidgetProps> = ({
 
   return (
     <div
-      className="relative w-full flex-1 min-h-[280px] max-h-[620px] flex flex-col justify-end items-stretch select-none overflow-hidden group transition-all duration-700"
+      className="relative w-full flex-1 min-h-[300px] max-h-[620px] flex flex-col justify-end items-stretch select-none overflow-hidden group transition-all duration-700"
     >
-      {/* 1. SEAMLESS AMBIENT BACKDROP LIGHTING (Full-bleed, mengisi ruang vertikal secara merata) */}
+      {/* 1. AMBIENT BACKDROP LIGHTING (Pendaran Hawa Panas & Kabut Karhutla) */}
       <div
         className={`absolute inset-0 transition-all duration-700 pointer-events-none ${
           isBurning
-            ? 'opacity-100 bg-[radial-gradient(ellipse_at_50%_90%,rgba(239,68,68,0.55)_0%,rgba(249,115,22,0.4)_35%,rgba(180,83,9,0.18)_65%,transparent_95%)]'
-            : 'opacity-90 bg-[radial-gradient(ellipse_at_50%_80%,rgba(217,119,6,0.22)_0%,rgba(146,64,14,0.12)_45%,rgba(28,16,12,0.05)_75%,transparent_90%)]'
+            ? 'opacity-100 bg-[radial-gradient(ellipse_at_50%_90%,rgba(239,68,68,0.6)_0%,rgba(249,115,22,0.45)_35%,rgba(180,83,9,0.2)_65%,transparent_95%)]'
+            : 'opacity-90 bg-[radial-gradient(ellipse_at_50%_75%,rgba(245,158,11,0.22)_0%,rgba(180,83,9,0.12)_45%,rgba(28,16,12,0.05)_75%,transparent_90%)]'
         }`}
       />
 
@@ -30,33 +30,48 @@ export const KarhutlaTreeWidget: React.FC<KarhutlaTreeWidgetProps> = ({
         <div className="absolute inset-0 bg-red-600/15 animate-pulse pointer-events-none" />
       )}
 
-      {/* 2. TALL MAJESTIC DRY & BURNING KARHUTLA TREE SVG (280 x 500 Canvas) */}
+      {/* 2. TALL MAJESTIC KARHUTLA TREE SILHOUETTE SVG (280 x 500 Canvas) */}
       <svg
         viewBox="0 0 280 500"
-        className="w-full h-full min-h-[280px] z-10 transition-transform duration-500 group-hover:scale-[1.01]"
+        className="w-full h-full min-h-[300px] z-10 transition-transform duration-500 group-hover:scale-[1.01]"
         preserveAspectRatio="xMidYBottom meet"
         xmlns="http://www.w3.org/2000/svg"
       >
         <defs>
-          {/* Warna Kayu Pohon Kering (Vivid Contrast di Latar Gelap) */}
-          <linearGradient id="dryWoodBarkGradient" x1="0%" y1="0%" x2="0%" y2="100%">
-            <stop offset="0%" stopColor="#FBBF24" />
-            <stop offset="20%" stopColor="#F59E0B" />
-            <stop offset="45%" stopColor="#D97706" />
-            <stop offset="70%" stopColor="#9A3412" />
-            <stop offset="100%" stopColor="#451A03" />
+          {/* Pendaran Latar Belakang (Backlight Sunset Disk) agar Siluet Tampak Jelas & Tegas */}
+          <radialGradient id="silhouetteBackdropGlow" cx="50%" cy="45%" r="50%">
+            <stop offset="0%" stopColor={isBurning ? '#EF4444' : '#F59E0B'} stopOpacity={isBurning ? '0.45' : '0.28'} />
+            <stop offset="45%" stopColor={isBurning ? '#EA580C' : '#D97706'} stopOpacity={isBurning ? '0.25' : '0.14'} />
+            <stop offset="80%" stopColor="#78350F" stopOpacity="0.04" />
+            <stop offset="100%" stopColor="#1C100C" stopOpacity="0" />
+          </radialGradient>
+
+          {/* Warna Siluet Batang Normal: Charred Timber Solid dengan Highlight Tepi Emas/Tembaga */}
+          <linearGradient id="solidTreeSilhouette" x1="0%" y1="0%" x2="0%" y2="100%">
+            <stop offset="0%" stopColor="#2A140A" />
+            <stop offset="30%" stopColor="#1C0D06" />
+            <stop offset="70%" stopColor="#120603" />
+            <stop offset="100%" stopColor="#0A0301" />
           </linearGradient>
 
-          {/* Warna Batang Terbakar Membara (Pijar Magma Bara Api) */}
-          <linearGradient id="burningMagmaBark" x1="0%" y1="0%" x2="0%" y2="100%">
+          {/* Rim-Light Tepi Siluet (Membuat Siluet Pohon Kontras & Tajam) */}
+          <linearGradient id="rimLightGradient" x1="0%" y1="0%" x2="0%" y2="100%">
+            <stop offset="0%" stopColor="#FDE047" />
+            <stop offset="25%" stopColor="#F59E0B" />
+            <stop offset="60%" stopColor="#D97706" />
+            <stop offset="100%" stopColor="#9A3412" />
+          </linearGradient>
+
+          {/* Warna Siluet saat Terbakar: Magma Bara Api Pijar */}
+          <linearGradient id="burningMagmaBody" x1="0%" y1="0%" x2="0%" y2="100%">
             <stop offset="0%" stopColor="#FEF08A" />
-            <stop offset="15%" stopColor="#FDE047" />
-            <stop offset="35%" stopColor="#F97316" />
-            <stop offset="65%" stopColor="#EF4444" />
+            <stop offset="20%" stopColor="#FDE047" />
+            <stop offset="45%" stopColor="#F97316" />
+            <stop offset="75%" stopColor="#DC2626" />
             <stop offset="100%" stopColor="#7F1D1D" />
           </linearGradient>
 
-          {/* Lidah Api Luar (Kirmizi ke Oranye Membara) */}
+          {/* Lidah Api Luar */}
           <linearGradient id="blazeOuterFire" x1="0%" y1="100%" x2="0%" y2="0%">
             <stop offset="0%" stopColor="#7F1D1D" stopOpacity="0.95" />
             <stop offset="25%" stopColor="#DC2626" />
@@ -64,7 +79,7 @@ export const KarhutlaTreeWidget: React.FC<KarhutlaTreeWidgetProps> = ({
             <stop offset="100%" stopColor="#FDE047" stopOpacity="0.95" />
           </linearGradient>
 
-          {/* Inti Lidah Api Panas (Pijar Putih-Kuning Inti Api) */}
+          {/* Inti Lidah Api Panas */}
           <linearGradient id="blazeCoreFire" x1="0%" y1="100%" x2="0%" y2="0%">
             <stop offset="0%" stopColor="#F97316" />
             <stop offset="40%" stopColor="#FDE047" />
@@ -73,7 +88,7 @@ export const KarhutlaTreeWidget: React.FC<KarhutlaTreeWidgetProps> = ({
 
           {/* Kepulan Asap Tebal Karhutla */}
           <radialGradient id="smokeCloud" cx="50%" cy="50%" r="50%">
-            <stop offset="0%" stopColor="#78716C" stopOpacity="0.5" />
+            <stop offset="0%" stopColor="#78716C" stopOpacity="0.55" />
             <stop offset="60%" stopColor="#44403C" stopOpacity="0.25" />
             <stop offset="100%" stopColor="#1C1917" stopOpacity="0" />
           </radialGradient>
@@ -85,173 +100,205 @@ export const KarhutlaTreeWidget: React.FC<KarhutlaTreeWidgetProps> = ({
           </filter>
         </defs>
 
-        {/* --- A. TANAH GAMBUT & ARANG DASAR --- */}
+        {/* --- LAYER 1: BACKLIGHT SUNSET/EMBER DISK (Pendaran Latar Belakang Penegas Siluet) --- */}
+        <ellipse
+          cx="140"
+          cy="210"
+          rx="125"
+          ry="150"
+          fill="url(#silhouetteBackdropGlow)"
+          className="transition-all duration-700"
+        />
+
+        {/* --- LAYER 2: TANAH GAMBUT DASAR --- */}
         <ellipse
           cx="140"
           cy="490"
           rx="135"
           ry="10"
-          fill={isBurning ? '#2D0A03' : '#1C0D06'}
+          fill={isBurning ? '#260B04' : '#140703'}
           stroke={isBurning ? '#EA580C' : '#451A03'}
           strokeWidth="1.5"
         />
 
-        {/* Retakan Bara Api di Tanah saat Kebakaran */}
+        {/* Retakan Bara Api di Tanah Gambut saat Kebakaran */}
         {isBurning && (
           <path
             d="M 35 490 Q 85 487 140 490 Q 195 487 245 490 M 65 492 Q 140 489 215 492"
             stroke="#F97316"
-            strokeWidth="2"
+            strokeWidth="2.2"
             strokeDasharray="4 6"
             className="animate-pulse"
           />
         )}
 
-        {/* --- B. AKAR-AKAR BESAR MENCENGKERAM TANAH --- */}
+        {/* --- LAYER 3: AKAR-AKAR BESAR MENCENGKERAM TANAH (SOLID ROOTS) --- */}
         <path
           d={`
-            M 118 482 C 102 487, 75 491, 35 495
-            M 162 482 C 178 487, 205 491, 245 495
-            M 128 484 C 132 490, 136 495, 137 498
-            M 152 484 C 148 490, 144 495, 143 498
-            M 95 488 C 80 492, 60 494, 45 496
-            M 185 488 C 200 492, 220 494, 235 496
+            M 116 480 C 100 486, 75 491, 28 496
+            M 164 480 C 180 486, 205 491, 252 496
+            M 126 482 C 130 488, 134 494, 136 498
+            M 154 482 C 150 488, 146 494, 144 498
+            M 92 486 C 75 492, 55 495, 42 497
+            M 188 486 C 205 492, 225 495, 238 497
           `}
           stroke={isBurning ? '#EA580C' : '#9A3412'}
-          strokeWidth="5"
+          strokeWidth="6"
           strokeLinecap="round"
           fill="none"
         />
 
-        {/* --- C. BATANG POHON UTAMA TEBAL & KOKOH (TRUNK 485 -> 280) --- */}
-        {/* Kontur Batang Siluet Berbobot */}
+        {/* --- LAYER 4: SOLID TREE SILHOUETTE BODY (KONTUR SILUET PADAT & TEGAS) --- */}
+        {/* Batang Utama & Cabang-Cabang Primer dibuat menyatu padat (Solid Filled Silhouette) */}
         <path
           d={`
-            M 118 482
-            C 122 430, 126 370, 130 310
-            C 133 270, 136 230, 138 180
-            L 142 180
-            C 144 230, 147 270, 150 310
-            C 154 370, 158 430, 162 482
+            /* Dimulai dari akar kiri bawah */
+            M 30 495
+            C 60 491, 95 486, 118 480
+            
+            /* Sisi kiri batang utama naik dengan lekukan pohon purba */
+            C 121 440, 123 395, 126 350
+            
+            /* DAHAN KIRI BAWAH (Melengkung gagah ke kiri) */
+            C 108 335, 82 320, 52 305
+            C 34 295, 22 275, 14 245
+            C 11 235, 17 228, 24 234
+            C 32 258, 48 276, 68 285
+            /* Cabang anakan kiri bawah */
+            C 58 260, 48 230, 44 200
+            C 50 194, 56 198, 58 208
+            C 62 232, 72 258, 84 272
+            C 98 290, 114 305, 128 322
+            
+            /* Sisi kiri batang tengah menuju dahan atas */
+            C 128 295, 126 270, 122 245
+            
+            /* DAHAN KIRI ATAS (Menjulang tinggi ke sudut kiri atas) */
+            C 102 225, 76 192, 48 155
+            C 32 128, 22 98, 16 62
+            C 14 52, 22 48, 26 58
+            C 34 90, 46 118, 62 138
+            /* Cabang anakan dahan kiri atas */
+            C 56 112, 50 82, 48 55
+            C 54 48, 62 52, 64 64
+            C 66 90, 78 118, 92 138
+            C 88 110, 84 82, 86 50
+            C 92 44, 98 48, 98 60
+            C 98 86, 106 114, 118 138
+            C 124 165, 128 198, 132 222
+            
+            /* PUNCAK MAHKOTA PUSAT (Menjulang tegak ke langit puncak y=15) */
+            /* Puncak Mahkota Kiri */
+            C 130 185, 126 145, 122 100
+            C 118 68, 114 42, 110 18
+            C 116 10, 124 14, 126 25
+            C 130 55, 134 92, 136 128
+            
+            /* Puncak Mahkota Utama Tertinggi */
+            C 136 92, 138 55, 139 12
+            C 143 6, 149 8, 149 20
+            C 147 55, 145 95, 144 135
+            
+            /* Puncak Mahkota Kanan */
+            C 146 95, 150 62, 156 28
+            C 162 20, 168 24, 166 36
+            C 162 68, 156 105, 152 145
+            C 160 120, 170 85, 180 48
+            C 186 40, 192 44, 190 56
+            C 182 88, 174 125, 166 162
+            
+            /* Sisi kanan batang tengah menuju dahan kanan */
+            C 164 190, 162 222, 158 248
+            
+            /* DAHAN KANAN ATAS (Menjulang tinggi ke sudut kanan atas) */
+            C 178 228, 204 195, 232 158
+            C 248 128, 258 98, 264 62
+            C 266 52, 258 48, 254 58
+            C 246 90, 234 118, 218 138
+            /* Cabang anakan dahan kanan atas */
+            C 224 112, 230 82, 232 55
+            C 226 48, 218 52, 216 64
+            C 214 90, 202 118, 188 138
+            C 192 110, 196 82, 194 50
+            C 188 44, 182 48, 182 60
+            C 182 86, 174 114, 162 138
+            C 158 175, 156 210, 154 278
+            
+            /* DAHAN KANAN BAWAH (Melengkung gagah ke kanan) */
+            C 172 295, 198 320, 228 305
+            C 246 295, 258 275, 266 245
+            C 269 235, 263 228, 256 234
+            C 248 258, 232 276, 212 285
+            /* Cabang anakan kanan bawah */
+            C 222 260, 232 230, 236 200
+            C 230 194, 224 198, 222 208
+            C 218 232, 208 258, 196 272
+            C 182 290, 166 305, 152 322
+            
+            /* Sisi kanan batang utama turun menuju tanah */
+            C 155 350, 158 395, 162 440
+            C 165 486, 200 491, 250 495
+            C 255 498, 245 500, 230 498
+            C 190 494, 140 490, 90 494
+            C 50 498, 35 500, 30 495
             Z
           `}
-          fill={isBurning ? '#3D0E05' : '#2A1208'}
-          stroke={isBurning ? 'url(#burningMagmaBark)' : 'url(#dryWoodBarkGradient)'}
-          strokeWidth="3.5"
-          className="transition-colors duration-700"
-          filter={isBurning ? 'url(#fireBloomEffect)' : undefined}
-        />
-
-        {/* --- D. CABANG-CABANG BESAR MENYEBAR PENUH KE SELURUH KANVAS --- */}
-        <path
-          d={`
-            /* 1. DAHAN KIRI BAWAH (Melebar ke batas kiri) */
-            M 130 340
-            C 105 320, 75 305, 45 290
-            C 25 280, 15 260, 10 230
-            M 45 290
-            C 30 255, 20 220, 15 175
-            M 30 255 L 42 225
-            M 10 230 L 4 205
-
-            /* 2. DAHAN KIRI TENGAH / ATAS (Menjulang tinggi ke kiri atas) */
-            M 134 275
-            C 112 235, 82 195, 52 155
-            C 34 125, 24 95, 16 55
-            M 82 195
-            C 68 150, 56 110, 48 70
-            M 52 155
-            C 40 120, 32 85, 26 50
-            M 68 150 L 80 120
-            M 56 110 L 44 85
-
-            /* 3. PINNAKLE / MAHKOTA PUSAT (Menjulang Tegak ke Puncak Tertinggi y=18) */
-            M 138 180
-            C 137 135, 138 90, 140 22
-            M 138 140
-            C 122 105, 110 65, 105 28
-            M 139 120
-            C 155 90, 168 55, 172 25
-            M 138 80
-            C 128 50, 122 30, 118 18
-            M 139 70
-            C 148 45, 156 30, 160 18
-
-            /* 4. DAHAN KANAN TENGAH / ATAS (Menjulang tinggi ke kanan atas) */
-            M 146 275
-            C 168 235, 198 195, 228 155
-            C 246 125, 256 95, 264 55
-            M 198 195
-            C 212 150, 224 110, 232 70
-            M 228 155
-            C 240 120, 248 85, 254 50
-            M 212 150 L 200 120
-            M 224 110 L 236 85
-
-            /* 5. DAHAN KANAN BAWAH (Melebar ke batas kanan) */
-            M 150 340
-            C 175 320, 205 305, 235 290
-            C 255 280, 265 260, 270 230
-            M 235 290
-            C 250 255, 260 220, 265 175
-            M 250 255 L 238 225
-            M 270 230 L 276 205
-          `}
-          fill="none"
-          stroke={isBurning ? 'url(#burningMagmaBark)' : 'url(#dryWoodBarkGradient)'}
-          strokeWidth="5"
-          strokeLinecap="round"
+          fill={isBurning ? 'url(#burningMagmaBody)' : 'url(#solidTreeSilhouette)'}
+          stroke={isBurning ? '#FEF08A' : 'url(#rimLightGradient)'}
+          strokeWidth={isBurning ? '2.5' : '1.8'}
           strokeLinejoin="round"
           className="transition-colors duration-700"
           filter={isBurning ? 'url(#fireBloomEffect)' : undefined}
         />
 
-        {/* --- E. RANTING-RANTING KERING HALUS (DENSE DEADWOOD CANOPY TWIGS) --- */}
+        {/* --- LAYER 5: RANTING-RANTING MAHKOTA TAJAM (DELICATE SHARP TWIG SILHOUETTE) --- */}
+        {/* Ranting luar yang mempertegas tekstur pohon kering Karhutla di seluruh kanopi */}
         <path
           d={`
-            /* Ranting Mahkota Atas */
-            M 118 18 L 112 8 M 122 28 L 128 14 M 140 22 L 140 10 M 140 22 L 146 12
-            M 160 18 L 166 8 M 154 28 L 148 14 M 105 28 L 98 16 M 172 25 L 180 14
+            /* Puncak Atas */
+            M 110 18 L 102 6 M 116 26 L 122 10 M 139 12 L 138 2 M 140 12 L 148 4
+            M 156 28 L 164 12 M 166 36 L 174 22 M 180 48 L 190 32 M 190 56 L 200 42
             
-            /* Ranting Kanopi Kiri */
-            M 16 55 L 8 42 M 22 70 L 12 62 M 48 70 L 40 52 M 60 45 L 52 30
-            M 26 50 L 18 36 M 34 85 L 24 76 M 80 120 L 92 105 M 95 75 L 88 58
-            M 15 175 L 6 162 M 22 190 L 10 182 M 42 225 L 50 208 M 62 245 L 72 230
+            /* Sayap Kiri Atas */
+            M 16 62 L 6 48 M 22 78 L 10 70 M 48 55 L 40 38 M 64 64 L 56 46
+            M 26 58 L 18 42 M 34 94 L 22 84 M 86 50 L 78 35 M 92 138 L 104 120
+            M 14 245 L 4 230 M 24 234 L 12 222 M 44 200 L 34 182 M 58 208 L 68 190
             
-            /* Ranting Kanopi Kanan */
-            M 264 55 L 272 42 M 258 70 L 268 62 M 232 70 L 240 52 M 220 45 L 228 30
-            M 254 50 L 262 36 M 246 85 L 256 76 M 200 120 L 188 105 M 185 75 L 192 58
-            M 265 175 L 274 162 M 258 190 L 270 182 M 238 225 L 230 208 M 218 245 L 208 230
+            /* Sayap Kanan Atas */
+            M 264 62 L 274 48 M 258 78 L 270 70 M 232 55 L 240 38 M 216 64 L 224 46
+            M 254 58 L 262 42 M 246 94 L 258 84 M 194 50 L 202 35 M 188 138 L 176 120
+            M 266 245 L 276 230 M 256 234 L 268 222 M 236 200 L 246 182 M 222 208 L 212 190
           `}
           fill="none"
-          stroke={isBurning ? '#F97316' : '#D97706'}
-          strokeWidth="2.4"
+          stroke={isBurning ? '#F97316' : '#F59E0B'}
+          strokeWidth="2.2"
           strokeLinecap="round"
+          className="transition-colors duration-700"
         />
 
-        {/* Retakan Serat Kayu Bercahaya di Batang */}
+        {/* Retakan Serat Kayu Bercahaya di Batang Pohon */}
         <path
-          d="M 137 470 Q 134 400 138 340 Q 140 290 137 250 M 143 455 Q 146 390 142 330"
+          d="M 137 465 Q 133 395 137 335 Q 140 285 137 245 M 144 450 Q 147 385 143 325"
           fill="none"
-          stroke={isBurning ? '#FEF08A' : '#78350F'}
-          strokeWidth={isBurning ? '3' : '1.5'}
-          opacity={isBurning ? '1' : '0.6'}
+          stroke={isBurning ? '#FEFCE8' : '#D97706'}
+          strokeWidth={isBurning ? '3' : '1.4'}
+          opacity={isBurning ? '1' : '0.65'}
           filter={isBurning ? 'url(#fireBloomEffect)' : undefined}
           className={isBurning ? 'animate-pulse' : ''}
         />
 
-        {/* --- F. KOBARAN API RAKSASA (MENYALA SAAT SENSOR KEBAKARAN AKTIF) --- */}
+        {/* --- LAYER 6: KOBARAN API RAKSASA SAAT SENSOR KEBAKARAN AKTIF --- */}
         {isBurning && (
           <g filter="url(#fireBloomEffect)">
             {/* 1. Api Utama Membakar Seluruh Batang Bawah */}
             <path
-              d="M 112 485 Q 98 400 135 340 Q 145 400 152 365 Q 170 420 168 485 Z"
+              d="M 110 485 Q 95 390 135 330 Q 146 390 154 355 Q 172 415 170 485 Z"
               fill="url(#blazeOuterFire)"
               className="animate-fire-primary"
               style={{ transformOrigin: '140px 485px' }}
             />
             <path
-              d="M 122 485 Q 112 410 138 375 Q 150 410 156 485 Z"
+              d="M 120 485 Q 110 400 138 365 Q 150 400 158 485 Z"
               fill="url(#blazeCoreFire)"
               className="animate-fire-secondary"
               style={{ transformOrigin: '140px 485px' }}
@@ -259,105 +306,105 @@ export const KarhutlaTreeWidget: React.FC<KarhutlaTreeWidgetProps> = ({
 
             {/* 2. Api Dahan Kiri Bawah & Tengah */}
             <path
-              d="M 70 320 Q 25 260 55 200 Q 75 245 85 230 Q 98 285 92 320 Z"
+              d="M 68 315 Q 20 255 52 195 Q 72 240 82 225 Q 96 280 90 315 Z"
               fill="url(#blazeOuterFire)"
               className="animate-fire-secondary"
-              style={{ transformOrigin: '80px 320px', animationDelay: '0.15s' }}
+              style={{ transformOrigin: '80px 315px', animationDelay: '0.15s' }}
             />
             <path
-              d="M 78 305 Q 45 255 60 215 Q 78 255 86 295 Z"
+              d="M 76 300 Q 42 250 58 210 Q 76 250 84 290 Z"
               fill="url(#blazeCoreFire)"
               className="animate-fire-primary"
-              style={{ transformOrigin: '80px 305px' }}
+              style={{ transformOrigin: '80px 300px' }}
             />
 
             {/* 3. Api Ujung Dahan Kiri Atas */}
             <path
-              d="M 28 140 Q -5 90 20 50 Q 32 85 42 120 Z"
+              d="M 26 135 Q -8 85 18 45 Q 30 80 40 115 Z"
               fill="url(#blazeOuterFire)"
               className="animate-fire-primary"
-              style={{ transformOrigin: '30px 140px', animationDelay: '0.35s' }}
+              style={{ transformOrigin: '30px 135px', animationDelay: '0.35s' }}
             />
             <path
-              d="M 30 130 Q 10 95 24 70 Q 32 95 40 115 Z"
+              d="M 28 125 Q 8 90 22 65 Q 30 90 38 110 Z"
               fill="url(#blazeCoreFire)"
               className="animate-fire-secondary"
-              style={{ transformOrigin: '30px 130px' }}
+              style={{ transformOrigin: '30px 125px' }}
             />
 
             {/* 4. Api Dahan Kanan Bawah & Tengah */}
             <path
-              d="M 188 320 Q 235 260 205 200 Q 185 245 175 230 Q 162 285 168 320 Z"
+              d="M 190 315 Q 238 255 208 195 Q 188 240 178 225 Q 164 280 170 315 Z"
               fill="url(#blazeOuterFire)"
               className="animate-fire-primary"
-              style={{ transformOrigin: '180px 320px', animationDelay: '0.2s' }}
+              style={{ transformOrigin: '180px 315px', animationDelay: '0.2s' }}
             />
             <path
-              d="M 182 305 Q 215 255 200 215 Q 182 255 174 295 Z"
+              d="M 184 300 Q 218 250 202 210 Q 184 250 176 290 Z"
               fill="url(#blazeCoreFire)"
               className="animate-fire-secondary"
-              style={{ transformOrigin: '180px 305px' }}
+              style={{ transformOrigin: '180px 300px' }}
             />
 
             {/* 5. Api Ujung Dahan Kanan Atas */}
             <path
-              d="M 252 140 Q 285 90 260 50 Q 248 85 238 120 Z"
+              d="M 254 135 Q 288 85 262 45 Q 250 80 240 115 Z"
               fill="url(#blazeOuterFire)"
               className="animate-fire-secondary"
-              style={{ transformOrigin: '250px 140px', animationDelay: '0.4s' }}
+              style={{ transformOrigin: '250px 135px', animationDelay: '0.4s' }}
             />
             <path
-              d="M 250 130 Q 270 95 256 70 Q 248 95 240 115 Z"
+              d="M 252 125 Q 272 90 258 65 Q 250 90 242 110 Z"
               fill="url(#blazeCoreFire)"
               className="animate-fire-primary"
-              style={{ transformOrigin: '250px 130px' }}
+              style={{ transformOrigin: '250px 125px' }}
             />
 
-            {/* 6. Api Puncak Mahkota Pohon (Towering Crown Blaze y=15) */}
+            {/* 6. Api Puncak Mahkota Pohon (Towering Crown Blaze y=12) */}
             <path
-              d="M 125 150 Q 110 90 140 15 Q 160 85 155 150 Z"
+              d="M 124 145 Q 108 85 140 10 Q 162 80 156 145 Z"
               fill="url(#blazeOuterFire)"
               className="animate-fire-primary"
-              style={{ transformOrigin: '140px 150px', animationDelay: '0.1s' }}
+              style={{ transformOrigin: '140px 145px', animationDelay: '0.1s' }}
             />
             <path
-              d="M 132 140 Q 124 95 140 38 Q 152 90 148 140 Z"
+              d="M 132 135 Q 122 90 140 32 Q 154 85 148 135 Z"
               fill="url(#blazeCoreFire)"
               className="animate-fire-secondary"
-              style={{ transformOrigin: '140px 140px' }}
+              style={{ transformOrigin: '140px 135px' }}
             />
 
-            {/* Asap Tebal Membumbung Tinggi Menembus Bagian Atas */}
-            <circle cx="120" cy="20" r="16" fill="url(#smokeCloud)" className="animate-smoke" style={{ animationDelay: '0s' }} />
-            <circle cx="160" cy="15" r="20" fill="url(#smokeCloud)" className="animate-smoke" style={{ animationDelay: '0.7s' }} />
-            <circle cx="75" cy="35" r="14" fill="url(#smokeCloud)" className="animate-smoke" style={{ animationDelay: '1.2s' }} />
-            <circle cx="215" cy="30" r="16" fill="url(#smokeCloud)" className="animate-smoke" style={{ animationDelay: '1.6s' }} />
+            {/* Asap Tebal Karhutla Membumbung Tinggi Menembus Bagian Atas */}
+            <circle cx="120" cy="18" r="18" fill="url(#smokeCloud)" className="animate-smoke" style={{ animationDelay: '0s' }} />
+            <circle cx="162" cy="12" r="22" fill="url(#smokeCloud)" className="animate-smoke" style={{ animationDelay: '0.7s' }} />
+            <circle cx="72" cy="32" r="16" fill="url(#smokeCloud)" className="animate-smoke" style={{ animationDelay: '1.2s' }} />
+            <circle cx="218" cy="28" r="18" fill="url(#smokeCloud)" className="animate-smoke" style={{ animationDelay: '1.6s' }} />
 
             {/* Percikan Bara Api Berhamburan Naik (Embers) */}
-            <circle cx="110" cy="120" r="2.5" fill="#FDE047" className="animate-ember" style={{ '--ember-drift': '-18px', '--ember-drift-end': '-40px', animationDelay: '0.1s' } as React.CSSProperties} />
-            <circle cx="170" cy="130" r="2.8" fill="#F97316" className="animate-ember" style={{ '--ember-drift': '20px', '--ember-drift-end': '42px', animationDelay: '0.35s' } as React.CSSProperties} />
-            <circle cx="140" cy="75" r="2.0" fill="#FEF08A" className="animate-ember" style={{ '--ember-drift': '10px', '--ember-drift-end': '-15px', animationDelay: '0.65s' } as React.CSSProperties} />
-            <circle cx="55" cy="100" r="2.2" fill="#EF4444" className="animate-ember" style={{ '--ember-drift': '-22px', '--ember-drift-end': '-45px', animationDelay: '0.9s' } as React.CSSProperties} />
-            <circle cx="235" cy="105" r="2.2" fill="#F59E0B" className="animate-ember" style={{ '--ember-drift': '18px', '--ember-drift-end': '38px', animationDelay: '1.15s' } as React.CSSProperties} />
-            <circle cx="35" cy="120" r="1.8" fill="#FEF08A" className="animate-ember" style={{ '--ember-drift': '-16px', '--ember-drift-end': '-30px', animationDelay: '1.4s' } as React.CSSProperties} />
-            <circle cx="255" cy="125" r="2.0" fill="#F97316" className="animate-ember" style={{ '--ember-drift': '16px', '--ember-drift-end': '32px', animationDelay: '1.7s' } as React.CSSProperties} />
-            <circle cx="130" cy="240" r="2.2" fill="#FDE047" className="animate-ember" style={{ '--ember-drift': '-12px', '--ember-drift-end': '-25px', animationDelay: '0.4s' } as React.CSSProperties} />
-            <circle cx="155" cy="250" r="2.5" fill="#EA580C" className="animate-ember" style={{ '--ember-drift': '14px', '--ember-drift-end': '30px', animationDelay: '0.8s' } as React.CSSProperties} />
+            <circle cx="110" cy="115" r="2.6" fill="#FDE047" className="animate-ember" style={{ '--ember-drift': '-18px', '--ember-drift-end': '-40px', animationDelay: '0.1s' } as React.CSSProperties} />
+            <circle cx="172" cy="125" r="2.8" fill="#F97316" className="animate-ember" style={{ '--ember-drift': '20px', '--ember-drift-end': '42px', animationDelay: '0.35s' } as React.CSSProperties} />
+            <circle cx="140" cy="70" r="2.2" fill="#FEF08A" className="animate-ember" style={{ '--ember-drift': '10px', '--ember-drift-end': '-15px', animationDelay: '0.65s' } as React.CSSProperties} />
+            <circle cx="52" cy="95" r="2.4" fill="#EF4444" className="animate-ember" style={{ '--ember-drift': '-22px', '--ember-drift-end': '-45px', animationDelay: '0.9s' } as React.CSSProperties} />
+            <circle cx="238" cy="100" r="2.4" fill="#F59E0B" className="animate-ember" style={{ '--ember-drift': '18px', '--ember-drift-end': '38px', animationDelay: '1.15s' } as React.CSSProperties} />
+            <circle cx="32" cy="115" r="2.0" fill="#FEF08A" className="animate-ember" style={{ '--ember-drift': '-16px', '--ember-drift-end': '-30px', animationDelay: '1.4s' } as React.CSSProperties} />
+            <circle cx="258" cy="120" r="2.2" fill="#F97316" className="animate-ember" style={{ '--ember-drift': '16px', '--ember-drift-end': '32px', animationDelay: '1.7s' } as React.CSSProperties} />
+            <circle cx="130" cy="235" r="2.4" fill="#FDE047" className="animate-ember" style={{ '--ember-drift': '-12px', '--ember-drift-end': '-25px', animationDelay: '0.4s' } as React.CSSProperties} />
+            <circle cx="156" cy="245" r="2.6" fill="#EA580C" className="animate-ember" style={{ '--ember-drift': '14px', '--ember-drift-end': '30px', animationDelay: '0.8s' } as React.CSSProperties} />
           </g>
         )}
 
         {/* Partikel Abu & Debu Gambut Melayang Lembut saat Normal */}
         {!isBurning && (
-          <g opacity="0.75">
-            <circle cx="75" cy="220" r="1.6" fill="#F59E0B" />
-            <circle cx="195" cy="190" r="1.5" fill="#D97706" />
-            <circle cx="140" cy="110" r="1.3" fill="#F59E0B" />
-            <circle cx="45" cy="130" r="1.5" fill="#D97706" />
-            <circle cx="240" cy="140" r="1.4" fill="#B45309" />
-            <circle cx="110" cy="65" r="1.2" fill="#FBBF24" />
-            <circle cx="170" cy="75" r="1.3" fill="#F59E0B" />
-            <circle cx="90" cy="310" r="1.4" fill="#D97706" />
-            <circle cx="190" cy="320" r="1.4" fill="#B45309" />
+          <g opacity="0.8">
+            <circle cx="72" cy="215" r="1.8" fill="#F59E0B" />
+            <circle cx="198" cy="185" r="1.6" fill="#D97706" />
+            <circle cx="140" cy="105" r="1.5" fill="#F59E0B" />
+            <circle cx="42" cy="125" r="1.6" fill="#D97706" />
+            <circle cx="242" cy="135" r="1.5" fill="#B45309" />
+            <circle cx="108" cy="60" r="1.4" fill="#FBBF24" />
+            <circle cx="172" cy="70" r="1.5" fill="#F59E0B" />
+            <circle cx="88" cy="305" r="1.5" fill="#D97706" />
+            <circle cx="192" cy="315" r="1.5" fill="#B45309" />
           </g>
         )}
       </svg>
