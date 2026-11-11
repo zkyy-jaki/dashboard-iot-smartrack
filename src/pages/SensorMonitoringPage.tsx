@@ -123,24 +123,16 @@ export const SensorMonitoringPage: React.FC<SensorMonitoringPageProps> = ({
             </h2>
           </div>
           <span className="text-[11px] font-mono text-[#77827D]">
-            Klik "Simulasi Putus" untuk menguji isolasi kendala sensor
+            Pemantauan real-time status koneksi bus hardware ESP32
           </span>
         </div>
 
         {disconnectedSensors.length === 0 ? (
-          <div className="p-4 text-xs font-mono text-[#4A644E] bg-[#66856A]/5 flex flex-wrap items-center justify-between gap-3">
-            <div className="flex items-center gap-2">
-              <CheckCircle2 className="w-4 h-4 text-[#66856A] shrink-0" />
-              <span>
-                Seluruh 8 kanal sensor fisik (US-01..US-06, GAS-01, ENV-01) terhubung normal ke ESP32.
-              </span>
-            </div>
-            <button
-              onClick={() => onToggleSensor('US-06')}
-              className="px-2.5 py-1 bg-white border border-[#E3E7E5] text-[#263238] hover:border-[#C85C54] rounded-sm text-xs font-semibold"
-            >
-              Simulasi Putus US-06
-            </button>
+          <div className="p-4 text-xs font-mono text-[#4A644E] bg-[#66856A]/5 flex items-center gap-2">
+            <CheckCircle2 className="w-4 h-4 text-[#66856A] shrink-0" />
+            <span>
+              Seluruh 8 kanal sensor fisik (US-01..US-06, GAS-01, ENV-01) terhubung normal ke ESP32.
+            </span>
           </div>
         ) : (
           <div className="divide-y divide-[#E3E7E5]">
@@ -205,14 +197,6 @@ export const SensorMonitoringPage: React.FC<SensorMonitoringPageProps> = ({
               <div className="p-2 bg-[#F5F6F4] rounded-sm text-[11px] text-[#77827D] break-words">
                 Pinout: {s.gpio} • Terakhir dilihat: {s.lastSeen}
               </div>
-              <div className="pt-1 flex justify-end">
-                <button
-                  onClick={() => onToggleSensor(s.id)}
-                  className="px-2.5 py-1 text-xs bg-white border border-[#E3E7E5] hover:border-[#C85C54] hover:text-[#C85C54] rounded-sm"
-                >
-                  Simulasi Putus
-                </button>
-              </div>
             </div>
           ))}
         </div>
@@ -229,7 +213,6 @@ export const SensorMonitoringPage: React.FC<SensorMonitoringPageProps> = ({
                 <th className="py-2.5 px-4">Nilai Telemetri</th>
                 <th className="py-2.5 px-4">Status</th>
                 <th className="py-2.5 px-4">Terakhir Terlihat</th>
-                <th className="py-2.5 px-4 text-right">Aksi Uji Coba</th>
               </tr>
             </thead>
             <tbody className="divide-y divide-[#E3E7E5] text-xs font-mono">
@@ -246,14 +229,6 @@ export const SensorMonitoringPage: React.FC<SensorMonitoringPageProps> = ({
                     <StatusBadge status="ONLINE" />
                   </td>
                   <td className="py-3 px-4 text-[#77827D] tabular-nums whitespace-nowrap">{s.lastSeen}</td>
-                  <td className="py-3 px-4 text-right whitespace-nowrap">
-                    <button
-                      onClick={() => onToggleSensor(s.id)}
-                      className="px-2 py-1 text-[11px] bg-[#F5F6F4] border border-[#E3E7E5] hover:border-[#C85C54] hover:text-[#C85C54] rounded-sm font-semibold"
-                    >
-                      Simulasi Putus
-                    </button>
-                  </td>
                 </tr>
               ))}
             </tbody>
@@ -310,23 +285,6 @@ export const SensorMonitoringPage: React.FC<SensorMonitoringPageProps> = ({
                 className="w-full mt-1 px-2 py-1 text-sm font-bold bg-white border border-[#E3E7E5] rounded-sm"
               />
             </div>
-          </div>
-
-          {/* Interactive Test Slider for Gas Concentration */}
-          <div className="p-3 bg-[#F5F6F4] border border-[#E3E7E5] rounded-sm space-y-1.5 font-mono">
-            <div className="flex justify-between text-xs">
-              <span>Simulasi Konsentrasi Gas (Uji Coba Alarm):</span>
-              <span className="font-bold">{envData.gasPpm} ppm</span>
-            </div>
-            <input
-              type="range"
-              min={100}
-              max={800}
-              step={10}
-              value={envData.gasPpm}
-              onChange={(e) => setEnvData({ ...envData, gasPpm: Number(e.target.value) })}
-              className="w-full accent-orange-600 h-1.5 bg-gray-300 rounded-lg cursor-pointer"
-            />
           </div>
 
           {/* Panel Kontrol Alarm & Buzzer Fisik (MQTT) */}

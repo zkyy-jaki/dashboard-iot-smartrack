@@ -18,7 +18,6 @@ import { calculateRowStock } from './utils/stockCalculator';
 import { connectSocket } from './services/socketService';
 import Sidebar from './components/layout/Sidebar';
 import Header from './components/layout/Header';
-import SimulatorDrawer from './components/layout/SimulatorDrawer';
 import Dashboard from './pages/Dashboard';
 import OverviewPage from './pages/OverviewPage';
 import RackMonitoringPage from './pages/RackMonitoringPage';
@@ -34,8 +33,6 @@ export default function App() {
   // Navigation & UI State
   const [activePage, setActivePage] = useState('overview');
   const [selectedRowId, setSelectedRowId] = useState('Row 01');
-  const [liveSimActive, setLiveSimActive] = useState(false);
-  const [showSimulatorBar, setShowSimulatorBar] = useState(false);
   const [isTutorialOpen, setIsTutorialOpen] = useState(true);
   const [lastSyncTime, setLastSyncTime] = useState('2026-11-03 16:34:52');
   const [systemNotification, setSystemNotification] = useState<{ msg: string; type: string } | null>(null);
@@ -406,47 +403,8 @@ export default function App() {
       gasDangerThreshold: APP_CONFIG.THRESHOLDS.GAS_DANGER_PPM
     });
     setLastSyncTime(getFormattedTimestamp());
-    setLiveSimActive(false);
-    triggerToast('Data demonstrasi berhasil direset ke konfigurasi awal.');
+    triggerToast('Konfigurasi berhasil disinkronkan ke default.');
   };
-
-  // Simulated Live Telemetry Pulse Effect
-  useEffect(() => {
-    if (!liveSimActive) return;
-    const interval = setInterval(() => {
-      const ts = getFormattedTimestamp();
-      setLastSyncTime(ts);
-
-      setEnvData((prev) => {
-        const nextTemp = Number((prev.temperatureC + (Math.random() * 0.4 - 0.2)).toFixed(1));
-        const nextHum = Math.max(40, Math.min(85, Math.round(prev.humidityRh + (Math.random() * 2 - 1))));
-        const nextGas = Math.max(120, Math.round(prev.gasPpm + (Math.random() * 14 - 7)));
-
-        setEnvHistory((hPrev) => [
-          ...hPrev.slice(-11),
-          {
-            time: ts.split(' ')[1],
-            temp: nextTemp,
-            humidity: nextHum,
-            gasPpm: nextGas
-          }
-        ]);
-
-        return {
-          ...prev,
-          temperatureC: nextTemp,
-          humidityRh: nextHum,
-          gasPpm: nextGas
-        };
-      });
-
-      setSensors((prev) =>
-        prev.map((s) => (s.online ? { ...s, lastSeen: ts.split(' ')[1] } : s))
-      );
-    }, systemConfig.pollingIntervalMs);
-
-    return () => clearInterval(interval);
-  }, [liveSimActive, systemConfig.pollingIntervalMs]);
 
   // Toggle Sensor Online/Offline status
   const toggleSensorConnection = (sensorId: string) => {
@@ -518,10 +476,6 @@ export default function App() {
           rackId={systemConfig.rackId}
           currentPageLabel={navLabels[activePage] || 'Ringkasan'}
           firmwareVersion={firmwareVersion}
-          showSimulatorBar={showSimulatorBar}
-          setShowSimulatorBar={setShowSimulatorBar}
-          liveSimActive={liveSimActive}
-          setLiveSimActive={setLiveSimActive}
           lastSyncTime={lastSyncTime}
           isBackendConnected={backendConnected}
           onOpenMobileMenu={() => setMobileMenuOpen(true)}
@@ -614,18 +568,6 @@ export default function App() {
           </div>
         </div>
 
-        {/* COLLAPSIBLE INTERACTIVE TELEMETRY TEST BENCH DRAWER */}
-        <SimulatorDrawer
-          show={showSimulatorBar}
-          onClose={() => setShowSimulatorBar(false)}
-          enrichedRows={enrichedRows}
-          onUpdateRowDistances={handleUpdateRowDistances}
-          onStepRowBox={handleStepRowBox}
-          envData={envData}
-          setEnvData={setEnvData}
-          gasStatus={gasStatus}
-        />
-
         {/* TOAST NOTIFICATION BANNER */}
         {systemNotification && (
           <div className="mx-4 sm:mx-6 mt-4 px-4 py-2.5 bg-[#172B3A] text-white text-xs font-mono rounded-sm flex items-center justify-between border-l-4 border-[#66856A] shadow-md">
@@ -663,8 +605,6 @@ export default function App() {
                 enrichedRows={enrichedRows}
                 selectedRowId={selectedRowId}
                 onSelectRow={setSelectedRowId}
-                onUpdateDistances={handleUpdateRowDistances}
-                onStepRowBox={handleStepRowBox}
                 envData={envData}
                 gasStatus={gasStatus}
                 sensors={sensors}

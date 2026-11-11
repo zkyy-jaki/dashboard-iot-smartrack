@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React from 'react';
 
 interface KarhutlaTreeWidgetProps {
   isFireAlert?: boolean;
@@ -9,17 +9,12 @@ export const KarhutlaTreeWidget: React.FC<KarhutlaTreeWidgetProps> = ({
   isFireAlert = false,
   gasPpm = 0
 }) => {
-  // Klik pohon untuk menguji nyala api / kembali ke pohon kering normal
-  const [manualTrigger, setManualTrigger] = useState(false);
-
-  // Terbakar jika sensor kebakaran nyata aktif ATAU user klik untuk uji coba
-  const isBurning = isFireAlert || manualTrigger;
+  // Terbakar otomatis jika sensor bahaya / kebakaran ESP32 aktif
+  const isBurning = isFireAlert;
 
   return (
     <div
-      onClick={() => setManualTrigger((prev) => !prev)}
-      title="Klik pohon untuk simulasi kebakaran (api berkobar) / normal (pohon kering)"
-      className="relative w-full flex-1 flex flex-col justify-end items-stretch cursor-pointer select-none overflow-hidden group transition-all duration-700"
+      className="relative w-full flex-1 flex flex-col justify-end items-stretch select-none overflow-hidden group transition-all duration-700"
     >
       {/* 1. SEAMLESS AMBIENT BACKDROP LIGHTING (Full-bleed, no cutoff, no box) */}
       <div

@@ -11,8 +11,6 @@ interface RackMonitoringPageProps {
   enrichedRows: EnrichedRow[];
   selectedRowId: string;
   onSelectRow: (rowId: string) => void;
-  onUpdateDistances: (rowId: string, newLeftCm: number, newRightCm: number, sourceLabel?: string) => void;
-  onStepRowBox: (rowId: string, deltaBoxes: number) => void;
   envData: EnvData;
   gasStatus: string;
   sensors: Sensor[];
@@ -25,8 +23,6 @@ export const RackMonitoringPage: React.FC<RackMonitoringPageProps> = ({
   enrichedRows,
   selectedRowId,
   onSelectRow,
-  onUpdateDistances,
-  onStepRowBox,
   envData,
   gasStatus,
   sensors,
@@ -352,26 +348,16 @@ export const RackMonitoringPage: React.FC<RackMonitoringPageProps> = ({
             </div>
           </div>
 
-          {/* Bottom Quick Row Controls */}
-          <div className="mt-6 pt-4 border-t border-[#E3E7E5] flex flex-wrap items-center justify-between gap-4">
-            <div className="text-xs font-mono text-[#77827D]">
-              Baris Terpilih: <strong className="text-orange-700">{selectedRow.rowId}</strong> — Uji coba penambahan/pengambilan kardus:
+          {/* Telemetry Status Bar */}
+          <div className="mt-6 pt-4 border-t border-[#E3E7E5] flex flex-wrap items-center justify-between gap-3 text-xs font-mono">
+            <div className="text-[#77827D]">
+              Baris Terpilih: <strong className="text-orange-700">{selectedRow.rowId}</strong> • SKU: <span className="font-bold text-[#1C100C]">{selectedRow.sku}</span>
             </div>
             <div className="flex items-center gap-2">
-              <button
-                onClick={() => onStepRowBox(selectedRow.rowId, -1)}
-                disabled={selectedRow.estimatedStock <= 0}
-                className="px-3 py-1.5 text-xs font-mono font-semibold bg-[#F5F6F4] border border-[#E3E7E5] hover:border-orange-500 rounded-sm disabled:opacity-40"
-              >
-                -1 Ambil Kardus ({selectedRow.rowId})
-              </button>
-              <button
-                onClick={() => onStepRowBox(selectedRow.rowId, +1)}
-                disabled={selectedRow.estimatedStock >= selectedRow.capacity}
-                className="px-3 py-1.5 text-xs font-mono font-semibold bg-[#1C100C] hover:bg-[#2E180E] text-white rounded-sm border border-orange-950 disabled:opacity-40 shadow-xs"
-              >
-                +1 Tambah Kardus ({selectedRow.rowId})
-              </button>
+              <span className="inline-flex items-center gap-1.5 px-2.5 py-1 bg-orange-50 border border-orange-200 text-orange-800 rounded-sm text-[11px] font-semibold">
+                <span className="w-1.5 h-1.5 rounded-full bg-orange-600 animate-pulse" />
+                Telemetri Fisik ESP32 Real-Time
+              </span>
             </div>
           </div>
         </div>
@@ -415,15 +401,18 @@ export const RackMonitoringPage: React.FC<RackMonitoringPageProps> = ({
                 </div>
               </div>
 
-              {/* Paired Ultrasonic Distance Readings & Interactive Sliders */}
+              {/* Paired Ultrasonic Distance Readings (Read-Only Telemetry) */}
               <div className="space-y-3">
                 <div className="text-xs font-mono font-bold uppercase text-[#1C100C] flex items-center justify-between">
                   <span>Pembacaan Jarak Sensor Ultrasonik</span>
-                  <span className="text-[11px] font-normal text-[#77827D]">Uji Interaktif</span>
+                  <span className="text-[11px] font-normal text-emerald-700 font-semibold flex items-center gap-1">
+                    <span className="w-1.5 h-1.5 rounded-full bg-emerald-600 animate-pulse" />
+                    Telemetri ESP32
+                  </span>
                 </div>
 
                 {/* Left Sensor Card */}
-                <div className="p-3 border border-[#E3E7E5] rounded-sm space-y-2">
+                <div className="p-3 border border-[#E3E7E5] rounded-sm space-y-2 bg-[#F5F6F4]/40">
                   <div className="flex items-center justify-between font-mono">
                     <div>
                       <span className="text-xs font-bold text-orange-700">{selectedRow.leftSensorId}</span>
@@ -433,26 +422,20 @@ export const RackMonitoringPage: React.FC<RackMonitoringPageProps> = ({
                       {selDistLeft} cm
                     </span>
                   </div>
-                  <input
-                    type="range"
-                    min={0}
-                    max={selectedRow.rowSpanCm}
-                    step={1}
-                    value={selDistLeft}
-                    onChange={(e) =>
-                      onUpdateDistances(
-                        selectedRow.rowId,
-                        Number(e.target.value),
-                        selDistRight,
-                        `${selectedRow.leftSensorId} Inspektor`
-                      )
-                    }
-                    className="w-full accent-orange-600 h-1.5 bg-gray-200 rounded-lg cursor-pointer"
-                  />
+                  <div className="w-full bg-stone-200 h-2 rounded-full overflow-hidden">
+                    <div
+                      className="bg-orange-600 h-full rounded-full transition-all duration-300"
+                      style={{ width: `${Math.min(100, Math.max(0, (selDistLeft / (selectedRow.rowSpanCm || SHELF_SPAN_CM)) * 100))}%` }}
+                    />
+                  </div>
+                  <div className="flex justify-between text-[10px] text-[#77827D] font-mono">
+                    <span>0 cm</span>
+                    <span>Span: {selectedRow.rowSpanCm} cm</span>
+                  </div>
                 </div>
 
                 {/* Right Sensor Card */}
-                <div className="p-3 border border-[#E3E7E5] rounded-sm space-y-2">
+                <div className="p-3 border border-[#E3E7E5] rounded-sm space-y-2 bg-[#F5F6F4]/40">
                   <div className="flex items-center justify-between font-mono">
                     <div>
                       <span className="text-xs font-bold text-orange-700">{selectedRow.rightSensorId}</span>
@@ -462,22 +445,16 @@ export const RackMonitoringPage: React.FC<RackMonitoringPageProps> = ({
                       {selDistRight} cm
                     </span>
                   </div>
-                  <input
-                    type="range"
-                    min={0}
-                    max={selectedRow.rowSpanCm}
-                    step={1}
-                    value={selDistRight}
-                    onChange={(e) =>
-                      onUpdateDistances(
-                        selectedRow.rowId,
-                        selDistLeft,
-                        Number(e.target.value),
-                        `${selectedRow.rightSensorId} Inspektor`
-                      )
-                    }
-                    className="w-full accent-orange-600 h-1.5 bg-gray-200 rounded-lg cursor-pointer"
-                  />
+                  <div className="w-full bg-stone-200 h-2 rounded-full overflow-hidden">
+                    <div
+                      className="bg-orange-600 h-full rounded-full transition-all duration-300"
+                      style={{ width: `${Math.min(100, Math.max(0, (selDistRight / (selectedRow.rowSpanCm || SHELF_SPAN_CM)) * 100))}%` }}
+                    />
+                  </div>
+                  <div className="flex justify-between text-[10px] text-[#77827D] font-mono">
+                    <span>0 cm</span>
+                    <span>Span: {selectedRow.rowSpanCm} cm</span>
+                  </div>
                 </div>
               </div>
 

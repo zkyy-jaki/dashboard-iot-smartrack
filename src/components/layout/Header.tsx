@@ -2,9 +2,6 @@ import React from 'react';
 import {
   Menu,
   Server,
-  Sliders,
-  Play,
-  Pause,
   Wifi,
   BookOpen
 } from 'lucide-react';
@@ -13,10 +10,6 @@ interface HeaderProps {
   rackId: string;
   currentPageLabel: string;
   firmwareVersion?: string;
-  showSimulatorBar: boolean;
-  setShowSimulatorBar: React.Dispatch<React.SetStateAction<boolean>>;
-  liveSimActive: boolean;
-  setLiveSimActive: React.Dispatch<React.SetStateAction<boolean>>;
   lastSyncTime: string;
   isBackendConnected?: boolean;
   onOpenMobileMenu: () => void;
@@ -27,10 +20,6 @@ export const Header: React.FC<HeaderProps> = ({
   rackId,
   currentPageLabel,
   firmwareVersion = 'v1.0.7',
-  showSimulatorBar,
-  setShowSimulatorBar,
-  liveSimActive,
-  setLiveSimActive,
   lastSyncTime,
   isBackendConnected = false,
   onOpenMobileMenu,
@@ -81,7 +70,7 @@ export const Header: React.FC<HeaderProps> = ({
         </div>
       </div>
 
-      {/* Right: Simulation Controls, Tutorial Button, Sync Timestamp & Connection Indicator */}
+      {/* Right: Tutorial Button, Sync Timestamp & Connection Indicator */}
       <div className="flex items-center gap-2 sm:gap-3 shrink-0">
         {/* Interactive Tutorial Reopen Button */}
         {onOpenTutorial && (
@@ -95,34 +84,6 @@ export const Header: React.FC<HeaderProps> = ({
             <span className="md:hidden">Panduan</span>
           </button>
         )}
-
-        {/* Interactive Telemetry Test Bench Toggle
-        <button
-          onClick={() => setShowSimulatorBar((prev) => !prev)}
-          className={`px-2 sm:px-2.5 py-1.5 text-xs font-mono font-medium border rounded-sm flex items-center gap-1.5 transition-colors ${
-            showSimulatorBar
-              ? 'bg-[#1C100C] text-orange-300 border-[#1C100C] shadow-xs'
-              : 'bg-white text-stone-700 border-orange-200/70 hover:bg-orange-50'
-          }`}
-          title="Buka simulator uji coba sensor"
-        >
-          <Sliders className="w-3.5 h-3.5 text-orange-600" />
-          <span className="hidden sm:inline">Uji Coba Sensor</span>
-        </button> */}
-
-        {/* Live Pulse Toggle */}
-        {/* <button
-          onClick={() => setLiveSimActive((prev) => !prev)}
-          className={`px-2 sm:px-2.5 py-1.5 text-xs font-mono font-medium border rounded-sm flex items-center gap-1.5 transition-colors ${
-            liveSimActive
-              ? 'bg-gradient-to-r from-orange-600 to-amber-600 text-white border-orange-600 shadow-xs'
-              : 'bg-white text-stone-700 border-orange-200/70 hover:bg-orange-50'
-          }`}
-          title={liveSimActive ? 'Jeda ' : 'Mulai '}
-        >
-          {liveSimActive ? <Pause className="w-3.5 h-3.5" /> : <Play className="w-3.5 h-3.5 text-orange-600" />}
-          <span className="hidden md:inline">{liveSimActive ? 'Telemetri Aktif' : 'Simulasi Pulsa'}</span>
-        </button> */}
 
         {/* Last Data Sync Time */}
         <div className="hidden lg:flex flex-col items-end text-right border-l border-orange-200/60 pl-3">
