@@ -85,7 +85,7 @@ export const Sidebar: React.FC<SidebarProps> = ({
       )}
 
       <aside
-        className={`fixed inset-y-0 left-0 z-50 w-64 bg-gradient-to-b from-[#1C100C] via-[#170C08] to-[#0E0603] text-white flex flex-col justify-between shrink-0 border-r border-[#2E160C] select-none shadow-2xl transition-transform duration-300 ease-in-out lg:static lg:translate-x-0 overflow-y-auto ${
+        className={`fixed inset-y-0 left-0 z-50 w-72 sm:w-80 lg:w-72 h-screen lg:sticky lg:top-0 bg-gradient-to-b from-[#1C100C] via-[#170C08] to-[#0E0603] text-white flex flex-col justify-between shrink-0 border-r border-[#2E160C] select-none shadow-2xl transition-transform duration-300 ease-in-out lg:translate-x-0 overflow-y-auto ${
           mobileOpen ? 'translate-x-0' : '-translate-x-full'
         }`}
       >
@@ -107,7 +107,7 @@ export const Sidebar: React.FC<SidebarProps> = ({
                   <span className="w-1.5 h-1.5 rounded-full bg-orange-500 animate-ping inline-block" />
                 </div>
                 <div className="text-[10px] font-mono text-amber-200/60 mt-1 tracking-tight">
-                  
+                  IIoT WMS v2.4 • RACK-001
                 </div>
               </div>
             </div>
@@ -128,10 +128,10 @@ export const Sidebar: React.FC<SidebarProps> = ({
             <div className="flex items-center justify-between text-[10px] font-mono uppercase tracking-wider text-amber-200/70">
               <span className="flex items-center gap-1">
                 <Sparkles className="w-2.5 h-2.5 text-orange-400" />
-                
+                ESP32 NODE #01
               </span>
               <span className="text-orange-400 font-bold bg-orange-950/80 px-1.5 py-0.5 rounded-xs border border-orange-500/30">
-                
+                ACTIVE
               </span>
             </div>
             <div className="mt-1.5 text-[10px] font-mono text-stone-300 flex items-center justify-between">
@@ -319,7 +319,7 @@ export const Sidebar: React.FC<SidebarProps> = ({
               </div>
             </div>
             <span className="text-[9px] font-mono font-bold px-1.5 py-0.5 bg-orange-950/80 border border-orange-500/30 rounded-xs text-amber-300">
-              
+              NODE-01
             </span>
           </div>
         </div>

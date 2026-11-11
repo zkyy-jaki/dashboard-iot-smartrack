@@ -438,7 +438,7 @@ export default function App() {
   const sensorAlertCount = sensors.filter((s) => !s.online).length + (gasStatus !== 'Normal' ? 1 : 0);
 
   return (
-    <div className="min-h-screen flex bg-[#F7F5F2] text-[#263238] font-sans antialiased selection:bg-[#EA580C] selection:text-white">
+    <div className="min-h-screen lg:h-screen flex lg:overflow-hidden bg-[#F7F5F2] text-[#263238] font-sans antialiased selection:bg-[#EA580C] selection:text-white">
       {/* INTERACTIVE POP-UP TUTORIAL MODAL OVERLAY */}
       <RackInstructionTutorial
         isOpen={isTutorialOpen}
