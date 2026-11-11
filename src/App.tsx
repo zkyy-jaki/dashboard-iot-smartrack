@@ -140,12 +140,67 @@ export default function App() {
     if (!telemetryPayload) return;
 
     if (telemetryPayload.environment) {
+      const curTemp = Number((telemetryPayload.environment.temperature_c ?? envData.temperatureC).toFixed(1));
+      const curHum = Number((telemetryPayload.environment.humidity_pct ?? envData.humidityRh).toFixed(1));
+      const curGas = Number(telemetryPayload.environment.gas_raw ?? envData.gasPpm);
+
       setEnvData((prev) => ({
         ...prev,
-        temperatureC: telemetryPayload.environment.temperature_c,
-        humidityRh: telemetryPayload.environment.humidity_pct,
-        gasPpm: telemetryPayload.environment.gas_raw,
+        temperatureC: curTemp,
+        humidityRh: curHum,
+        gasPpm: curGas,
       }));
+
+      // Stream data titik baru ke riwayat grafik lingkungan real-time
+      const now = new Date();
+      const pad = (n: number) => String(n).padStart(2, '0');
+      const timeStr = `${pad(now.getHours())}:${pad(now.getMinutes())}:${pad(now.getSeconds())}`;
+
+      setEnvHistory((prev) => {
+        const isStaticInitial = prev.length > 0 && prev[0].time.startsWith('14:');
+        if (isStaticInitial) {
+          const initPoints: EnvHistoryPoint[] = [];
+          for (let i = 7; i >= 1; i--) {
+            const past = new Date(now.getTime() - i * 2500);
+            initPoints.push({
+              time: `${pad(past.getHours())}:${pad(past.getMinutes())}:${pad(past.getSeconds())}`,
+              temp: curTemp,
+              humidity: curHum,
+              gasPpm: curGas,
+            });
+          }
+          initPoints.push({
+            time: timeStr,
+            temp: curTemp,
+            humidity: curHum,
+            gasPpm: curGas,
+          });
+          return initPoints;
+        }
+
+        if (prev.length > 0 && prev[prev.length - 1].time === timeStr) {
+          const updated = [...prev];
+          updated[updated.length - 1] = {
+            time: timeStr,
+            temp: curTemp,
+            humidity: curHum,
+            gasPpm: curGas,
+          };
+          return updated;
+        }
+
+        const next = [
+          ...prev,
+          {
+            time: timeStr,
+            temp: curTemp,
+            humidity: curHum,
+            gasPpm: curGas,
+          },
+        ];
+
+        return next.length > 10 ? next.slice(next.length - 10) : next;
+      });
     }
 
     if (telemetryPayload.floors && telemetryPayload.floors.length > 0) {
@@ -174,6 +229,60 @@ export default function App() {
       );
     }
   }, [telemetryPayload, liveLastUpdated]);
+
+  // Pulse per 3 detik agar grafik lingkungan terus mengalir secara real-time
+  useEffect(() => {
+    const timer = setInterval(() => {
+      const curTemp = Number((telemetryPayload?.environment?.temperature_c ?? envData.temperatureC).toFixed(1));
+      const curHum = Number((telemetryPayload?.environment?.humidity_pct ?? envData.humidityRh).toFixed(1));
+      const curGas = Number(telemetryPayload?.environment?.gas_raw ?? envData.gasPpm);
+
+      const now = new Date();
+      const pad = (n: number) => String(n).padStart(2, '0');
+      const timeStr = `${pad(now.getHours())}:${pad(now.getMinutes())}:${pad(now.getSeconds())}`;
+
+      setEnvHistory((prev) => {
+        const isStaticInitial = prev.length > 0 && prev[0].time.startsWith('14:');
+        if (isStaticInitial) {
+          const initPoints: EnvHistoryPoint[] = [];
+          for (let i = 7; i >= 1; i--) {
+            const past = new Date(now.getTime() - i * 3000);
+            initPoints.push({
+              time: `${pad(past.getHours())}:${pad(past.getMinutes())}:${pad(past.getSeconds())}`,
+              temp: curTemp,
+              humidity: curHum,
+              gasPpm: curGas,
+            });
+          }
+          initPoints.push({
+            time: timeStr,
+            temp: curTemp,
+            humidity: curHum,
+            gasPpm: curGas,
+          });
+          return initPoints;
+        }
+
+        if (prev.length > 0 && prev[prev.length - 1].time === timeStr) {
+          return prev;
+        }
+
+        const next = [
+          ...prev,
+          {
+            time: timeStr,
+            temp: curTemp,
+            humidity: curHum,
+            gasPpm: curGas,
+          },
+        ];
+
+        return next.length > 10 ? next.slice(next.length - 10) : next;
+      });
+    }, 3000);
+
+    return () => clearInterval(timer);
+  }, [telemetryPayload, envData.temperatureC, envData.humidityRh, envData.gasPpm]);
 
   // Compute enriched rows langsung dari data Edge Computing ESP32 (Hapus kalkulasi browser)
   const enrichedRows: EnrichedRow[] = useMemo(() => {

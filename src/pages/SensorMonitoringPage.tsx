@@ -454,11 +454,17 @@ export const SensorMonitoringPage: React.FC<SensorMonitoringPageProps> = ({
           <div>
             <div className="flex flex-wrap items-center justify-between border-b border-[#E3E7E5] pb-3 gap-2">
               <div>
-                <h3 className="text-sm font-bold font-mono uppercase text-[#1C100C]">
-                  Monitoring Suhu &amp; Kelembaban (ENV-01)
-                </h3>
+                <div className="flex items-center gap-2">
+                  <h3 className="text-sm font-bold font-mono uppercase text-[#1C100C]">
+                    Monitoring Suhu &amp; Kelembaban (ENV-01)
+                  </h3>
+                  <span className="inline-flex items-center gap-1 px-2 py-0.5 text-[10px] font-mono font-bold bg-emerald-50 text-emerald-800 border border-emerald-300 rounded-sm">
+                    <span className="w-1.5 h-1.5 rounded-full bg-emerald-600 animate-pulse" />
+                    STREAMING REAL-TIME
+                  </span>
+                </div>
                 <p className="text-xs text-[#77827D] mt-0.5">
-                  Riwayat telemetri kondisi udara sekitar rak penyimpanan
+                  Grafik telemetri bergerak otomatis mengikuti pembacaan sensor fisik DHT11
                 </p>
               </div>
               <div className="text-right font-mono">
@@ -467,7 +473,7 @@ export const SensorMonitoringPage: React.FC<SensorMonitoringPageProps> = ({
                 </span>
                 <span className="mx-1.5 text-[#77827D]">|</span>
                 <span className="text-sm font-bold text-amber-700">
-                  {envData.humidityRh} %RH
+                  {envData.humidityRh.toFixed(1)} %RH
                 </span>
               </div>
             </div>
@@ -479,14 +485,14 @@ export const SensorMonitoringPage: React.FC<SensorMonitoringPageProps> = ({
                   <XAxis dataKey="time" tick={{ fontSize: 11, fill: '#77827D' }} />
                   <YAxis
                     yAxisId="temp"
-                    domain={[20, 35]}
+                    domain={[(dataMin: number) => Math.floor(Math.min(dataMin, 20)), (dataMax: number) => Math.ceil(Math.max(dataMax, 35))]}
                     tick={{ fontSize: 11, fill: '#EA580C' }}
                     label={{ value: '°C', position: 'insideTopLeft', fontSize: 10 }}
                   />
                   <YAxis
                     yAxisId="hum"
                     orientation="right"
-                    domain={[40, 90]}
+                    domain={[(dataMin: number) => Math.floor(Math.min(dataMin, 40)), (dataMax: number) => Math.ceil(Math.max(dataMax, 90))]}
                     tick={{ fontSize: 11, fill: '#D97706' }}
                     label={{ value: '%RH', position: 'insideTopRight', fontSize: 10 }}
                   />
@@ -504,8 +510,11 @@ export const SensorMonitoringPage: React.FC<SensorMonitoringPageProps> = ({
                     dataKey="temp"
                     name="Suhu Lingkungan (°C)"
                     stroke="#EA580C"
-                    strokeWidth={2}
-                    dot={{ r: 3 }}
+                    strokeWidth={2.5}
+                    dot={{ r: 3.5, fill: '#EA580C' }}
+                    activeDot={{ r: 5 }}
+                    isAnimationActive={true}
+                    animationDuration={300}
                   />
                   <Line
                     yAxisId="hum"
@@ -513,8 +522,11 @@ export const SensorMonitoringPage: React.FC<SensorMonitoringPageProps> = ({
                     dataKey="humidity"
                     name="Kelembaban Udara (%RH)"
                     stroke="#D97706"
-                    strokeWidth={2}
-                    dot={{ r: 3 }}
+                    strokeWidth={2.5}
+                    dot={{ r: 3.5, fill: '#D97706' }}
+                    activeDot={{ r: 5 }}
+                    isAnimationActive={true}
+                    animationDuration={300}
                   />
                 </LineChart>
               </ResponsiveContainer>

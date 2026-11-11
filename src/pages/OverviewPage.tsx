@@ -483,14 +483,17 @@ export const OverviewPage: React.FC<OverviewPageProps> = ({
               <div>
                 <div className="text-[11px] font-mono uppercase text-[#77827D] mb-2 flex justify-between">
                   <span>Tren Suhu Lingkungan</span>
-                  <span>SHT31 • Interval 30m</span>
+                  <span className="text-emerald-700 font-semibold flex items-center gap-1">
+                    <span className="w-1.5 h-1.5 rounded-full bg-emerald-600 animate-pulse" />
+                    DHT11 • Real-Time
+                  </span>
                 </div>
                 <div className="h-36 w-full border border-[#E3E7E5] bg-[#F5F6F4]/40 p-2 rounded-sm">
                   <ResponsiveContainer width="100%" height="100%">
                     <LineChart data={envHistory}>
                       <CartesianGrid strokeDasharray="3 3" stroke="#E3E7E5" />
                       <XAxis dataKey="time" tick={{ fontSize: 10, fill: '#77827D' }} />
-                      <YAxis yAxisId="left" domain={[20, 35]} tick={{ fontSize: 10, fill: '#77827D' }} width={28} />
+                      <YAxis yAxisId="left" domain={[(dataMin: number) => Math.floor(Math.min(dataMin, 20)), (dataMax: number) => Math.ceil(Math.max(dataMax, 35))]} tick={{ fontSize: 10, fill: '#77827D' }} width={28} />
                       <Tooltip
                         contentStyle={{
                           backgroundColor: '#FFFFFF',
@@ -505,8 +508,10 @@ export const OverviewPage: React.FC<OverviewPageProps> = ({
                         dataKey="temp"
                         name="Suhu (°C)"
                         stroke="#EA580C"
-                        strokeWidth={2}
-                        dot={{ r: 2 }}
+                        strokeWidth={2.5}
+                        dot={{ r: 2.5, fill: '#EA580C' }}
+                        isAnimationActive={true}
+                        animationDuration={300}
                       />
                     </LineChart>
                   </ResponsiveContainer>
