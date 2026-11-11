@@ -480,7 +480,7 @@ export default function App() {
   const sensorAlertCount = sensors.filter((s) => !s.online).length + (gasStatus !== 'Normal' ? 1 : 0);
 
   return (
-    <div className="min-h-screen flex bg-[#F5F6F4] text-[#263238] font-sans antialiased selection:bg-[#172B3A] selection:text-white">
+    <div className="min-h-screen flex bg-[#F7F5F2] text-[#263238] font-sans antialiased selection:bg-[#EA580C] selection:text-white">
       {/* INTERACTIVE POP-UP TUTORIAL MODAL OVERLAY */}
       <RackInstructionTutorial
         isOpen={isTutorialOpen}
@@ -503,6 +503,12 @@ export default function App() {
         mobileOpen={mobileMenuOpen}
         onCloseMobile={() => setMobileMenuOpen(false)}
         onOpenTutorial={() => setIsTutorialOpen(true)}
+        isFireAlert={
+          gasStatus === 'Danger' ||
+          telemetryPayload?.environment?.safety_state === 'ALARM_TRIGGERED' ||
+          telemetryPayload?.actuators?.buzzer === true
+        }
+        gasPpm={telemetryPayload?.environment?.gas_raw ?? envData.gasPpm}
       />
 
       {/* MAIN CONTENT AREA */}
@@ -571,7 +577,7 @@ export default function App() {
                   JALUR TELEMETRI LIVE HARDWARE (ESP32)
                 </span>
                 <span className="text-emerald-900 text-xs font-mono">
-                  Streaming telemetri langsung dari ESP32 via EMQX TLS &amp; WebSocket Gateway. Ambalan 58.0 cm aktif.
+                  Streaming telemetri langsung dari ESP32 via EMQX TLS &amp; WebSocket Gateway. 
                 </span>
               </>
             ) : backendConnected ? (
@@ -599,10 +605,10 @@ export default function App() {
           <div className="flex items-center gap-3">
             <button
               onClick={refreshBackendData}
-              className="text-[11px] font-mono text-[#172B3A] hover:underline flex items-center gap-1 font-medium"
+              className="text-[11px] font-mono text-orange-950 hover:text-orange-700 hover:underline flex items-center gap-1 font-semibold"
               title="Sinkronisasi ulang data master dari SQLite database"
             >
-              <RotateCcw className="w-3 h-3" />
+              <RotateCcw className="w-3 h-3 text-orange-600" />
               Sinkronisasi DB
             </button>
           </div>

@@ -95,7 +95,7 @@ export type LedState =
   | 'RED'       // rack/row empty (0 boxes)
   | 'BLUE'      // partially occupied
   | 'GREEN'     // full capacity (100%)
-  | 'BLINK_RED' // emergency: temp >= 50°C OR gas >= 600 ppm
+  | 'BLINK_RED' // emergency: temp >= 50°C OR gas >= 1800 ADC
 
 export interface RowLedStates {
   row1: LedState;

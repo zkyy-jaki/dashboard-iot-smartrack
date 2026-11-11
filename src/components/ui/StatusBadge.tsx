@@ -22,7 +22,7 @@ const STATUS_MAP_ID: Record<string, string> = {
 export const StatusBadge: React.FC<StatusBadgeProps> = ({ status }) => {
   const styles: Record<string, string> = {
     'IN STOCK': 'bg-[#66856A]/15 text-[#4A644E] border-[#66856A]/40',
-    'FULL CAPACITY': 'bg-[#172B3A]/10 text-[#172B3A] border-[#172B3A]/30',
+    'FULL CAPACITY': 'bg-[#1C100C]/10 text-[#1C100C] border-[#1C100C]/30',
     'Normal': 'bg-[#66856A]/15 text-[#4A644E] border-[#66856A]/40',
     'ONLINE': 'bg-[#66856A]/15 text-[#4A644E] border-[#66856A]/40',
     'LOW STOCK': 'bg-[#D6A34A]/15 text-[#9A6E1F] border-[#D6A34A]/40',

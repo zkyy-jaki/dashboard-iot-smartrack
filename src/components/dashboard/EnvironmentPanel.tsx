@@ -54,30 +54,30 @@ export const EnvironmentPanel: React.FC<EnvironmentPanelProps> = ({
       <div
         className={`p-4 rounded-sm border flex items-center justify-between transition-all ${
           isAlarm
-            ? 'bg-rose-50 border-rose-300 text-rose-800 animate-pulse'
-            : 'bg-emerald-50 border-emerald-300 text-emerald-800'
+            ? 'bg-red-50/90 border-red-300 text-red-900 animate-pulse shadow-sm'
+            : 'bg-emerald-50/90 border-emerald-300 text-emerald-900 shadow-2xs'
         }`}
       >
         <div className="flex items-center gap-3">
           {isAlarm ? (
-            <ShieldAlert className="w-6 h-6 text-rose-600 shrink-0" />
+            <ShieldAlert className="w-6 h-6 text-red-600 shrink-0" />
           ) : (
             <ShieldCheck className="w-6 h-6 text-emerald-600 shrink-0" />
           )}
           <div>
-            <div className="font-bold font-mono text-sm uppercase tracking-wider">
+            <div className="font-extrabold font-mono text-sm uppercase tracking-wider">
               STATUS KESELAMATAN: {environment.safety_state}
             </div>
             <div className="text-xs">
               {isAlarm
-                ? 'BAHAYA TERDETEKSI: Suhu melebihi 50°C atau Konsentrasi Gas > 600 ppm.'
+                ? 'BAHAYA TERDETEKSI: Suhu melebihi 50°C atau Konsentrasi Gas >= 1800 ADC.'
                 : 'Kondisi lingkungan rak dalam batas aman normal.'}
             </div>
           </div>
         </div>
         <span
-          className={`px-2.5 py-1 text-xs font-mono font-bold rounded-sm ${
-            isAlarm ? 'bg-rose-600 text-white' : 'bg-emerald-600 text-white'
+          className={`px-3 py-1 text-xs font-mono font-bold rounded-sm shadow-2xs ${
+            isAlarm ? 'bg-red-600 text-white animate-pulse' : 'bg-emerald-600 text-white'
           }`}
         >
           {isAlarm ? '⚠️ HAZARD' : '✓ NORMAL'}
@@ -87,68 +87,74 @@ export const EnvironmentPanel: React.FC<EnvironmentPanelProps> = ({
       {/* 2. Grid Sensor Lingkungan (Suhu, Kelembaban, Gas) */}
       <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
         {/* Suhu Udara (DHT11) */}
-        <div className="bg-white border border-[#E3E7E5] p-4 rounded-sm">
-          <div className="flex items-center justify-between text-[#77827D] mb-2">
+        <div className="bg-white border border-orange-900/10 p-4 rounded-sm shadow-2xs hover:border-orange-500/40 transition-all">
+          <div className="flex items-center justify-between text-stone-500 mb-2">
             <span className="text-xs font-mono font-semibold uppercase">Suhu (DHT11)</span>
-            <Thermometer className="w-4 h-4 text-orange-500" />
+            <div className="p-1.5 bg-orange-50 text-orange-600 rounded-sm">
+              <Thermometer className="w-4 h-4" />
+            </div>
           </div>
-          <div className="text-2xl font-bold font-mono text-[#263238] tabular-nums">
-            {environment.temperature_c.toFixed(1)} <span className="text-sm font-normal text-[#77827D]">°C</span>
+          <div className="text-2xl font-extrabold font-mono text-[#1C100C] tabular-nums">
+            {environment.temperature_c.toFixed(1)} <span className="text-sm font-normal text-stone-400">°C</span>
           </div>
-          <div className="text-[11px] font-mono text-[#77827D] mt-1">
+          <div className="text-[11px] font-mono text-stone-500 mt-1">
             Ambang Bahaya: &gt; 50.0 °C
           </div>
         </div>
 
         {/* Kelembaban Udara (DHT11) */}
-        <div className="bg-white border border-[#E3E7E5] p-4 rounded-sm">
-          <div className="flex items-center justify-between text-[#77827D] mb-2">
+        <div className="bg-white border border-orange-900/10 p-4 rounded-sm shadow-2xs hover:border-orange-500/40 transition-all">
+          <div className="flex items-center justify-between text-stone-500 mb-2">
             <span className="text-xs font-mono font-semibold uppercase">Kelembaban (DHT11)</span>
-            <Droplets className="w-4 h-4 text-blue-500" />
+            <div className="p-1.5 bg-sky-50 text-sky-600 rounded-sm">
+              <Droplets className="w-4 h-4" />
+            </div>
           </div>
-          <div className="text-2xl font-bold font-mono text-[#263238] tabular-nums">
-            {environment.humidity_pct.toFixed(1)} <span className="text-sm font-normal text-[#77827D]">% RH</span>
+          <div className="text-2xl font-extrabold font-mono text-[#1C100C] tabular-nums">
+            {environment.humidity_pct.toFixed(1)} <span className="text-sm font-normal text-stone-400">% RH</span>
           </div>
-          <div className="text-[11px] font-mono text-[#77827D] mt-1">
+          <div className="text-[11px] font-mono text-stone-500 mt-1">
             Rentang Optimal: 40% - 70%
           </div>
         </div>
 
         {/* Kadar Gas / Asap (MQ-2) */}
-        <div className="bg-white border border-[#E3E7E5] p-4 rounded-sm">
-          <div className="flex items-center justify-between text-[#77827D] mb-2">
+        <div className="bg-white border border-orange-900/10 p-4 rounded-sm shadow-2xs hover:border-orange-500/40 transition-all">
+          <div className="flex items-center justify-between text-stone-500 mb-2">
             <span className="text-xs font-mono font-semibold uppercase">Konsentrasi Gas (MQ-2)</span>
-            <Flame className="w-4 h-4 text-rose-500" />
+            <div className="p-1.5 bg-red-50 text-red-600 rounded-sm">
+              <Flame className="w-4 h-4" />
+            </div>
           </div>
-          <div className="text-2xl font-bold font-mono text-[#263238] tabular-nums">
-            {environment.gas_raw} <span className="text-sm font-normal text-[#77827D]">ADC ({environment.gas_pct}%)</span>
+          <div className="text-2xl font-extrabold font-mono text-[#1C100C] tabular-nums">
+            {environment.gas_raw} <span className="text-sm font-normal text-stone-400">ADC ({environment.gas_pct}%)</span>
           </div>
-          <div className="text-[11px] font-mono text-[#77827D] mt-1">
-            Ambang Bahaya: &gt; 600 ppm
+          <div className="text-[11px] font-mono text-stone-500 mt-1">
+            Ambang Bahaya: &gt; 1800 ADC (Waspada: &gt; 700 ADC)
           </div>
         </div>
       </div>
 
       {/* 3. Panel Kontrol Sirene & Buzzer Aktif */}
-      <div className="bg-white border border-[#E3E7E5] p-5 rounded-sm">
-        <div className="flex flex-wrap items-center justify-between pb-3 border-b border-[#E3E7E5] gap-2 mb-4">
+      <div className="bg-white border border-orange-900/10 p-5 rounded-sm shadow-2xs">
+        <div className="flex flex-wrap items-center justify-between pb-3 border-b border-orange-200/60 gap-2 mb-4">
           <div className="flex items-center gap-2.5">
             {actuators.buzzer ? (
-              <div className="p-2 bg-rose-500 text-white rounded-sm animate-bounce">
+              <div className="p-2 bg-gradient-to-br from-red-600 to-rose-700 text-white rounded-sm animate-bounce shadow-xs">
                 <Volume2 className="w-5 h-5" />
               </div>
             ) : (
-              <div className="p-2 bg-slate-700 text-white rounded-sm">
+              <div className="p-2 bg-[#1C100C] text-orange-400 border border-orange-500/30 rounded-sm">
                 <VolumeX className="w-5 h-5" />
               </div>
             )}
             <div>
-              <h4 className="text-sm font-bold font-mono text-[#263238] uppercase">
+              <h4 className="text-sm font-extrabold font-mono text-[#1C100C] uppercase">
                 Kontrol Sirene Buzzer Fisik (GPIO 13)
               </h4>
-              <p className="text-xs text-[#77827D]">
+              <p className="text-xs text-stone-500">
                 Status Hardware Saat Ini:{' '}
-                <span className={`font-mono font-bold ${actuators.buzzer ? 'text-rose-600' : 'text-slate-600'}`}>
+                <span className={`font-mono font-bold ${actuators.buzzer ? 'text-red-600' : 'text-stone-600'}`}>
                   {actuators.buzzer ? '🔊 BUNYI AKTIF' : '🔇 MATI / STANDBY'}
                 </span>
               </p>
@@ -156,7 +162,7 @@ export const EnvironmentPanel: React.FC<EnvironmentPanelProps> = ({
           </div>
 
           {lastAction && (
-            <span className="text-xs font-mono text-emerald-600 bg-emerald-50 px-2 py-1 border border-emerald-200 rounded-sm">
+            <span className="text-xs font-mono text-emerald-800 bg-emerald-50 px-2 py-1 border border-emerald-300 rounded-sm font-semibold">
               {lastAction}
             </span>
           )}
@@ -167,28 +173,28 @@ export const EnvironmentPanel: React.FC<EnvironmentPanelProps> = ({
           <button
             disabled={isPending}
             onClick={() => handleCommand('MUTE')}
-            className="px-3 py-2.5 bg-amber-500 hover:bg-amber-600 text-white font-mono text-xs font-bold rounded-sm transition-colors shadow-xs disabled:opacity-50"
+            className="px-3 py-2.5 bg-amber-600 hover:bg-amber-700 text-white font-mono text-xs font-bold rounded-sm transition-colors shadow-xs disabled:opacity-50"
           >
             🔇 MUTE BUZZER
           </button>
           <button
             disabled={isPending}
             onClick={() => handleCommand('AUTO')}
-            className="px-3 py-2.5 bg-[#172B3A] hover:bg-[#233F53] text-white font-mono text-xs font-bold rounded-sm transition-colors shadow-xs disabled:opacity-50"
+            className="px-3 py-2.5 bg-[#1C100C] hover:bg-orange-950 text-amber-200 border border-orange-500/40 font-mono text-xs font-bold rounded-sm transition-colors shadow-xs disabled:opacity-50"
           >
-            ⚙️ MODE AUTO
+            🔄 MODE AUTO
           </button>
           <button
             disabled={isPending}
             onClick={() => handleCommand('ON')}
-            className="px-3 py-2.5 bg-rose-600 hover:bg-rose-700 text-white font-mono text-xs font-bold rounded-sm transition-colors shadow-xs disabled:opacity-50"
+            className="px-3 py-2.5 bg-red-600 hover:bg-red-700 text-white font-mono text-xs font-bold rounded-sm transition-colors shadow-xs disabled:opacity-50"
           >
-            🚨 TEST ON
+            🔊 TEST ON
           </button>
           <button
             disabled={isPending}
             onClick={() => handleCommand('OFF')}
-            className="px-3 py-2.5 bg-slate-600 hover:bg-slate-700 text-white font-mono text-xs font-bold rounded-sm transition-colors shadow-xs disabled:opacity-50"
+            className="px-3 py-2.5 bg-stone-700 hover:bg-stone-800 text-stone-200 font-mono text-xs font-bold rounded-sm transition-colors shadow-xs disabled:opacity-50"
           >
             ⏹️ PAKSA OFF
           </button>

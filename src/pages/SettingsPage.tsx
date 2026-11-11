@@ -57,7 +57,7 @@ export const SettingsPage: React.FC<SettingsPageProps> = ({
           </div>
           <button
             onClick={onResetDemo}
-            className="px-3 py-1.5 text-xs font-mono bg-[#F5F6F4] border border-[#E3E7E5] hover:border-[#172B3A] rounded-sm"
+            className="px-3 py-1.5 text-xs font-mono bg-[#F5F6F4] border border-[#E3E7E5] hover:border-orange-500 text-[#1C100C] rounded-sm transition-colors"
           >
             Reset ke Pengaturan Default
           </button>
@@ -67,7 +67,7 @@ export const SettingsPage: React.FC<SettingsPageProps> = ({
           {rows.map((row) => (
             <div key={row.rowId} className="p-4 bg-[#F5F6F4] border border-[#E3E7E5] rounded-sm space-y-3">
               <div className="flex items-center justify-between border-b border-[#E3E7E5] pb-2">
-                <span className="px-2 py-0.5 bg-[#172B3A] text-white text-xs font-mono font-bold rounded-sm">
+                <span className="px-2 py-0.5 bg-[#1C100C] text-orange-200 border border-orange-900/40 text-xs font-mono font-bold rounded-sm">
                   {row.rowId}
                 </span>
                 <span className="text-xs font-mono text-[#77827D]">
@@ -139,7 +139,7 @@ export const SettingsPage: React.FC<SettingsPageProps> = ({
                 type="text"
                 value={systemConfig.rackId}
                 onChange={(e) => setSystemConfig({ ...systemConfig, rackId: e.target.value })}
-                className="w-full px-3 py-1.5 bg-[#F5F6F4] border border-[#E3E7E5] rounded-sm font-semibold text-[#172B3A]"
+                className="w-full px-3 py-1.5 bg-[#F5F6F4] border border-[#E3E7E5] focus:border-orange-500 rounded-sm font-semibold text-[#1C100C]"
               />
             </div>
             <div>
@@ -152,7 +152,7 @@ export const SettingsPage: React.FC<SettingsPageProps> = ({
                 onChange={(e) =>
                   setSystemConfig({ ...systemConfig, pollingIntervalMs: Number(e.target.value) })
                 }
-                className="w-full px-3 py-1.5 bg-[#F5F6F4] border border-[#E3E7E5] rounded-sm font-semibold text-[#172B3A]"
+                className="w-full px-3 py-1.5 bg-[#F5F6F4] border border-[#E3E7E5] focus:border-orange-500 rounded-sm font-semibold text-[#1C100C]"
               />
             </div>
           </div>
@@ -173,7 +173,7 @@ export const SettingsPage: React.FC<SettingsPageProps> = ({
                 onChange={(e) =>
                   setSystemConfig({ ...systemConfig, tempCompensation: e.target.checked })
                 }
-                className="w-4 h-4 accent-[#172B3A] shrink-0 mt-0.5 sm:mt-0"
+                className="w-4 h-4 accent-orange-600 shrink-0 mt-0.5 sm:mt-0"
               />
             </label>
 
@@ -192,7 +192,7 @@ export const SettingsPage: React.FC<SettingsPageProps> = ({
                 onChange={(e) =>
                   setSystemConfig({ ...systemConfig, emailAlerts: e.target.checked })
                 }
-                className="w-4 h-4 accent-[#172B3A] shrink-0 mt-0.5 sm:mt-0"
+                className="w-4 h-4 accent-orange-600 shrink-0 mt-0.5 sm:mt-0"
               />
             </label>
           </div>
@@ -249,14 +249,14 @@ export const SettingsPage: React.FC<SettingsPageProps> = ({
         <div className="bg-white border border-[#E3E7E5] rounded-sm p-5 space-y-4">
           <div className="flex items-center justify-between border-b border-[#E3E7E5] pb-3">
             <div>
-              <h3 className="text-sm font-bold font-mono uppercase text-[#263238]">
+              <h3 className="text-sm font-bold font-mono uppercase text-[#1C100C]">
                 Kontrak Integrasi Backend API &amp; WebSocket
               </h3>
               <p className="text-xs text-[#77827D]">
                 Alur data: Sensor Fisik → ESP32 → MQTT Broker → Node.js Backend → Dashboard
               </p>
             </div>
-            <Terminal className="w-4 h-4 text-[#172B3A]" />
+            <Terminal className="w-4 h-4 text-orange-600" />
           </div>
 
           <div className="space-y-2 font-mono text-xs">
@@ -269,10 +269,10 @@ export const SettingsPage: React.FC<SettingsPageProps> = ({
                   <span
                     className={`px-1.5 py-0.5 text-[10px] font-bold rounded-sm shrink-0 ${
                       ep.method === 'GET'
-                        ? 'bg-[#172B3A] text-white'
+                        ? 'bg-[#1C100C] text-orange-200 border border-orange-900/40'
                         : ep.method === 'POST'
-                        ? 'bg-[#66856A] text-white'
-                        : 'bg-[#D6A34A] text-white'
+                        ? 'bg-emerald-700 text-white'
+                        : 'bg-amber-600 text-white'
                     }`}
                   >
                     {ep.method}

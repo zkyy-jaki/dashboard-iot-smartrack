@@ -50,31 +50,31 @@ export const Dashboard: React.FC<DashboardProps> = ({
     return (
       <div className="min-h-[70vh] flex flex-col items-center justify-center p-6 text-center">
         <div className="relative mb-6">
-          <div className="w-20 h-20 bg-[#172B3A]/10 rounded-full flex items-center justify-center animate-ping absolute inset-0" />
-          <div className="w-20 h-20 bg-[#172B3A] text-white rounded-full flex items-center justify-center relative shadow-lg">
-            <Radio className="w-10 h-10 animate-pulse" />
+          <div className="w-20 h-20 bg-orange-500/15 rounded-full flex items-center justify-center animate-ping absolute inset-0" />
+          <div className="w-20 h-20 bg-gradient-to-br from-[#2D1409] via-[#1F0C05] to-[#120602] border border-orange-500/40 text-orange-400 rounded-full flex items-center justify-center relative shadow-xl">
+            <Radio className="w-10 h-10 animate-pulse text-orange-500" />
           </div>
         </div>
 
-        <h2 className="text-xl font-bold font-mono text-[#263238] uppercase tracking-wide">
+        <h2 className="text-xl font-extrabold font-mono text-[#1C100C] uppercase tracking-wide">
           Menunggu Koneksi Gateway ESP32...
         </h2>
-        <p className="text-sm text-[#77827D] max-w-md mt-2">
+        <p className="text-sm text-stone-500 max-w-md mt-2">
           {isConnected
             ? 'WebSocket terhubung. Menunggu paket telemetri MQTT pertama dari ESP32 (topik: warehouse/small_warehouse/telemetry)...'
             : 'Mencoba menghubungkan ke Backend WebSocket di port 3001... Pastikan backend telah dijalankan.'}
         </p>
 
-        <div className="mt-6 flex items-center gap-3 px-4 py-2 bg-white border border-[#E3E7E5] rounded-full text-xs font-mono">
+        <div className="mt-6 flex items-center gap-3 px-4 py-2 bg-white/90 border border-orange-200/80 rounded-full text-xs font-mono shadow-xs">
           <span
             className={`w-2.5 h-2.5 rounded-full ${
-              isConnected ? 'bg-emerald-500 animate-pulse' : 'bg-amber-500 animate-ping'
+              isConnected ? 'bg-emerald-500 animate-pulse' : 'bg-orange-500 animate-ping'
             }`}
           />
-          <span className="font-bold text-[#263238]">
+          <span className="font-bold text-[#1C100C]">
             Status Gateway: {isConnected ? 'ONLINE & SIAP' : 'MENGHUBUNGKAN...'}
           </span>
-          <Loader2 className="w-3.5 h-3.5 animate-spin text-slate-400" />
+          <Loader2 className="w-3.5 h-3.5 animate-spin text-orange-400" />
         </div>
       </div>
     );
@@ -87,27 +87,27 @@ export const Dashboard: React.FC<DashboardProps> = ({
   return (
     <div className="space-y-6">
       {/* Top Banner Status Bar */}
-      <div className="bg-white border border-[#E3E7E5] p-4 rounded-sm flex flex-wrap items-center justify-between gap-4">
+      <div className="bg-white/95 border border-orange-900/10 p-4 rounded-sm flex flex-wrap items-center justify-between gap-4 shadow-2xs border-t-2 border-t-orange-500">
         <div className="flex items-center gap-3">
-          <div className="p-2 bg-[#172B3A] text-white rounded-sm">
+          <div className="p-2.5 bg-gradient-to-br from-orange-600 via-amber-600 to-red-600 text-white rounded-sm shadow-xs">
             <Package className="w-5 h-5" />
           </div>
           <div>
-            <h1 className="text-base font-bold font-mono text-[#263238] uppercase">
+            <h1 className="text-base font-extrabold font-mono text-[#1C100C] uppercase tracking-tight">
               Smart Small Rack Warehouse — Live Monitor
             </h1>
-            <p className="text-xs text-[#77827D] mt-0.5">
+            <p className="text-xs text-stone-500 mt-0.5">
               Arsitektur Edge Computing • Data dihitung langsung oleh ESP32
             </p>
           </div>
         </div>
 
         <div className="flex items-center gap-4 text-xs font-mono">
-          <div className="flex items-center gap-1.5 text-[#77827D]">
-            <Clock className="w-4 h-4" />
+          <div className="flex items-center gap-1.5 text-stone-500">
+            <Clock className="w-4 h-4 text-orange-600" />
             <span>Update Terakhir: {lastUpdated || 'Baru Saja'}</span>
           </div>
-          <span className="inline-flex items-center gap-1 px-2.5 py-1 rounded-full bg-emerald-100 text-emerald-800 font-bold text-[11px]">
+          <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-emerald-50 text-emerald-800 border border-emerald-300 font-bold text-[11px] shadow-2xs">
             <span className="w-2 h-2 rounded-full bg-emerald-600 animate-pulse" />
             LIVE MQTT
           </span>
@@ -117,69 +117,73 @@ export const Dashboard: React.FC<DashboardProps> = ({
       {/* A. 4 METRIC CARDS RINGKASAN GUDANG (ZERO LOCAL MATH) */}
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
         {/* Card 1: Total Kardus */}
-        <div className="bg-white border border-[#E3E7E5] p-4 rounded-sm">
-          <div className="flex items-center justify-between text-[#77827D] mb-2">
+        <div className="bg-white border border-orange-900/10 p-4 rounded-sm shadow-2xs hover:border-orange-500/40 transition-all">
+          <div className="flex items-center justify-between text-stone-500 mb-2">
             <span className="text-xs font-mono font-semibold uppercase">Total Stok Barang</span>
-            <Package className="w-4 h-4 text-[#172B3A]" />
+            <div className="p-1.5 bg-orange-50 text-orange-600 rounded-sm">
+              <Package className="w-4 h-4" />
+            </div>
           </div>
-          <div className="text-3xl font-bold font-mono text-[#263238] tabular-nums">
+          <div className="text-3xl font-extrabold font-mono text-[#1C100C] tabular-nums">
             {summary.total_items}{' '}
-            <span className="text-sm font-normal text-[#77827D]">/ 12 Kardus</span>
+            <span className="text-sm font-normal text-stone-400">/ 12 Kardus</span>
           </div>
-          <div className="text-[11px] font-mono text-[#77827D] mt-1">
-            Status Gudang: <span className="font-bold text-[#172B3A]">{summary.warehouse_status}</span>
+          <div className="text-[11px] font-mono text-stone-500 mt-1">
+            Status Gudang: <span className="font-bold text-orange-950">{summary.warehouse_status}</span>
           </div>
         </div>
 
         {/* Card 2: Baris Rak Terisi */}
-        <div className="bg-white border border-[#E3E7E5] p-4 rounded-sm">
-          <div className="flex items-center justify-between text-[#77827D] mb-2">
+        <div className="bg-white border border-orange-900/10 p-4 rounded-sm shadow-2xs hover:border-orange-500/40 transition-all">
+          <div className="flex items-center justify-between text-stone-500 mb-2">
             <span className="text-xs font-mono font-semibold uppercase">Lantai Terisi</span>
-            <Layers className="w-4 h-4 text-[#172B3A]" />
+            <div className="p-1.5 bg-amber-50 text-amber-600 rounded-sm">
+              <Layers className="w-4 h-4" />
+            </div>
           </div>
-          <div className="text-3xl font-bold font-mono text-[#263238] tabular-nums">
+          <div className="text-3xl font-extrabold font-mono text-[#1C100C] tabular-nums">
             {summary.occupied_floors}{' '}
-            <span className="text-sm font-normal text-[#77827D]">/ 3 Lantai</span>
+            <span className="text-sm font-normal text-stone-400">/ 3 Lantai</span>
           </div>
-          <div className="text-[11px] font-mono text-[#77827D] mt-1">
+          <div className="text-[11px] font-mono text-stone-500 mt-1">
             Ambalan: 3 Baris x 58.0 cm
           </div>
         </div>
 
         {/* Card 3: Suhu Udara (DHT11) */}
-        <div className="bg-white border border-[#E3E7E5] p-4 rounded-sm">
-          <div className="flex items-center justify-between text-[#77827D] mb-2">
+        <div className="bg-white border border-orange-900/10 p-4 rounded-sm shadow-2xs hover:border-orange-500/40 transition-all">
+          <div className="flex items-center justify-between text-stone-500 mb-2">
             <span className="text-xs font-mono font-semibold uppercase">Suhu Ruang (DHT11)</span>
-            <span className="text-xs font-mono text-orange-600 font-bold">
+            <span className="text-xs font-mono text-red-600 font-bold bg-red-50 px-2 py-0.5 rounded-sm border border-red-200">
               {environment.temperature_c.toFixed(1)}°C
             </span>
           </div>
-          <div className="text-3xl font-bold font-mono text-[#263238] tabular-nums">
+          <div className="text-3xl font-extrabold font-mono text-[#1C100C] tabular-nums">
             {environment.humidity_pct.toFixed(0)}{' '}
-            <span className="text-sm font-normal text-[#77827D]">% RH</span>
+            <span className="text-sm font-normal text-stone-400">% RH</span>
           </div>
-          <div className="text-[11px] font-mono text-[#77827D] mt-1">
+          <div className="text-[11px] font-mono text-stone-500 mt-1">
             Kelembaban Udara Gudang
           </div>
         </div>
 
         {/* Card 4: Konsentrasi Gas & Sirene */}
-        <div className="bg-white border border-[#E3E7E5] p-4 rounded-sm">
-          <div className="flex items-center justify-between text-[#77827D] mb-2">
+        <div className="bg-white border border-orange-900/10 p-4 rounded-sm shadow-2xs hover:border-orange-500/40 transition-all">
+          <div className="flex items-center justify-between text-stone-500 mb-2">
             <span className="text-xs font-mono font-semibold uppercase">Sensor Gas (MQ-2)</span>
             {isAlarm ? (
-              <ShieldAlert className="w-4 h-4 text-rose-600" />
+              <ShieldAlert className="w-4 h-4 text-red-600 animate-pulse" />
             ) : (
               <ShieldCheck className="w-4 h-4 text-emerald-600" />
             )}
           </div>
-          <div className="text-3xl font-bold font-mono text-[#263238] tabular-nums">
+          <div className="text-3xl font-extrabold font-mono text-[#1C100C] tabular-nums">
             {environment.gas_raw}{' '}
-            <span className="text-sm font-normal text-[#77827D]">ADC ({environment.gas_pct}%)</span>
+            <span className="text-sm font-normal text-stone-400">ADC ({environment.gas_pct}%)</span>
           </div>
-          <div className="text-[11px] font-mono text-[#77827D] mt-1">
+          <div className="text-[11px] font-mono text-stone-500 mt-1">
             Buzzer:{' '}
-            <span className={`font-bold ${actuators.buzzer ? 'text-rose-600' : 'text-slate-600'}`}>
+            <span className={`font-bold ${actuators.buzzer ? 'text-red-600 animate-pulse' : 'text-stone-600'}`}>
               {actuators.buzzer ? '🔊 BUNYI' : '🔇 STANDBY'}
             </span>
           </div>

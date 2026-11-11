@@ -141,21 +141,21 @@ export const ProductManagementPage: React.FC<ProductManagementPageProps> = ({
               placeholder="Cari SKU atau nama..."
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
-              className="pl-8 pr-3 py-1.5 text-xs font-mono bg-[#F5F6F4] border border-[#E3E7E5] rounded-sm focus:outline-none focus:border-[#172B3A] w-full sm:w-56"
+              className="pl-8 pr-3 py-1.5 text-xs font-mono bg-[#F5F6F4] border border-[#E3E7E5] rounded-sm focus:outline-none focus:border-orange-500 w-full sm:w-56"
             />
           </div>
           <button
             onClick={openAddModal}
-            className="w-full sm:w-auto px-3 py-1.5 text-xs font-mono font-semibold bg-[#172B3A] text-white rounded-sm hover:bg-[#223d52] flex items-center justify-center gap-1.5"
+            className="w-full sm:w-auto px-3 py-1.5 text-xs font-mono font-semibold bg-[#1C100C] text-orange-200 border border-orange-900/40 hover:bg-[#2E180E] rounded-sm flex items-center justify-center gap-1.5 transition-colors shadow-xs"
           >
-            <Plus className="w-3.5 h-3.5" />
+            <Plus className="w-3.5 h-3.5 text-orange-400" />
             <span>Tambah SKU Produk</span>
           </button>
         </div>
       </div>
 
       {/* Product List Container */}
-      <div className="bg-white border border-[#E3E7E5] rounded-sm overflow-hidden">
+      <div className="bg-white border border-[#E3E7E5] rounded-sm overflow-hidden shadow-xs">
         {/* MOBILE VIEW: Cards that stack vertically downward (No horizontal scroll) */}
         <div className="md:hidden divide-y divide-[#E3E7E5]">
           {filteredProducts.map((product) => {
@@ -164,13 +164,13 @@ export const ProductManagementPage: React.FC<ProductManagementPageProps> = ({
               <div key={product.id} className="p-4 space-y-2.5 text-xs">
                 <div className="flex items-center justify-between">
                   <div className="flex items-center gap-2">
-                    <span className="px-2 py-0.5 bg-[#172B3A] text-white font-mono font-bold rounded-sm">
+                    <span className="px-2 py-0.5 bg-[#1C100C] text-orange-200 border border-orange-900/40 font-mono font-bold rounded-sm">
                       {product.sku}
                     </span>
-                    <strong className="text-[#263238]">{product.name}</strong>
+                    <strong className="text-[#1C100C]">{product.name}</strong>
                   </div>
                   {assignedRow ? (
-                    <span className="px-1.5 py-0.5 text-[10px] font-mono bg-[#66856A]/15 text-[#4A644E] border border-[#66856A]/30 rounded-sm font-semibold">
+                    <span className="px-1.5 py-0.5 text-[10px] font-mono bg-emerald-50 text-emerald-700 border border-emerald-200 rounded-sm font-semibold">
                       {assignedRow.rowId}
                     </span>
                   ) : (
@@ -181,7 +181,7 @@ export const ProductManagementPage: React.FC<ProductManagementPageProps> = ({
                 <div className="grid grid-cols-2 gap-2 p-2 bg-[#F5F6F4] rounded-sm font-mono text-[11px]">
                   <div>
                     <span className="text-[#77827D] block">Panjang Sumbu Ukur:</span>
-                    <span className="font-bold text-[#172B3A]">{product.lengthCm} cm</span>
+                    <span className="font-bold text-orange-700">{product.lengthCm} cm</span>
                   </div>
                   <div>
                     <span className="text-[#77827D] block">Lebar × Tinggi:</span>
@@ -196,9 +196,9 @@ export const ProductManagementPage: React.FC<ProductManagementPageProps> = ({
                 <div className="pt-2 flex items-center justify-end gap-2 border-t border-dashed border-[#E3E7E5] font-mono">
                   <button
                     onClick={() => openEditModal(product)}
-                    className="px-2.5 py-1 text-xs bg-white border border-[#E3E7E5] hover:border-[#172B3A] rounded-sm flex items-center gap-1"
+                    className="px-2.5 py-1 text-xs bg-white border border-[#E3E7E5] hover:border-orange-500 rounded-sm flex items-center gap-1"
                   >
-                    <Edit3 className="w-3 h-3" /> Edit
+                    <Edit3 className="w-3 h-3 text-orange-600" /> Edit
                   </button>
                   {deleteConfirmSku === product.sku ? (
                     <div className="inline-flex items-center gap-1">
@@ -249,16 +249,16 @@ export const ProductManagementPage: React.FC<ProductManagementPageProps> = ({
                 const assignedRow = rows.find((r) => r.sku === product.sku);
                 return (
                   <tr key={product.id} className="hover:bg-[#F5F6F4]/50">
-                    <td className="py-3.5 px-4 font-mono font-bold text-[#172B3A] whitespace-nowrap">
+                    <td className="py-3.5 px-4 font-mono font-bold text-orange-700 whitespace-nowrap">
                       <span className="px-2 py-0.5 bg-[#F5F6F4] border border-[#E3E7E5] rounded-sm">
                         {product.sku}
                       </span>
                     </td>
-                    <td className="py-3.5 px-4 font-semibold text-[#263238] whitespace-nowrap">
+                    <td className="py-3.5 px-4 font-semibold text-[#1C100C] whitespace-nowrap">
                       {product.name}
                     </td>
                     <td className="py-3.5 px-4 font-mono whitespace-nowrap">
-                      <span className="px-2 py-0.5 bg-[#172B3A]/10 text-[#172B3A] font-bold rounded-sm">
+                      <span className="px-2 py-0.5 bg-orange-500/10 text-orange-700 font-bold rounded-sm border border-orange-500/20">
                         {product.lengthCm} cm
                       </span>
                     </td>
@@ -267,7 +267,7 @@ export const ProductManagementPage: React.FC<ProductManagementPageProps> = ({
                     </td>
                     <td className="py-3.5 px-4 font-mono whitespace-nowrap">
                       {assignedRow ? (
-                        <span className="px-2 py-0.5 bg-[#66856A]/15 text-[#4A644E] border border-[#66856A]/30 rounded-sm font-semibold">
+                        <span className="px-2 py-0.5 bg-emerald-50 text-emerald-700 border border-emerald-200 rounded-sm font-semibold">
                           {assignedRow.rowId}
                         </span>
                       ) : (
@@ -281,9 +281,9 @@ export const ProductManagementPage: React.FC<ProductManagementPageProps> = ({
                       <div className="inline-flex items-center gap-2">
                         <button
                           onClick={() => openEditModal(product)}
-                          className="px-2 py-1 text-xs bg-[#F5F6F4] border border-[#E3E7E5] hover:border-[#172B3A] rounded-sm flex items-center gap-1 font-semibold"
+                          className="px-2 py-1 text-xs bg-[#F5F6F4] border border-[#E3E7E5] hover:border-orange-500 rounded-sm flex items-center gap-1 font-semibold text-[#1C100C]"
                         >
-                          <Edit3 className="w-3 h-3" /> Edit
+                          <Edit3 className="w-3 h-3 text-orange-600" /> Edit
                         </button>
                         {deleteConfirmSku === product.sku ? (
                           <div className="inline-flex items-center gap-1">
@@ -323,11 +323,11 @@ export const ProductManagementPage: React.FC<ProductManagementPageProps> = ({
       {isModalOpen && (
         <div className="fixed inset-0 z-50 bg-black/60 backdrop-blur-sm flex items-center justify-center p-4">
           <div className="bg-white border border-[#E3E7E5] rounded-sm w-full max-w-lg shadow-xl overflow-hidden max-h-[90vh] flex flex-col">
-            <div className="px-5 py-3.5 bg-[#172B3A] text-white flex items-center justify-between shrink-0">
-              <h3 className="text-sm font-mono font-bold uppercase">
+            <div className="px-5 py-3.5 bg-gradient-to-r from-[#1C100C] via-[#2A140A] to-[#1C100C] border-b border-orange-900/40 text-white flex items-center justify-between shrink-0">
+              <h3 className="text-sm font-mono font-bold uppercase text-orange-200">
                 {editingProduct ? `Edit Produk — ${editingProduct.sku}` : 'Daftarkan SKU Kardus Baru'}
               </h3>
-              <button onClick={() => setIsModalOpen(false)} className="text-slate-300 hover:text-white p-1">
+              <button onClick={() => setIsModalOpen(false)} className="text-orange-200/60 hover:text-white p-1">
                 <X className="w-4 h-4" />
               </button>
             </div>
@@ -343,7 +343,7 @@ export const ProductManagementPage: React.FC<ProductManagementPageProps> = ({
                     required
                     value={formState.sku}
                     onChange={(e) => setFormState({ ...formState, sku: e.target.value })}
-                    className="w-full px-3 py-2 font-mono border border-[#E3E7E5] rounded-sm bg-[#F5F6F4] font-bold"
+                    className="w-full px-3 py-2 font-mono border border-[#E3E7E5] rounded-sm bg-[#F5F6F4] font-bold text-[#1C100C]"
                   />
                 </div>
                 <div>
@@ -355,18 +355,18 @@ export const ProductManagementPage: React.FC<ProductManagementPageProps> = ({
                     required
                     value={formState.name}
                     onChange={(e) => setFormState({ ...formState, name: e.target.value })}
-                    className="w-full px-3 py-2 border border-[#E3E7E5] rounded-sm font-medium"
+                    className="w-full px-3 py-2 border border-[#E3E7E5] rounded-sm font-medium text-[#1C100C]"
                   />
                 </div>
               </div>
 
-              <div className="p-3 bg-[#F5F6F4] border border-[#E3E7E5] rounded-sm">
-                <div className="font-mono font-bold text-[#172B3A] mb-2">
+              <div className="p-3 bg-orange-950/[0.03] border border-orange-900/20 rounded-sm">
+                <div className="font-mono font-bold text-orange-700 mb-2">
                   Dimensi Fisik Kardus (cm)
                 </div>
                 <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
                   <div>
-                    <label className="block text-[11px] font-mono text-[#172B3A] font-semibold mb-1">
+                    <label className="block text-[11px] font-mono text-orange-700 font-semibold mb-1">
                       Panjang (Aksial) *
                     </label>
                     <input
@@ -376,7 +376,7 @@ export const ProductManagementPage: React.FC<ProductManagementPageProps> = ({
                       required
                       value={formState.lengthCm}
                       onChange={(e) => setFormState({ ...formState, lengthCm: Number(e.target.value) })}
-                      className="w-full px-2.5 py-1.5 font-mono border border-[#172B3A] bg-white rounded-sm font-bold"
+                      className="w-full px-2.5 py-1.5 font-mono border border-orange-500 bg-white rounded-sm font-bold text-orange-800"
                     />
                   </div>
                   <div>
@@ -435,7 +435,7 @@ export const ProductManagementPage: React.FC<ProductManagementPageProps> = ({
                 </button>
                 <button
                   type="submit"
-                  className="px-4 py-2 font-mono text-xs font-semibold bg-[#172B3A] text-white rounded-sm hover:bg-[#223d52]"
+                  className="px-4 py-2 font-mono text-xs font-semibold bg-[#1C100C] hover:bg-[#2E180E] text-white rounded-sm border border-orange-950 transition-colors shadow-xs"
                 >
                   Simpan SKU Produk
                 </button>

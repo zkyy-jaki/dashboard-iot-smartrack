@@ -141,16 +141,16 @@ export const RackInstructionTutorial: React.FC<RackInstructionTutorialProps> = (
       `}</style>
 
       <div
-        className="bg-white border-2 border-[#172B3A] rounded shadow-2xl overflow-hidden w-full max-w-5xl my-auto flex flex-col max-h-[92vh] animate-in zoom-in-95 duration-200"
+        className="bg-white border-2 border-[#1C100C] rounded shadow-2xl overflow-hidden w-full max-w-5xl my-auto flex flex-col max-h-[92vh] animate-in zoom-in-95 duration-200"
         onClick={(e) => e.stopPropagation()}
       >
         {/* Top Panel Bar */}
-        <div className="px-5 py-3.5 bg-[#172B3A] text-white flex flex-wrap items-center justify-between gap-3 shrink-0 border-b border-white/10">
+        <div className="px-5 py-3.5 bg-gradient-to-r from-[#1C100C] via-[#2A140A] to-[#1C100C] text-white flex flex-wrap items-center justify-between gap-3 shrink-0 border-b border-orange-900/40">
           <div className="flex items-center gap-2.5">
-            <span className="px-2 py-0.5 text-[10px] font-mono font-bold uppercase tracking-wider bg-[#66856A] text-white rounded-sm">
+            <span className="px-2 py-0.5 text-[10px] font-mono font-bold uppercase tracking-wider bg-orange-600 text-white rounded-sm">
               PANDUAN INTERAKTIF
             </span>
-            <h3 id="tutorial-dialog-title" className="text-xs sm:text-sm font-mono font-bold uppercase tracking-wider text-white">
+            <h3 id="tutorial-dialog-title" className="text-xs sm:text-sm font-mono font-bold uppercase tracking-wider text-orange-100">
               Smart Small Rack — Tata Cara Operasional &amp; Perangkat Keras
             </h3>
           </div>
@@ -242,7 +242,7 @@ export const RackInstructionTutorial: React.FC<RackInstructionTutorialProps> = (
                   <span
                     key={phaseIdx}
                     className={`w-3.5 h-1.5 rounded-[1px] transition-colors ${
-                      subStep === phaseIdx ? 'bg-[#172B3A]' : 'bg-[#CBC5B9]'
+                      subStep === phaseIdx ? 'bg-orange-600' : 'bg-[#CBC5B9]'
                     }`}
                   />
                 ))}
@@ -257,7 +257,7 @@ export const RackInstructionTutorial: React.FC<RackInstructionTutorialProps> = (
               <div>
                 <div className="flex items-center justify-between text-[11px] font-mono uppercase text-[#77827D] mb-2">
                   <span>Kemajuan Panduan</span>
-                  <span className="font-bold text-[#172B3A]">
+                  <span className="font-bold text-orange-700">
                     Langkah {currentScene + 1} dari {TUTORIAL_SCENES.length}
                   </span>
                 </div>
@@ -271,10 +271,10 @@ export const RackInstructionTutorial: React.FC<RackInstructionTutorialProps> = (
                         onClick={() => setCurrentScene(idx)}
                         className={`h-7 text-xs font-mono font-bold rounded-sm border transition-colors flex items-center justify-center ${
                           isCurrent
-                            ? 'bg-[#172B3A] text-white border-[#172B3A]'
+                            ? 'bg-[#1C100C] text-orange-200 border-orange-600'
                             : isCompleted
-                            ? 'bg-[#66856A]/15 text-[#4A644E] border-[#66856A]/40 hover:bg-[#66856A]/25'
-                            : 'bg-[#F5F6F4] text-[#77827D] border-[#E3E7E5] hover:border-[#172B3A]/40'
+                            ? 'bg-orange-500/15 text-orange-800 border-orange-500/40 hover:bg-orange-500/25'
+                            : 'bg-[#F5F6F4] text-[#77827D] border-[#E3E7E5] hover:border-orange-500/40'
                         }`}
                         title={`Langkah ${scene.step}: ${scene.title}`}
                       >
@@ -287,14 +287,14 @@ export const RackInstructionTutorial: React.FC<RackInstructionTutorialProps> = (
 
               {/* Scene Title & Main Mandatory Copy */}
               <div className="pt-2">
-                <div className="text-[11px] font-mono font-semibold uppercase tracking-wider text-[#66856A]">
+                <div className="text-[11px] font-mono font-semibold uppercase tracking-wider text-orange-700">
                   {activeSceneMeta.code}
                 </div>
-                <h4 className="text-base sm:text-lg font-bold text-[#263238] mt-1">
+                <h4 className="text-base sm:text-lg font-bold text-[#1C100C] mt-1">
                   {activeSceneMeta.title}
                 </h4>
-                <div className="mt-3 p-3.5 bg-[#F5F6F4] border-l-4 border-[#172B3A] rounded-r-sm">
-                  <p className="text-xs sm:text-sm text-[#263238] leading-relaxed font-medium">
+                <div className="mt-3 p-3.5 bg-[#F5F6F4] border-l-4 border-orange-600 rounded-r-sm">
+                  <p className="text-xs sm:text-sm text-[#1C100C] leading-relaxed font-medium">
                     "{activeSceneMeta.description}"
                   </p>
                 </div>
@@ -302,8 +302,8 @@ export const RackInstructionTutorial: React.FC<RackInstructionTutorialProps> = (
 
               {/* Hardware & Operational Specification Note */}
               <div className="p-3 bg-white border border-[#E3E7E5] rounded-sm space-y-1.5">
-                <div className="flex items-center gap-1.5 text-[11px] font-mono font-bold uppercase text-[#172B3A]">
-                  <Info className="w-3.5 h-3.5 text-[#172B3A]" />
+                <div className="flex items-center gap-1.5 text-[11px] font-mono font-bold uppercase text-orange-700">
+                  <Info className="w-3.5 h-3.5 text-orange-600" />
                   <span>Catatan Operasional &amp; Perangkat Keras</span>
                 </div>
                 <p className="text-xs text-[#77827D] leading-relaxed">
@@ -321,8 +321,8 @@ export const RackInstructionTutorial: React.FC<RackInstructionTutorialProps> = (
                     onClick={() => setIsPlaying((prev) => !prev)}
                     className={`px-3 py-1.5 text-xs font-mono font-semibold border rounded-sm flex items-center gap-1.5 transition-colors ${
                       isPlaying
-                        ? 'bg-[#F5F6F4] text-[#263238] border-[#E3E7E5] hover:border-[#172B3A]'
-                        : 'bg-[#66856A] text-white border-[#66856A]'
+                        ? 'bg-[#F5F6F4] text-[#263238] border-[#E3E7E5] hover:border-orange-500'
+                        : 'bg-orange-600 text-white border-orange-600'
                     }`}
                   >
                     {isPlaying ? (
@@ -340,7 +340,7 @@ export const RackInstructionTutorial: React.FC<RackInstructionTutorialProps> = (
 
                   <button
                     onClick={handleReplayScene}
-                    className="px-2.5 py-1.5 text-xs font-mono bg-[#F5F6F4] text-[#263238] border border-[#E3E7E5] hover:border-[#172B3A] rounded-sm flex items-center gap-1"
+                    className="px-2.5 py-1.5 text-xs font-mono bg-[#F5F6F4] text-[#263238] border border-[#E3E7E5] hover:border-orange-500 rounded-sm flex items-center gap-1"
                     title="Ulangi animasi langkah ini"
                   >
                     <RotateCcw className="w-3.5 h-3.5" />
@@ -353,7 +353,7 @@ export const RackInstructionTutorial: React.FC<RackInstructionTutorialProps> = (
                   <button
                     onClick={handlePrevScene}
                     disabled={currentScene === 0}
-                    className="px-3 py-1.5 text-xs font-mono font-semibold bg-[#F5F6F4] text-[#263238] border border-[#E3E7E5] hover:border-[#172B3A] rounded-sm disabled:opacity-40 flex items-center gap-1"
+                    className="px-3 py-1.5 text-xs font-mono font-semibold bg-[#F5F6F4] text-[#263238] border border-[#E3E7E5] hover:border-orange-500 rounded-sm disabled:opacity-40 flex items-center gap-1"
                   >
                     <ChevronLeft className="w-3.5 h-3.5" />
                     <span>Sebelumnya</span>
@@ -362,7 +362,7 @@ export const RackInstructionTutorial: React.FC<RackInstructionTutorialProps> = (
                   {currentScene < TUTORIAL_SCENES.length - 1 ? (
                     <button
                       onClick={handleNextScene}
-                      className="px-3.5 py-1.5 text-xs font-mono font-semibold bg-[#172B3A] text-white border border-[#172B3A] hover:bg-[#223d52] rounded-sm flex items-center gap-1"
+                      className="px-3.5 py-1.5 text-xs font-mono font-semibold bg-[#1C100C] text-white border border-orange-950 hover:bg-[#2E180E] rounded-sm flex items-center gap-1 transition-colors"
                     >
                       <span>Selanjutnya</span>
                       <ChevronRight className="w-3.5 h-3.5" />
@@ -370,7 +370,7 @@ export const RackInstructionTutorial: React.FC<RackInstructionTutorialProps> = (
                   ) : (
                     <button
                       onClick={onClose}
-                      className="px-3.5 py-1.5 text-xs font-mono font-semibold bg-[#66856A] text-white border border-[#66856A] hover:bg-[#526e56] rounded-sm flex items-center gap-1 shadow-sm"
+                      className="px-3.5 py-1.5 text-xs font-mono font-semibold bg-emerald-700 text-white border border-emerald-800 hover:bg-emerald-800 rounded-sm flex items-center gap-1 shadow-sm"
                     >
                       <span>Selesai &amp; Buka Dashboard</span>
                     </button>
@@ -385,7 +385,7 @@ export const RackInstructionTutorial: React.FC<RackInstructionTutorialProps> = (
                 </span>
                 <button
                   onClick={onClose}
-                  className="text-xs font-mono text-[#172B3A] hover:underline font-semibold"
+                  className="text-xs font-mono text-orange-700 hover:text-orange-800 hover:underline font-semibold"
                 >
                   Lewati Panduan &amp; Mulai Sekarang →
                 </button>

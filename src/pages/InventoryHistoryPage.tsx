@@ -155,9 +155,9 @@ export const InventoryHistoryPage: React.FC<InventoryHistoryPageProps> = ({
             <button
               onClick={onRefresh}
               title="Sinkronisasi audit terbaru dari database SQLite"
-              className="px-3 py-1.5 text-xs font-mono font-bold bg-[#172B3A] text-white rounded-sm hover:bg-[#254257] flex items-center gap-1.5 transition-colors shadow-xs"
+              className="px-3 py-1.5 text-xs font-mono font-bold bg-[#1C100C] text-orange-200 border border-orange-900/40 hover:bg-[#2E180E] rounded-sm flex items-center gap-1.5 transition-colors shadow-xs"
             >
-              <RotateCcw className="w-3.5 h-3.5" />
+              <RotateCcw className="w-3.5 h-3.5 text-orange-400" />
               <span className="hidden sm:inline">Segarkan</span>
             </button>
           )}
@@ -165,26 +165,26 @@ export const InventoryHistoryPage: React.FC<InventoryHistoryPageProps> = ({
       </div>
 
       {/* History Ledger Container */}
-      <div className="bg-white border border-[#E3E7E5] rounded-sm overflow-hidden">
+      <div className="bg-white border border-[#E3E7E5] rounded-sm overflow-hidden shadow-xs">
         {/* MOBILE / TABLET VIEW: Responsive Cards (Stacked Vertically without horizontal scrolling) */}
         <div className="md:hidden divide-y divide-[#E3E7E5]">
           {paginatedLogs.length > 0 ? (
             paginatedLogs.map((tx) => (
               <div key={tx.id} className="p-4 space-y-2.5 text-xs font-mono">
                 <div className="flex items-center justify-between">
-                  <span className="font-bold text-[#172B3A]">{tx.id}</span>
+                  <span className="font-bold text-[#1C100C]">{tx.id}</span>
                   <StatusBadge status={tx.eventType} />
                 </div>
                 <div className="flex items-center justify-between text-[#77827D]">
                   <span className="flex items-center gap-1">
-                    <Calendar className="w-3 h-3" />
+                    <Calendar className="w-3 h-3 text-orange-600" />
                     {tx.timestamp}
                   </span>
-                  <span className="font-semibold text-[#263238]">{tx.rowId}</span>
+                  <span className="font-semibold text-[#1C100C]">{tx.rowId}</span>
                 </div>
                 <div className="flex items-center justify-between py-1 border-t border-b border-dashed border-[#E3E7E5]">
                   <div className="flex items-center gap-1.5">
-                    <Package className="w-3.5 h-3.5 text-[#172B3A]" />
+                    <Package className="w-3.5 h-3.5 text-orange-600" />
                     <span className="px-1.5 py-0.5 bg-[#F5F6F4] border border-[#E3E7E5] rounded-sm font-semibold">
                       {tx.sku}
                     </span>
@@ -192,10 +192,10 @@ export const InventoryHistoryPage: React.FC<InventoryHistoryPageProps> = ({
                   <div className="tabular-nums">
                     <span>{tx.prevStock}</span>
                     <span className="mx-1 text-[#77827D]">→</span>
-                    <strong className="text-[#263238]">{tx.currentStock}</strong>
+                    <strong className="text-[#1C100C]">{tx.currentStock}</strong>
                     <span
                       className={`ml-1.5 font-bold ${
-                        tx.diff > 0 ? 'text-[#66856A]' : 'text-[#D6A34A]'
+                        tx.diff > 0 ? 'text-emerald-700' : 'text-amber-700'
                       }`}
                     >
                       ({tx.diff > 0 ? `+${tx.diff}` : tx.diff})
@@ -203,7 +203,7 @@ export const InventoryHistoryPage: React.FC<InventoryHistoryPageProps> = ({
                   </div>
                 </div>
                 <div className="text-[11px] text-[#77827D] break-words">
-                  <span className="font-semibold text-[#263238]">Pemicu:</span> {tx.trigger}
+                  <span className="font-semibold text-[#1C100C]">Pemicu:</span> {tx.trigger}
                 </div>
               </div>
             ))
@@ -234,7 +234,7 @@ export const InventoryHistoryPage: React.FC<InventoryHistoryPageProps> = ({
               {paginatedLogs.length > 0 ? (
                 paginatedLogs.map((tx) => (
                   <tr key={tx.id} className="hover:bg-[#F5F6F4]/60">
-                    <td className="py-3 px-4 font-bold text-[#172B3A]">{tx.id}</td>
+                    <td className="py-3 px-4 font-bold text-[#1C100C]">{tx.id}</td>
                     <td className="py-3 px-4 text-[#77827D] tabular-nums whitespace-nowrap">
                       {tx.timestamp}
                     </td>

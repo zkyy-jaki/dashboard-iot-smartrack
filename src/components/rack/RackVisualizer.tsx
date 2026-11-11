@@ -65,36 +65,36 @@ export const RackVisualizer: React.FC<RackVisualizerProps> = ({
   };
 
   return (
-    <div className="bg-white border border-[#E3E7E5] rounded-sm p-4 sm:p-6 flex flex-col justify-between">
+    <div className="bg-white border border-orange-900/10 rounded-sm p-4 sm:p-6 flex flex-col justify-between shadow-2xs">
       {/* Header Visualizer */}
-      <div className="flex flex-wrap items-center justify-between pb-4 mb-5 border-b border-[#E3E7E5] gap-2">
+      <div className="flex flex-wrap items-center justify-between pb-4 mb-5 border-b border-orange-200/60 gap-2">
         <div className="flex items-center gap-3">
-          <div className="p-2 bg-[#172B3A] text-white rounded-sm shrink-0">
+          <div className="p-2.5 bg-gradient-to-br from-orange-600 via-amber-600 to-red-600 text-white rounded-sm shrink-0 shadow-xs">
             <Layers className="w-5 h-5" />
           </div>
           <div>
-            <span className="text-[10px] font-mono uppercase tracking-widest text-[#77827D]">
+            <span className="text-[10px] font-mono uppercase tracking-widest text-stone-500">
               SKEMATIK ELEVASI RAK (CAD ISOMETRIK)
             </span>
-            <h3 className="text-sm sm:text-base font-bold text-[#263238] font-mono">
+            <h3 className="text-sm sm:text-base font-extrabold text-[#1C100C] font-mono">
               RACK-001 • 3 Lantai Ambalan (Panjang 58.0 cm)
             </h3>
           </div>
         </div>
 
         {/* Legend */}
-        <div className="flex items-center gap-4 text-xs font-mono text-[#77827D]">
+        <div className="flex items-center gap-4 text-xs font-mono text-stone-500">
           <span className="flex items-center gap-1.5">
-            <span className="w-3 h-3 bg-[#172B3A] inline-block rounded-[1px]" /> Sensor HC-SR04
+            <span className="w-3 h-3 bg-[#1C100C] inline-block rounded-[1px] border border-orange-500/40" /> Sensor HC-SR04
           </span>
           <span className="flex items-center gap-1.5">
-            <span className="w-3 h-3 bg-[#D6A34A] border border-[#9A6E1F] inline-block rounded-[1px]" /> Kardus Barang
+            <span className="w-3 h-3 bg-amber-500 border border-amber-700 inline-block rounded-[1px]" /> Kardus Barang
           </span>
         </div>
       </div>
 
-      {/* Frame Rak Baja */}
-      <div className="border-x-[10px] sm:border-x-[12px] border-t-[10px] border-[#4A5559] bg-[#F5F6F4]/60 pt-4 pb-2 px-2 sm:px-4 space-y-5 relative">
+      {/* Frame Rak Baja — Charred Timber & Dark Steel */}
+      <div className="border-x-[10px] sm:border-x-[12px] border-t-[10px] border-[#2E180E] bg-stone-100/70 pt-4 pb-2 px-2 sm:px-4 space-y-5 relative rounded-t-sm shadow-inner">
         {floors.map((floor) => {
           const isSelected = selectedFloor === floor.floor;
           // ZERO LOCAL MATH: Lebar murni rasio terhadap 58.0 cm
@@ -106,20 +106,20 @@ export const RackVisualizer: React.FC<RackVisualizerProps> = ({
               onClick={() => onSelectFloor?.(floor.floor)}
               className={`transition-all rounded-sm border-2 bg-white ${
                 isSelected
-                  ? 'border-[#172B3A] shadow-md ring-2 ring-[#172B3A]/10'
-                  : 'border-[#E3E7E5] hover:border-[#172B3A]/40 cursor-pointer'
+                  ? 'border-orange-600 shadow-md ring-2 ring-orange-500/20'
+                  : 'border-orange-200/80 hover:border-orange-500/50 cursor-pointer shadow-xs'
               }`}
             >
               {/* Baris Strip Informasi Lantai */}
-              <div className="px-3 py-2 bg-[#172B3A]/5 border-b border-[#E3E7E5] flex flex-wrap items-center justify-between gap-2 text-xs font-mono">
+              <div className="px-3 py-2 bg-orange-950/5 border-b border-orange-200/60 flex flex-wrap items-center justify-between gap-2 text-xs font-mono">
                 <div className="flex items-center gap-2">
-                  <span className="px-2 py-0.5 bg-[#172B3A] text-white font-bold rounded-sm">
+                  <span className="px-2 py-0.5 bg-gradient-to-r from-orange-700 to-amber-800 text-amber-100 font-bold rounded-sm shadow-2xs">
                     Lantai {floor.floor}
                   </span>
-                  <span className="font-bold text-[#263238]">
+                  <span className="font-bold text-[#1C100C]">
                     {floor.item_count} Kardus ({floor.occupied_span_cm} cm)
                   </span>
-                  <span className="text-[#77827D] hidden md:inline">
+                  <span className="text-stone-500 hidden md:inline">
                     • Kiri: {floor.distance_left_cm} cm | Kanan: {floor.distance_right_cm} cm
                   </span>
                 </div>
@@ -130,10 +130,10 @@ export const RackVisualizer: React.FC<RackVisualizerProps> = ({
                   <span
                     className={`px-2 py-0.5 rounded-sm font-bold text-[10px] ${
                       floor.status === 'FULL'
-                        ? 'bg-emerald-100 text-emerald-800'
+                        ? 'bg-emerald-100 text-emerald-800 border border-emerald-300'
                         : floor.status === 'PARTIAL'
-                        ? 'bg-sky-100 text-sky-800'
-                        : 'bg-rose-100 text-rose-800'
+                        ? 'bg-amber-100 text-amber-800 border border-amber-300'
+                        : 'bg-rose-100 text-rose-800 border border-rose-300'
                     }`}
                   >
                     {floor.status}
@@ -145,28 +145,28 @@ export const RackVisualizer: React.FC<RackVisualizerProps> = ({
               <div className="h-28 relative flex items-end px-7 sm:px-8 pt-4 pb-2 bg-white overflow-hidden">
                 {/* Modul Sensor Kiri */}
                 <div className="absolute left-0 bottom-2 z-10 flex items-center">
-                  <div className="bg-[#172B3A] text-white px-1.5 py-2 rounded-r-sm flex flex-col items-center shadow-xs">
+                  <div className="bg-[#1C100C] text-orange-400 px-1.5 py-2 rounded-r-sm flex flex-col items-center shadow-xs border-r border-y border-orange-500/30">
                     <span className="text-[9px] font-mono font-bold leading-none">US-0{floor.floor * 2 - 1}</span>
-                    <span className="text-[7px] font-mono text-slate-300">KIRI</span>
+                    <span className="text-[7px] font-mono text-amber-300/70">KIRI</span>
                   </div>
                 </div>
 
                 {/* Modul Sensor Kanan */}
                 <div className="absolute right-0 bottom-2 z-10 flex items-center">
-                  <div className="bg-[#172B3A] text-white px-1.5 py-2 rounded-l-sm flex flex-col items-center shadow-xs">
+                  <div className="bg-[#1C100C] text-orange-400 px-1.5 py-2 rounded-l-sm flex flex-col items-center shadow-xs border-l border-y border-orange-500/30">
                     <span className="text-[9px] font-mono font-bold leading-none">US-0{floor.floor * 2}</span>
-                    <span className="text-[7px] font-mono text-slate-300">KANAN</span>
+                    <span className="text-[7px] font-mono text-amber-300/70">KANAN</span>
                   </div>
                 </div>
 
                 {/* Ambalan Rak 58 cm */}
-                <div className="w-full h-20 flex items-end relative overflow-hidden bg-slate-50/50 border-b-2 border-slate-700">
+                <div className="w-full h-20 flex items-end relative overflow-hidden bg-stone-50 border-b-2 border-[#2E180E]">
                   {floor.item_count === 0 ? (
-                    <div className="w-full h-full flex flex-col items-center justify-center border border-dashed border-slate-300 rounded-sm">
-                      <span className="text-xs font-mono font-semibold text-slate-400 italic">
+                    <div className="w-full h-full flex flex-col items-center justify-center border border-dashed border-stone-300 rounded-sm">
+                      <span className="text-xs font-mono font-semibold text-stone-400 italic">
                         — LANTAI KOSONG (0 KARDUS) —
                       </span>
-                      <span className="text-[10px] font-mono text-slate-400">
+                      <span className="text-[10px] font-mono text-stone-400">
                         Ambalan 58.0 cm bersih tanpa hambatan
                       </span>
                     </div>
@@ -179,12 +179,12 @@ export const RackVisualizer: React.FC<RackVisualizerProps> = ({
                       {Array.from({ length: floor.item_count }).map((_, boxIdx) => (
                         <div
                           key={boxIdx}
-                          className="flex-1 bg-gradient-to-b from-[#E5B563] to-[#C9943B] border-2 border-[#8A5F19] rounded-xs shadow-md flex flex-col items-center justify-center relative overflow-hidden select-none"
+                          className="flex-1 bg-gradient-to-b from-amber-400 via-amber-500 to-amber-600 border-2 border-amber-800 rounded-xs shadow-md flex flex-col items-center justify-center relative overflow-hidden select-none"
                           title={`Kardus #${boxIdx + 1} di Lantai ${floor.floor}`}
                         >
                           {/* Garis Lakban Cokelat */}
-                          <div className="absolute inset-x-0 top-1/2 -translate-y-1/2 h-2.5 bg-[#8A5F19]/25 border-y border-[#8A5F19]/40" />
-                          <span className="text-[10px] font-mono font-bold text-[#422907] z-10">
+                          <div className="absolute inset-x-0 top-1/2 -translate-y-1/2 h-2.5 bg-amber-950/25 border-y border-amber-900/40" />
+                          <span className="text-[10px] font-mono font-bold text-amber-950 z-10">
                             BOX #{boxIdx + 1}
                           </span>
                         </div>
@@ -195,7 +195,7 @@ export const RackVisualizer: React.FC<RackVisualizerProps> = ({
               </div>
 
               {/* Garis Ambalan Besi Horizontal */}
-              <div className="h-2 bg-[#374151] border-t border-[#1F2937]" />
+              <div className="h-2 bg-[#2E180E] border-t border-[#1C100C]" />
             </div>
           );
         })}

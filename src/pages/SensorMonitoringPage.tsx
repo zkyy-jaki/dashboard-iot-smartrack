@@ -164,7 +164,7 @@ export const SensorMonitoringPage: React.FC<SensorMonitoringPageProps> = ({
                   <StatusBadge status="OFFLINE" />
                   <button
                     onClick={() => onToggleSensor(s.id)}
-                    className="px-3 py-1 bg-[#172B3A] text-white rounded-sm font-semibold"
+                    className="px-3 py-1 bg-[#1C100C] text-orange-200 border border-orange-900/40 hover:bg-[#2E180E] rounded-sm font-semibold transition-colors"
                   >
                     Sambungkan Kembali
                   </button>
@@ -176,10 +176,10 @@ export const SensorMonitoringPage: React.FC<SensorMonitoringPageProps> = ({
       </div>
 
       {/* CONNECTED SENSORS CONTAINER */}
-      <div className="bg-white border border-[#E3E7E5] rounded-sm overflow-hidden">
+      <div className="bg-white border border-[#E3E7E5] rounded-sm overflow-hidden shadow-xs">
         <div className="px-5 py-4 border-b border-[#E3E7E5] flex items-center justify-between">
           <div>
-            <h2 className="text-sm font-bold font-mono uppercase text-[#263238]">
+            <h2 className="text-sm font-bold font-mono uppercase text-[#1C100C]">
               Sensor Aktif Terhubung ({connectedSensors.length} Online)
             </h2>
             <p className="text-xs text-[#77827D] mt-0.5">
@@ -193,12 +193,12 @@ export const SensorMonitoringPage: React.FC<SensorMonitoringPageProps> = ({
           {connectedSensors.map((s) => (
             <div key={s.id} className="p-4 space-y-2 text-xs font-mono">
               <div className="flex items-center justify-between">
-                <span className="font-bold text-[#172B3A]">{s.id} — {s.name}</span>
+                <span className="font-bold text-orange-700">{s.id} — {s.name}</span>
                 <StatusBadge status="ONLINE" />
               </div>
               <div className="flex items-center justify-between text-[#77827D]">
                 <span>Lokasi: {s.rowId} ({s.position})</span>
-                <strong className="text-[#172B3A] text-sm tabular-nums">
+                <strong className="text-[#1C100C] text-sm tabular-nums">
                   {getSensorReadingDisplay(s)}
                 </strong>
               </div>
@@ -235,11 +235,11 @@ export const SensorMonitoringPage: React.FC<SensorMonitoringPageProps> = ({
             <tbody className="divide-y divide-[#E3E7E5] text-xs font-mono">
               {connectedSensors.map((s) => (
                 <tr key={s.id} className="hover:bg-[#F5F6F4]/60">
-                  <td className="py-3 px-4 font-bold text-[#172B3A] whitespace-nowrap">{s.id}</td>
-                  <td className="py-3 px-4 font-sans font-medium text-[#263238] whitespace-nowrap">{s.name}</td>
+                  <td className="py-3 px-4 font-bold text-orange-700 whitespace-nowrap">{s.id}</td>
+                  <td className="py-3 px-4 font-sans font-medium text-[#1C100C] whitespace-nowrap">{s.name}</td>
                   <td className="py-3 px-4 whitespace-nowrap">{s.rowId} ({s.position})</td>
                   <td className="py-3 px-4 text-[#77827D] max-w-xs break-words">{s.gpio}</td>
-                  <td className="py-3 px-4 font-bold text-[#172B3A] tabular-nums whitespace-nowrap">
+                  <td className="py-3 px-4 font-bold text-[#1C100C] tabular-nums whitespace-nowrap">
                     {getSensorReadingDisplay(s)}
                   </td>
                   <td className="py-3 px-4">
@@ -325,15 +325,15 @@ export const SensorMonitoringPage: React.FC<SensorMonitoringPageProps> = ({
               step={10}
               value={envData.gasPpm}
               onChange={(e) => setEnvData({ ...envData, gasPpm: Number(e.target.value) })}
-              className="w-full accent-[#172B3A] h-1.5 bg-gray-300 rounded-lg cursor-pointer"
+              className="w-full accent-orange-600 h-1.5 bg-gray-300 rounded-lg cursor-pointer"
             />
           </div>
 
           {/* Panel Kontrol Alarm & Buzzer Fisik (MQTT) */}
           <div className="p-3.5 bg-[#F5F6F4] border border-[#E3E7E5] rounded-sm space-y-3">
             <div className="flex flex-wrap items-center justify-between text-xs font-mono gap-1 border-b border-[#E3E7E5] pb-2">
-              <span className="font-bold text-[#263238] uppercase flex items-center gap-1.5">
-                <Volume2 className="w-3.5 h-3.5 text-[#172B3A]" />
+              <span className="font-bold text-[#1C100C] uppercase flex items-center gap-1.5">
+                <Volume2 className="w-3.5 h-3.5 text-orange-600" />
                 Panel Kontrol Alarm &amp; Buzzer Fisik (MQTT)
               </span>
               <span className="text-[10px] text-[#77827D]">
@@ -345,14 +345,14 @@ export const SensorMonitoringPage: React.FC<SensorMonitoringPageProps> = ({
             <div className="grid grid-cols-2 gap-2 text-xs font-mono">
               <div className="p-2 bg-white border border-[#E3E7E5] rounded-sm flex items-center justify-between">
                 <span className="text-[11px] text-[#77827D]">Status Sirene:</span>
-                <span className={`font-bold flex items-center gap-1 ${telemetryPayload?.actuators?.buzzer ? 'text-[#C85C54]' : 'text-[#66856A]'}`}>
-                  <span className={`w-2 h-2 rounded-full ${telemetryPayload?.actuators?.buzzer ? 'bg-[#C85C54] animate-ping' : 'bg-[#66856A]'}`} />
+                <span className={`font-bold flex items-center gap-1 ${telemetryPayload?.actuators?.buzzer ? 'text-[#C85C54]' : 'text-emerald-700'}`}>
+                  <span className={`w-2 h-2 rounded-full ${telemetryPayload?.actuators?.buzzer ? 'bg-[#C85C54] animate-ping' : 'bg-emerald-600'}`} />
                   {telemetryPayload?.actuators?.buzzer ? 'BUNYI (AKTIF)' : 'MATI (STANDBY)'}
                 </span>
               </div>
               <div className="p-2 bg-white border border-[#E3E7E5] rounded-sm flex items-center justify-between">
                 <span className="text-[11px] text-[#77827D]">Safety State:</span>
-                <span className={`font-bold ${telemetryPayload?.environment?.safety_state === 'ALARM_TRIGGERED' ? 'text-[#C85C54]' : 'text-[#66856A]'}`}>
+                <span className={`font-bold ${telemetryPayload?.environment?.safety_state === 'ALARM_TRIGGERED' ? 'text-[#C85C54]' : 'text-emerald-700'}`}>
                   {telemetryPayload?.environment?.safety_state === 'ALARM_TRIGGERED' ? 'ALARM_TRIGGERED (BAHAYA)' : 'SAFE_NORMAL (AMAN)'}
                 </span>
               </div>
@@ -368,10 +368,10 @@ export const SensorMonitoringPage: React.FC<SensorMonitoringPageProps> = ({
                     ok ? 'info' : 'danger'
                   );
                 }}
-                className="px-2 py-1.5 bg-white border border-[#E3E7E5] hover:border-[#172B3A] rounded-sm flex items-center justify-center gap-1.5 font-semibold text-[#263238]"
+                className="px-2 py-1.5 bg-amber-50 border border-amber-300 hover:bg-amber-100 rounded-sm flex items-center justify-center gap-1.5 font-semibold text-amber-900 transition-colors"
                 title="Diamkan alarm saat bahaya aktif"
               >
-                <VolumeX className="w-3.5 h-3.5 text-[#D6A34A]" />
+                <VolumeX className="w-3.5 h-3.5 text-amber-600" />
                 <span>MUTE</span>
               </button>
               <button
@@ -382,10 +382,10 @@ export const SensorMonitoringPage: React.FC<SensorMonitoringPageProps> = ({
                     ok ? 'info' : 'danger'
                   );
                 }}
-                className="px-2 py-1.5 bg-[#172B3A] text-white rounded-sm flex items-center justify-center gap-1.5 font-semibold hover:bg-[#223d52]"
+                className="px-2 py-1.5 bg-[#1C100C] text-orange-200 border border-orange-900/40 rounded-sm flex items-center justify-center gap-1.5 font-semibold hover:bg-[#2E180E] transition-colors"
                 title="Kembalikan sistem ke mode pemantauan otomatis"
               >
-                <RotateCcw className="w-3.5 h-3.5 text-[#66856A]" />
+                <RotateCcw className="w-3.5 h-3.5 text-orange-400" />
                 <span>AUTO</span>
               </button>
               <button
@@ -396,10 +396,10 @@ export const SensorMonitoringPage: React.FC<SensorMonitoringPageProps> = ({
                     ok ? 'info' : 'danger'
                   );
                 }}
-                className="px-2 py-1.5 bg-white border border-[#E3E7E5] hover:border-[#C85C54] rounded-sm flex items-center justify-center gap-1.5 font-semibold text-[#C85C54]"
+                className="px-2 py-1.5 bg-red-50 border border-red-300 hover:bg-red-100 rounded-sm flex items-center justify-center gap-1.5 font-semibold text-red-700 transition-colors"
                 title="Bunyikan sirine darurat secara manual (TEST ON)"
               >
-                <Volume2 className="w-3.5 h-3.5 text-[#C85C54]" />
+                <Volume2 className="w-3.5 h-3.5 text-red-600" />
                 <span>TEST ON</span>
               </button>
               <button
@@ -410,7 +410,7 @@ export const SensorMonitoringPage: React.FC<SensorMonitoringPageProps> = ({
                     ok ? 'info' : 'danger'
                   );
                 }}
-                className="px-2 py-1.5 bg-white border border-[#E3E7E5] hover:border-[#172B3A] rounded-sm flex items-center justify-center gap-1.5 font-semibold text-[#77827D]"
+                className="px-2 py-1.5 bg-stone-100 border border-stone-300 hover:bg-stone-200 rounded-sm flex items-center justify-center gap-1.5 font-semibold text-stone-700 transition-colors"
                 title="Matikan buzzer secara paksa"
               >
                 <span>OFF</span>
@@ -421,12 +421,12 @@ export const SensorMonitoringPage: React.FC<SensorMonitoringPageProps> = ({
           {/* Gas Alert History */}
           <div>
             <div className="flex items-center justify-between mb-2">
-              <span className="text-xs font-mono font-bold uppercase text-[#263238]">
+              <span className="text-xs font-mono font-bold uppercase text-[#1C100C]">
                 Riwayat Peringatan Gas
               </span>
               <button
                 onClick={handleLogGasTestAlert}
-                className="px-2 py-1 text-[11px] font-mono bg-[#F5F6F4] border border-[#E3E7E5] hover:border-[#172B3A] rounded-sm"
+                className="px-2 py-1 text-[11px] font-mono bg-[#F5F6F4] border border-[#E3E7E5] hover:border-orange-500 rounded-sm"
               >
                 + Catat Snapshot
               </button>
@@ -436,8 +436,8 @@ export const SensorMonitoringPage: React.FC<SensorMonitoringPageProps> = ({
                 <div key={alert.id} className="p-2.5 text-xs font-mono flex items-start justify-between gap-2">
                   <div>
                     <div className="flex items-center gap-2">
-                      <span className="font-bold text-[#263238]">{alert.timestamp}</span>
-                      <span className="text-[#172B3A] font-semibold">{alert.readingPpm} ppm</span>
+                      <span className="font-bold text-[#1C100C]">{alert.timestamp}</span>
+                      <span className="text-orange-700 font-semibold">{alert.readingPpm} ppm</span>
                     </div>
                     <div className="text-[11px] font-sans text-[#77827D] mt-0.5 break-words">{alert.message}</div>
                   </div>
@@ -453,7 +453,7 @@ export const SensorMonitoringPage: React.FC<SensorMonitoringPageProps> = ({
           <div>
             <div className="flex flex-wrap items-center justify-between border-b border-[#E3E7E5] pb-3 gap-2">
               <div>
-                <h3 className="text-sm font-bold font-mono uppercase text-[#263238]">
+                <h3 className="text-sm font-bold font-mono uppercase text-[#1C100C]">
                   Monitoring Suhu &amp; Kelembaban (ENV-01)
                 </h3>
                 <p className="text-xs text-[#77827D] mt-0.5">
@@ -461,11 +461,11 @@ export const SensorMonitoringPage: React.FC<SensorMonitoringPageProps> = ({
                 </p>
               </div>
               <div className="text-right font-mono">
-                <span className="text-sm font-bold text-[#172B3A]">
+                <span className="text-sm font-bold text-orange-700">
                   {envData.temperatureC.toFixed(1)} °C
                 </span>
                 <span className="mx-1.5 text-[#77827D]">|</span>
-                <span className="text-sm font-bold text-[#66856A]">
+                <span className="text-sm font-bold text-amber-700">
                   {envData.humidityRh} %RH
                 </span>
               </div>
@@ -479,14 +479,14 @@ export const SensorMonitoringPage: React.FC<SensorMonitoringPageProps> = ({
                   <YAxis
                     yAxisId="temp"
                     domain={[20, 35]}
-                    tick={{ fontSize: 11, fill: '#172B3A' }}
+                    tick={{ fontSize: 11, fill: '#EA580C' }}
                     label={{ value: '°C', position: 'insideTopLeft', fontSize: 10 }}
                   />
                   <YAxis
                     yAxisId="hum"
                     orientation="right"
                     domain={[40, 90]}
-                    tick={{ fontSize: 11, fill: '#66856A' }}
+                    tick={{ fontSize: 11, fill: '#D97706' }}
                     label={{ value: '%RH', position: 'insideTopRight', fontSize: 10 }}
                   />
                   <Tooltip
@@ -502,7 +502,7 @@ export const SensorMonitoringPage: React.FC<SensorMonitoringPageProps> = ({
                     type="monotone"
                     dataKey="temp"
                     name="Suhu Lingkungan (°C)"
-                    stroke="#172B3A"
+                    stroke="#EA580C"
                     strokeWidth={2}
                     dot={{ r: 3 }}
                   />
@@ -511,7 +511,7 @@ export const SensorMonitoringPage: React.FC<SensorMonitoringPageProps> = ({
                     type="monotone"
                     dataKey="humidity"
                     name="Kelembaban Udara (%RH)"
-                    stroke="#66856A"
+                    stroke="#D97706"
                     strokeWidth={2}
                     dot={{ r: 3 }}
                   />

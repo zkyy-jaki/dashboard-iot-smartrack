@@ -27,11 +27,11 @@ export const SimulatorDrawer: React.FC<SimulatorDrawerProps> = ({
   if (!show) return null;
 
   return (
-    <div className="bg-white border-b-2 border-[#172B3A] px-4 sm:px-6 py-4 shadow-sm transition-all">
+    <div className="bg-white border-b-2 border-orange-600 px-4 sm:px-6 py-4 shadow-md transition-all">
       <div className="flex items-center justify-between mb-3">
         <div className="flex items-center gap-2">
-          <Sliders className="w-4 h-4 text-[#172B3A]" />
-          <h3 className="text-xs font-mono font-bold uppercase tracking-wider text-[#172B3A]">
+          <Sliders className="w-4 h-4 text-orange-600" />
+          <h3 className="text-xs font-mono font-bold uppercase tracking-wider text-[#1C100C]">
             Simulator Interaktif Jarak Ultrasonik &amp; Lingkungan
           </h3>
           <span className="text-xs text-[#77827D] hidden md:inline">
@@ -40,7 +40,7 @@ export const SimulatorDrawer: React.FC<SimulatorDrawerProps> = ({
         </div>
         <button
           onClick={onClose}
-          className="text-xs font-mono text-[#77827D] hover:text-[#263238] flex items-center gap-1"
+          className="text-xs font-mono text-[#77827D] hover:text-[#1C100C] flex items-center gap-1"
         >
           <X className="w-4 h-4" /> Tutup
         </button>
@@ -50,10 +50,10 @@ export const SimulatorDrawer: React.FC<SimulatorDrawerProps> = ({
         {enrichedRows.map((r) => (
           <div key={r.rowId} className="p-3 bg-[#F5F6F4] border border-[#E3E7E5] rounded-sm space-y-2">
             <div className="flex items-center justify-between">
-              <span className="text-xs font-bold font-mono text-[#172B3A]">
+              <span className="text-xs font-bold font-mono text-orange-700">
                 {r.rowId} ({r.sku})
               </span>
-              <span className="text-xs font-mono font-semibold text-[#263238]">
+              <span className="text-xs font-mono font-semibold text-[#1C100C]">
                 Stok: {r.estimatedStock}/{r.capacity}
               </span>
             </div>
@@ -75,7 +75,7 @@ export const SimulatorDrawer: React.FC<SimulatorDrawerProps> = ({
                   onChange={(e) =>
                     onUpdateRowDistances(r.rowId, Number(e.target.value), r.rightDistanceCm, 'Simulator Slider')
                   }
-                  className="w-full accent-[#172B3A] h-1.5 bg-gray-300 rounded-lg cursor-pointer"
+                  className="w-full accent-orange-600 h-1.5 bg-gray-300 rounded-lg cursor-pointer"
                 />
               </div>
               <div>
@@ -92,7 +92,7 @@ export const SimulatorDrawer: React.FC<SimulatorDrawerProps> = ({
                   onChange={(e) =>
                     onUpdateRowDistances(r.rowId, r.leftDistanceCm, Number(e.target.value), 'Simulator Slider')
                   }
-                  className="w-full accent-[#172B3A] h-1.5 bg-gray-300 rounded-lg cursor-pointer"
+                  className="w-full accent-orange-600 h-1.5 bg-gray-300 rounded-lg cursor-pointer"
                 />
               </div>
             </div>
@@ -100,14 +100,14 @@ export const SimulatorDrawer: React.FC<SimulatorDrawerProps> = ({
               <button
                 onClick={() => onStepRowBox(r.rowId, -1)}
                 disabled={r.estimatedStock <= 0}
-                className="px-2 py-0.5 text-[11px] font-mono bg-white border border-[#E3E7E5] rounded-sm hover:bg-gray-100 disabled:opacity-40"
+                className="px-2 py-0.5 text-[11px] font-mono bg-white border border-[#E3E7E5] rounded-sm hover:border-orange-500 disabled:opacity-40"
               >
                 -1 Kardus (Ambil)
               </button>
               <button
                 onClick={() => onStepRowBox(r.rowId, +1)}
                 disabled={r.estimatedStock >= r.capacity}
-                className="px-2 py-0.5 text-[11px] font-mono bg-white border border-[#E3E7E5] rounded-sm hover:bg-gray-100 disabled:opacity-40"
+                className="px-2 py-0.5 text-[11px] font-mono bg-white border border-[#E3E7E5] rounded-sm hover:border-orange-500 disabled:opacity-40"
               >
                 +1 Kardus (Tambah)
               </button>
@@ -118,7 +118,7 @@ export const SimulatorDrawer: React.FC<SimulatorDrawerProps> = ({
         {/* Environmental Simulator Controls */}
         <div className="p-3 bg-[#F5F6F4] border border-[#E3E7E5] rounded-sm space-y-2">
           <div className="flex items-center justify-between">
-            <span className="text-xs font-bold font-mono text-[#172B3A]">
+            <span className="text-xs font-bold font-mono text-orange-700">
               Simulasi Udara &amp; Gas
             </span>
             <StatusBadge status={gasStatus} />

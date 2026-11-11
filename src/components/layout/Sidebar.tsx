@@ -9,9 +9,13 @@ import {
   X,
   BookOpen,
   Radio,
-  Cpu
+  Cpu,
+  Flame,
+  ShieldAlert,
+  Sparkles
 } from 'lucide-react';
 import { OtaStatusInfo } from '../../types';
+import { KarhutlaTreeWidget } from './KarhutlaTreeWidget';
 
 interface SidebarProps {
   activePage: string;
@@ -28,6 +32,8 @@ interface SidebarProps {
   mobileOpen: boolean;
   onCloseMobile: () => void;
   onOpenTutorial?: () => void;
+  isFireAlert?: boolean;
+  gasPpm?: number;
 }
 
 export const Sidebar: React.FC<SidebarProps> = ({
@@ -44,7 +50,9 @@ export const Sidebar: React.FC<SidebarProps> = ({
   sensorAlertCount,
   mobileOpen,
   onCloseMobile,
-  onOpenTutorial
+  onOpenTutorial,
+  isFireAlert = false,
+  gasPpm = 0
 }) => {
   const navItems = [
     { id: 'overview', label: 'Ringkasan', icon: LayoutDashboard },
@@ -67,34 +75,39 @@ export const Sidebar: React.FC<SidebarProps> = ({
 
   return (
     <>
-      {/* Mobile Backdrop */}
+      {/* Mobile Backdrop with Warm Charcoal Tint */}
       {mobileOpen && (
         <div
-          className="fixed inset-0 bg-black/60 backdrop-blur-sm z-40 lg:hidden transition-opacity"
+          className="fixed inset-0 bg-[#0F0704]/80 backdrop-blur-sm z-40 lg:hidden transition-opacity"
           onClick={onCloseMobile}
           aria-hidden="true"
         />
       )}
 
-      {/* Sidebar Container */}
       <aside
-        className={`fixed inset-y-0 left-0 z-50 w-64 bg-[#172B3A] text-white flex flex-col justify-between shrink-0 border-r border-[#0F1E29] select-none transition-transform duration-300 ease-in-out lg:static lg:translate-x-0 ${
+        className={`fixed inset-y-0 left-0 z-50 w-64 bg-gradient-to-b from-[#1C100C] via-[#170C08] to-[#0E0603] text-white flex flex-col justify-between shrink-0 border-r border-[#2E160C] select-none shadow-2xl transition-transform duration-300 ease-in-out lg:static lg:translate-x-0 overflow-y-auto ${
           mobileOpen ? 'translate-x-0' : '-translate-x-full'
         }`}
       >
-        {/* Top Brand Header */}
-        <div>
-          <div className="h-16 px-5 flex items-center justify-between border-b border-white/10">
+        {/* Top Brand Header & Navigation */}
+        <div className="flex flex-col">
+          <div className="h-16 px-5 flex items-center justify-between border-b border-orange-500/15 bg-gradient-to-r from-orange-950/30 via-transparent to-red-950/20">
             <div className="flex items-center gap-3">
-              <div className="w-8 h-8 rounded-sm bg-[#66856A] flex items-center justify-center text-white font-mono font-bold text-sm border border-white/20">
-                SR
-              </div>
-              <div>
-                <div className="font-bold tracking-wider text-sm text-white leading-none">
-                  SMART RACK
+              {/* Flame Ember Logo Badge */}
+              <div className="relative group">
+                <div className="absolute -inset-0.5 bg-gradient-to-r from-red-600 via-orange-500 to-amber-500 rounded-sm blur-[3px] opacity-70 group-hover:opacity-100 transition duration-300" />
+                <div className="relative w-8 h-8 rounded-sm bg-gradient-to-br from-[#2D1409] via-[#1F0C05] to-[#120602] border border-orange-500/40 flex items-center justify-center text-orange-400 font-mono font-bold text-sm shadow-inner">
+                  <Flame className="w-4 h-4 text-orange-500 animate-pulse" />
                 </div>
-                <div className="text-[11px] font-mono text-slate-300 mt-1">
-                  IIoT WMS v2.4 • RACK-001
+              </div>
+
+              <div>
+                <div className="font-extrabold tracking-wider text-sm bg-gradient-to-r from-amber-200 via-orange-300 to-red-300 bg-clip-text text-transparent leading-none flex items-center gap-1.5">
+                  SMART RACK
+                  <span className="w-1.5 h-1.5 rounded-full bg-orange-500 animate-ping inline-block" />
+                </div>
+                <div className="text-[10px] font-mono text-amber-200/60 mt-1 tracking-tight">
+                  
                 </div>
               </div>
             </div>
@@ -102,27 +115,35 @@ export const Sidebar: React.FC<SidebarProps> = ({
             {/* Mobile Close Button */}
             <button
               onClick={onCloseMobile}
-              className="lg:hidden p-1 text-slate-400 hover:text-white rounded-sm hover:bg-white/10"
+              className="lg:hidden p-1 text-amber-300/70 hover:text-white rounded-sm hover:bg-orange-500/20 transition-colors"
               aria-label="Close menu"
             >
               <X className="w-5 h-5" />
             </button>
           </div>
 
-          {/* Prototype Mode Notice inside Sidebar */}
-          <div className="mx-3 mt-3 p-2.5 bg-[#0F1E29] border border-white/10 rounded-sm">
-            <div className="flex items-center justify-between text-[10px] font-mono uppercase tracking-wider text-slate-300">
-              <span>Node Hardware</span>
-              <span className="text-[#66856A] font-semibold">ESP32-WROOM</span>
+          {/* Node Hardware Card — Charred Timber & Copper Border */}
+          <div className="mx-3 mt-3.5 p-2.5 bg-gradient-to-r from-[#24130A] to-[#1A0C06] border border-orange-500/25 rounded-sm shadow-sm relative overflow-hidden group">
+            <div className="absolute -right-4 -bottom-4 w-12 h-12 bg-orange-600/10 rounded-full blur-xl group-hover:bg-orange-600/20 transition-all" />
+            <div className="flex items-center justify-between text-[10px] font-mono uppercase tracking-wider text-amber-200/70">
+              <span className="flex items-center gap-1">
+                <Sparkles className="w-2.5 h-2.5 text-orange-400" />
+                
+              </span>
+              <span className="text-orange-400 font-bold bg-orange-950/80 px-1.5 py-0.5 rounded-xs border border-orange-500/30">
+                
+              </span>
             </div>
-            <div className="mt-1 text-[11px] font-mono text-slate-400 flex items-center justify-between">
-              <span>6x HC-SR04 • MQ • DHT11</span>
+            <div className="mt-1.5 text-[10px] font-mono text-stone-300 flex items-center justify-between">
+              <span className="text-stone-400">Sensor Ambalan:</span>
+              <span className="text-amber-300/90 font-medium">6x HC-SR04 • MQ • DHT11</span>
             </div>
           </div>
 
           {/* Navigation Links */}
-          <nav className="mt-4 px-2 space-y-1">
-            <div className="px-3 py-1.5 text-[10px] font-mono uppercase tracking-widest text-slate-400">
+          <nav className="mt-4 px-2.5 space-y-1">
+            <div className="px-3 py-1.5 text-[10px] font-mono uppercase tracking-widest text-amber-300/50 flex items-center gap-1.5">
+              <span className="w-1 h-1 rounded-full bg-orange-500" />
               Operasional &amp; Telemetri
             </div>
             {navItems.map((item) => {
@@ -132,26 +153,30 @@ export const Sidebar: React.FC<SidebarProps> = ({
                 <button
                   key={item.id}
                   onClick={() => handleNavClick(item.id)}
-                  className={`w-full flex items-center justify-between px-3 py-2.5 text-xs font-medium rounded-sm transition-colors ${
+                  className={`w-full flex items-center justify-between px-3 py-2 text-xs font-medium rounded-sm transition-all duration-200 ${
                     isActive
-                      ? 'bg-white/12 text-white border-l-2 border-[#66856A]'
-                      : 'text-slate-300 hover:bg-white/5 hover:text-white'
+                      ? 'bg-gradient-to-r from-orange-600/30 via-red-600/20 to-transparent text-white border-l-[3px] border-orange-500 shadow-[inset_0_1px_1px_rgba(251,146,60,0.2)] font-semibold'
+                      : 'text-stone-300 hover:text-white hover:bg-orange-950/30 hover:border-l-2 hover:border-orange-500/40'
                   }`}
                 >
                   <div className="flex items-center gap-2.5">
                     <IconComponent
-                      className={`w-4 h-4 ${isActive ? 'text-[#66856A]' : 'text-slate-400'}`}
+                      className={`w-4 h-4 transition-transform ${
+                        isActive
+                          ? 'text-orange-400 drop-shadow-[0_0_8px_rgba(249,115,22,0.6)] scale-105'
+                          : 'text-stone-400 group-hover:text-orange-300'
+                      }`}
                     />
-                    <span>{item.label}</span>
+                    <span className={isActive ? 'text-orange-100' : 'text-stone-300'}>{item.label}</span>
                   </div>
                   {item.badge && (
-                    <span className="px-1.5 py-0.5 text-[10px] font-mono bg-white/10 text-slate-200 rounded-sm">
+                    <span className="px-1.5 py-0.5 text-[9px] font-mono bg-orange-950/60 text-amber-300/90 border border-orange-500/30 rounded-xs font-semibold">
                       {item.badge}
                     </span>
                   )}
                   {item.alertCount && item.alertCount > 0 ? (
-                    <span className="px-1.5 py-0.5 text-[10px] font-mono bg-[#C85C54] text-white rounded-sm font-bold">
-                      {item.alertCount}
+                    <span className="px-1.5 py-0.5 text-[9px] font-mono bg-gradient-to-r from-red-600 to-rose-600 text-white rounded-xs font-bold animate-pulse shadow-[0_0_8px_rgba(220,38,38,0.5)]">
+                      {item.alertCount} ALERT
                     </span>
                   ) : null}
                 </button>
@@ -166,13 +191,13 @@ export const Sidebar: React.FC<SidebarProps> = ({
                     onOpenTutorial();
                     onCloseMobile();
                   }}
-                  className="w-full flex items-center justify-between px-3 py-2 text-xs font-medium rounded-sm text-[#EAE3D2] bg-white/5 hover:bg-white/10 border border-white/10 transition-colors"
+                  className="w-full flex items-center justify-between px-3 py-2 text-xs font-medium rounded-sm text-amber-200 bg-gradient-to-r from-orange-950/40 to-red-950/30 hover:from-orange-900/50 hover:to-red-900/40 border border-orange-500/30 transition-all shadow-xs group"
                 >
                   <div className="flex items-center gap-2.5">
-                    <BookOpen className="w-4 h-4 text-[#66856A]" />
+                    <BookOpen className="w-4 h-4 text-orange-400 group-hover:scale-110 transition-transform" />
                     <span>Panduan Penggunaan</span>
                   </div>
-                  <span className="px-1.5 py-0.5 text-[9px] font-mono bg-[#66856A] text-white rounded-xs uppercase">
+                  <span className="px-1.5 py-0.5 text-[9px] font-mono bg-gradient-to-r from-orange-600 to-red-600 text-white rounded-xs uppercase font-bold tracking-wider shadow-xs">
                     Buka
                   </span>
                 </button>
@@ -181,35 +206,38 @@ export const Sidebar: React.FC<SidebarProps> = ({
           </nav>
         </div>
 
-        {/* Bottom Sidebar: System Connection & User Profile */}
-        <div className="p-3 border-t border-white/10 bg-[#12222E] space-y-3">
+        {/* MIDDLE AREA: DYNAMIC SEAMLESS KARHUTLA TREE SILHOUETTE (Fills empty space seamlessly, no box) */}
+        <KarhutlaTreeWidget isFireAlert={isFireAlert} gasPpm={gasPpm} />
+
+        {/* Bottom Sidebar: System Connection & User Profile (Ember Hearth) */}
+        <div className="p-3 border-t border-orange-500/15 bg-gradient-to-b from-[#170C08] to-[#0A0402] space-y-2.5 shrink-0 z-10">
           {/* Connection Status Box - Jalur Telemetri Real-Time */}
-          <div className="p-2.5 bg-[#172B3A] border border-white/10 rounded-sm space-y-2">
+          <div className="p-2.5 bg-[#1F0E07]/90 border border-orange-500/25 rounded-sm space-y-2 shadow-inner">
             <div className="flex items-center justify-between">
-              <span className="text-[10px] font-mono uppercase tracking-wider text-slate-300 flex items-center gap-1.5">
-                <Radio className={`w-3 h-3 ${isTelemetryLive ? 'text-emerald-400 animate-pulse' : 'text-slate-400'}`} />
+              <span className="text-[10px] font-mono uppercase tracking-wider text-amber-200/80 flex items-center gap-1.5">
+                <Radio className={`w-3 h-3 ${isTelemetryLive ? 'text-orange-400 animate-pulse' : 'text-stone-400'}`} />
                 Jalur Telemetri
               </span>
 
               {/* Dynamic status badge */}
               {!isBackendConnected ? (
-                <span className="inline-flex items-center gap-1 text-[9px] font-mono text-rose-400 font-semibold px-1.5 py-0.5 rounded-xs bg-rose-950/60 border border-rose-500/30">
-                  <span className="w-1.5 h-1.5 rounded-full bg-rose-500" />
+                <span className="inline-flex items-center gap-1 text-[9px] font-mono text-red-300 font-semibold px-1.5 py-0.5 rounded-xs bg-red-950/80 border border-red-500/40">
+                  <span className="w-1.5 h-1.5 rounded-full bg-red-500" />
                   GATEWAY OFFLINE
                 </span>
               ) : isTelemetryLive ? (
-                <span className="inline-flex items-center gap-1 text-[9px] font-mono text-emerald-400 font-semibold px-1.5 py-0.5 rounded-xs bg-emerald-950/60 border border-emerald-500/30">
+                <span className="inline-flex items-center gap-1 text-[9px] font-mono text-emerald-300 font-semibold px-1.5 py-0.5 rounded-xs bg-emerald-950/80 border border-emerald-500/40 shadow-[0_0_8px_rgba(16,185,129,0.3)]">
                   <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-ping" />
                   <span className="w-1.5 h-1.5 rounded-full bg-emerald-400" />
                   LIVE ESP32
                 </span>
               ) : isMqttConnected ? (
-                <span className="inline-flex items-center gap-1 text-[9px] font-mono text-amber-300 font-semibold px-1.5 py-0.5 rounded-xs bg-amber-950/60 border border-amber-500/30">
+                <span className="inline-flex items-center gap-1 text-[9px] font-mono text-amber-300 font-semibold px-1.5 py-0.5 rounded-xs bg-amber-950/80 border border-amber-500/40">
                   <span className="w-1.5 h-1.5 rounded-full bg-amber-400 animate-pulse" />
                   STANDBY MQTT
                 </span>
               ) : (
-                <span className="inline-flex items-center gap-1 text-[9px] font-mono text-amber-400 font-semibold px-1.5 py-0.5 rounded-xs bg-amber-950/60 border border-amber-500/30">
+                <span className="inline-flex items-center gap-1 text-[9px] font-mono text-amber-400 font-semibold px-1.5 py-0.5 rounded-xs bg-amber-950/80 border border-amber-500/40">
                   <span className="w-1.5 h-1.5 rounded-full bg-amber-500" />
                   MQTT TERPUTUS
                 </span>
@@ -217,27 +245,27 @@ export const Sidebar: React.FC<SidebarProps> = ({
             </div>
 
             {/* Broker & Protocol Card */}
-            <div className="bg-black/30 p-2 rounded-xs border border-white/5 space-y-1">
-              <div className="flex items-center justify-between text-[9px] font-mono text-slate-400">
+            <div className="bg-[#120603]/80 p-2 rounded-xs border border-orange-500/15 space-y-1">
+              <div className="flex items-center justify-between text-[9px] font-mono text-stone-400">
                 <span>Broker MQTT (TLS):</span>
-                <span className="text-emerald-400 font-semibold">EMQX Cloud</span>
+                <span className="text-amber-400 font-semibold">EMQX Cloud</span>
               </div>
               <div
-                className="text-[10px] font-mono text-slate-200 truncate select-all cursor-text font-medium"
+                className="text-[10px] font-mono text-amber-100/90 truncate select-all cursor-text font-medium"
                 title={mqttBroker}
               >
                 {mqttBroker}
               </div>
-              <div className="text-[9px] font-mono text-slate-400 pt-0.5 flex items-center justify-between">
+              <div className="text-[9px] font-mono text-stone-400 pt-0.5 flex items-center justify-between">
                 <span>Topik:</span>
-                <span className="text-slate-300 font-mono truncate">small_warehouse/telemetry</span>
+                <span className="text-orange-200/80 font-mono truncate">small_warehouse/telemetry</span>
               </div>
             </div>
 
             {/* Active Sensor Counter */}
-            <div className="flex items-center justify-between text-[10px] font-mono text-slate-400 pt-1 border-t border-white/10">
+            <div className="flex items-center justify-between text-[10px] font-mono text-stone-300 pt-1 border-t border-orange-500/15">
               <span>Status Sensor:</span>
-              <span className={`font-semibold ${isTelemetryLive ? 'text-emerald-400' : 'text-slate-300'}`}>
+              <span className={`font-semibold ${isTelemetryLive ? 'text-amber-400' : 'text-stone-300'}`}>
                 {isTelemetryLive
                   ? `${onlineSensorsCount} / ${totalSensorsCount} Aktif`
                   : isBackendConnected
@@ -247,12 +275,12 @@ export const Sidebar: React.FC<SidebarProps> = ({
             </div>
 
             {/* Firmware Version & OTA Over-The-Air Status */}
-            <div className="flex items-center justify-between text-[10px] font-mono text-slate-400 pt-1 border-t border-white/10">
+            <div className="flex items-center justify-between text-[10px] font-mono text-stone-300 pt-1 border-t border-orange-500/15">
               <span className="flex items-center gap-1">
-                <Cpu className="w-3 h-3 text-slate-400" />
+                <Cpu className="w-3 h-3 text-orange-400" />
                 Firmware ESP32:
               </span>
-              <span className="text-emerald-400 font-semibold font-mono">
+              <span className="text-amber-300 font-bold font-mono">
                 {firmwareVersion || 'v1.0.7'}
               </span>
             </div>
@@ -261,37 +289,37 @@ export const Sidebar: React.FC<SidebarProps> = ({
             {otaStatus && otaStatus.status !== 'IDLE' && (
               <div className={`p-1.5 rounded-xs text-[9px] font-mono border flex items-center justify-between ${
                 otaStatus.status === 'SUCCESS'
-                  ? 'bg-emerald-950/70 border-emerald-500/50 text-emerald-300'
+                  ? 'bg-emerald-950/80 border-emerald-500/50 text-emerald-300'
                   : otaStatus.status === 'FAILED'
-                  ? 'bg-rose-950/70 border-rose-500/50 text-rose-300'
-                  : 'bg-amber-950/70 border-amber-500/50 text-amber-300 animate-pulse'
+                  ? 'bg-red-950/80 border-red-500/50 text-red-300'
+                  : 'bg-orange-950/80 border-orange-500/50 text-orange-300 animate-pulse'
               }`}>
                 <span className="flex items-center gap-1 font-bold">
                   <span className={`w-1.5 h-1.5 rounded-full ${
-                    otaStatus.status === 'SUCCESS' ? 'bg-emerald-400' : otaStatus.status === 'FAILED' ? 'bg-rose-400' : 'bg-amber-400 animate-ping'
+                    otaStatus.status === 'SUCCESS' ? 'bg-emerald-400' : otaStatus.status === 'FAILED' ? 'bg-red-400' : 'bg-orange-400 animate-ping'
                   }`} />
                   OTA: {otaStatus.status}
                 </span>
-                <span className="text-[8px] text-slate-400">
+                <span className="text-[8px] text-stone-400">
                   {otaStatus.status === 'DOWNLOADING' ? 'Mengunduh...' : otaStatus.status === 'BURNING' ? 'Flashing...' : 'Selesai'}
                 </span>
               </div>
             )}
           </div>
 
-          {/* User Profile */}
-          <div className="flex items-center justify-between px-1 pt-1">
+          {/* User Profile — Firebreak Operator Badge */}
+          <div className="flex items-center justify-between px-1 pt-0.5">
             <div className="flex items-center gap-2.5">
-              <div className="w-7 h-7 rounded-sm bg-slate-700 border border-white/15 flex items-center justify-center text-xs font-mono font-semibold text-white">
-                IP
+              <div className="w-7 h-7 rounded-sm bg-gradient-to-br from-orange-700 via-amber-800 to-red-950 border border-orange-500/30 flex items-center justify-center text-xs font-mono font-bold text-amber-100 shadow-xs">
+                TT
               </div>
               <div className="leading-tight">
-                <div className="text-xs font-medium text-white">JQ</div>
-                <div className="text-[10px] font-mono text-slate-400">IIoT Systems Lead</div>
+                <div className="text-xs font-semibold text-stone-200">TITUT</div>
+                <div className="text-[10px] font-mono text-orange-400/80">Smart Small Rack Warehouse</div>
               </div>
             </div>
-            <span className="text-[10px] font-mono px-1.5 py-0.5 bg-white/10 rounded-sm text-slate-300">
-              OP-01
+            <span className="text-[9px] font-mono font-bold px-1.5 py-0.5 bg-orange-950/80 border border-orange-500/30 rounded-xs text-amber-300">
+              
             </span>
           </div>
         </div>

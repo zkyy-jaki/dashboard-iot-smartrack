@@ -69,8 +69,8 @@ export const OverviewPage: React.FC<OverviewPageProps> = ({
         );
       case 'BLUE':
         return (
-          <span className="inline-flex items-center gap-1 px-1.5 py-0.5 rounded-full text-[9px] font-mono font-bold bg-[#172B3A]/10 text-[#172B3A] border border-[#172B3A]/30">
-            <span className="w-1.5 h-1.5 rounded-full bg-[#172B3A]" />
+          <span className="inline-flex items-center gap-1 px-1.5 py-0.5 rounded-full text-[9px] font-mono font-bold bg-blue-50 text-blue-700 border border-blue-300">
+            <span className="w-1.5 h-1.5 rounded-full bg-blue-600" />
             LED: BLUE
           </span>
         );
@@ -97,21 +97,23 @@ export const OverviewPage: React.FC<OverviewPageProps> = ({
       {/* A. COMPACT SUMMARY METRICS (4-Column Strip) */}
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
         {/* Metric 1: Total Inventory */}
-        <div className="bg-white border border-[#E3E7E5] p-4 rounded-sm">
+        <div className="bg-white border border-[#E3E7E5] p-4 rounded-sm shadow-xs hover:border-orange-500/30 transition-colors">
           <div className="flex items-center justify-between">
             <span className="text-xs font-mono uppercase tracking-wider text-[#77827D]">
               Total Stok Barang
             </span>
-            <Package className="w-4 h-4 text-[#172B3A]" />
+            <div className="w-8 h-8 rounded-sm bg-orange-50 border border-orange-200 flex items-center justify-center">
+              <Package className="w-4 h-4 text-orange-600" />
+            </div>
           </div>
           <div className="mt-2 flex items-baseline justify-between">
-            <div className="text-2xl font-bold font-mono text-[#263238] tabular-nums">
+            <div className="text-2xl font-bold font-mono text-[#1C100C] tabular-nums">
               {totalItems}{' '}
               <span className="text-sm font-normal text-[#77827D]">
                 / {totalCapacity} Kardus
               </span>
             </div>
-            <span className="text-xs font-mono font-semibold text-[#172B3A]">
+            <span className="text-xs font-mono font-semibold text-orange-700">
               {totalCapacity > 0
                 ? Math.round((totalItems / totalCapacity) * 100)
                 : 0}% Kapasitas
@@ -119,7 +121,7 @@ export const OverviewPage: React.FC<OverviewPageProps> = ({
           </div>
           <div className="mt-2.5 w-full h-1.5 bg-[#F5F6F4] rounded-none overflow-hidden border border-[#E3E7E5]">
             <div
-              className="h-full bg-[#172B3A] transition-all duration-300"
+              className="h-full bg-gradient-to-r from-orange-600 to-amber-600 transition-all duration-300"
               style={{
                 width: `${
                   totalCapacity > 0
@@ -132,21 +134,23 @@ export const OverviewPage: React.FC<OverviewPageProps> = ({
         </div>
 
         {/* Metric 2: Active Rack Rows */}
-        <div className="bg-white border border-[#E3E7E5] p-4 rounded-sm">
+        <div className="bg-white border border-[#E3E7E5] p-4 rounded-sm shadow-xs hover:border-orange-500/30 transition-colors">
           <div className="flex items-center justify-between">
             <span className="text-xs font-mono uppercase tracking-wider text-[#77827D]">
               Baris Rak Terisi
             </span>
-            <Layers className="w-4 h-4 text-[#172B3A]" />
+            <div className="w-8 h-8 rounded-sm bg-amber-50 border border-amber-200 flex items-center justify-center">
+              <Layers className="w-4 h-4 text-amber-600" />
+            </div>
           </div>
           <div className="mt-2 flex items-baseline justify-between">
-            <div className="text-2xl font-bold font-mono text-[#263238] tabular-nums">
+            <div className="text-2xl font-bold font-mono text-[#1C100C] tabular-nums">
               {occupiedFloors}{' '}
               <span className="text-sm font-normal text-[#77827D]">
                 / 3 Lantai Terisi
               </span>
             </div>
-            <span className="text-xs font-mono text-[#77827D]">RACK-001</span>
+            <span className="text-xs font-mono text-orange-700 font-semibold bg-orange-50 px-1.5 py-0.5 rounded border border-orange-200">RACK-001</span>
           </div>
           <div className="mt-2.5 flex items-center gap-2 text-[11px] font-mono text-[#77827D] overflow-x-auto">
             {enrichedRows.map((r) => (
@@ -154,7 +158,7 @@ export const OverviewPage: React.FC<OverviewPageProps> = ({
                 key={r.rowId}
                 className={`px-1.5 py-0.5 border rounded-sm whitespace-nowrap ${
                   r.estimatedStock > 0
-                    ? 'bg-[#172B3A]/5 text-[#172B3A] border-[#172B3A]/20 font-semibold'
+                    ? 'bg-orange-500/10 text-orange-900 border-orange-500/30 font-semibold'
                     : 'bg-gray-50 text-[#77827D] border-[#E3E7E5]'
                 }`}
               >
@@ -185,24 +189,26 @@ export const OverviewPage: React.FC<OverviewPageProps> = ({
         </div>
 
         {/* Metric 4: Ambient Temperature & Humidity (DHT11) */}
-        <div className="bg-white border border-[#E3E7E5] p-4 rounded-sm">
+        <div className="bg-white border border-[#E3E7E5] p-4 rounded-sm shadow-xs hover:border-orange-500/30 transition-colors">
           <div className="flex items-center justify-between">
             <span className="text-xs font-mono uppercase tracking-wider text-[#77827D]">
               Kondisi Lingkungan (DHT11)
             </span>
-            <Thermometer className="w-4 h-4 text-[#172B3A]" />
+            <div className="w-8 h-8 rounded-sm bg-rose-50 border border-rose-200 flex items-center justify-center">
+              <Thermometer className="w-4 h-4 text-rose-600" />
+            </div>
           </div>
           <div className="mt-2 flex items-baseline justify-between">
-            <div className="text-2xl font-bold font-mono text-[#263238] tabular-nums">
+            <div className="text-2xl font-bold font-mono text-[#1C100C] tabular-nums">
               {temperatureC.toFixed(1)} °C
             </div>
-            <div className="text-lg font-bold font-mono text-[#172B3A] tabular-nums">
+            <div className="text-lg font-bold font-mono text-orange-700 tabular-nums">
               {humidityPct} %RH
             </div>
           </div>
           <div className="mt-2.5 text-[11px] font-mono text-[#77827D] flex items-center justify-between">
             <span>Sensor: ENV-01 (DHT11)</span>
-            <span className="text-[#66856A] font-semibold">Udara Sekitar</span>
+            <span className="text-emerald-700 font-semibold bg-emerald-50 px-1.5 py-0.2 rounded border border-emerald-200">Udara Sekitar</span>
           </div>
         </div>
       </div>
@@ -225,16 +231,16 @@ export const OverviewPage: React.FC<OverviewPageProps> = ({
                 {onOpenTutorial && (
                   <button
                     onClick={onOpenTutorial}
-                    className="px-3 py-1.5 text-xs font-mono font-semibold bg-[#F5F6F4] text-[#172B3A] border border-[#172B3A]/30 hover:bg-[#172B3A] hover:text-white rounded-sm flex items-center gap-1.5 transition-colors shadow-xs"
+                    className="px-3 py-1.5 text-xs font-mono font-semibold bg-[#F5F6F4] text-[#1C100C] border border-orange-900/20 hover:bg-[#1C100C] hover:text-white rounded-sm flex items-center gap-1.5 transition-colors shadow-xs"
                     title="Buka panduan interaktif penggunaan rak"
                   >
-                    <Play className="w-3.5 h-3.5 text-[#66856A]" />
+                    <Play className="w-3.5 h-3.5 text-amber-600" />
                     <span>Petunjuk Penggunaan Rak</span>
                   </button>
                 )}
                 <button
                   onClick={() => onNavigate('rack')}
-                  className="px-3 py-1.5 text-xs font-mono font-semibold bg-[#172B3A] text-white rounded-sm hover:bg-[#223d52] flex items-center gap-1.5"
+                  className="px-3 py-1.5 text-xs font-mono font-semibold bg-[#1C100C] hover:bg-[#2E180E] text-white rounded-sm flex items-center gap-1.5 shadow-sm border border-orange-950"
                 >
                   <span>Buka Tampilan 3D / CAD Rak</span>
                   <ChevronRight className="w-3.5 h-3.5" />
@@ -247,22 +253,22 @@ export const OverviewPage: React.FC<OverviewPageProps> = ({
               {enrichedRows.map((row) => (
                 <div
                   key={row.rowId}
-                  className="border border-[#E3E7E5] bg-[#F5F6F4]/60 rounded-sm p-4 hover:border-[#172B3A]/40 transition-colors"
+                  className="border border-[#E3E7E5] bg-[#F5F6F4]/60 rounded-sm p-4 hover:border-orange-500/40 transition-colors"
                 >
                   <div className="flex flex-wrap items-center justify-between gap-2 pb-3 border-b border-[#E3E7E5]">
                     <div className="flex items-center gap-3">
-                      <span className="px-2 py-1 bg-[#172B3A] text-white text-xs font-mono font-bold rounded-sm">
+                      <span className="px-2 py-1 bg-[#1C100C] text-orange-200 text-xs font-mono font-bold rounded-sm border border-orange-900/40">
                         {row.rowId}
                       </span>
                       <div>
-                        <div className="text-xs font-bold text-[#263238] flex items-center gap-2">
+                        <div className="text-xs font-bold text-[#1C100C] flex items-center gap-2">
                           <span>{row.product.name}</span>
                           <span className="font-mono text-[11px] text-[#77827D] bg-white px-1.5 py-0.5 border border-[#E3E7E5] rounded-sm">
                             {row.sku}
                           </span>
                         </div>
                         <div className="text-[11px] font-mono text-[#77827D] mt-0.5">
-                          Panjang Kardus: <strong className="text-[#263238]">{row.product.lengthCm} cm</strong> • Lebar Rak: {row.rowSpanCm} cm
+                          Panjang Kardus: <strong className="text-[#1C100C]">{row.product.lengthCm} cm</strong> • Lebar Rak: {row.rowSpanCm} cm
                         </div>
                       </div>
                     </div>
@@ -271,14 +277,14 @@ export const OverviewPage: React.FC<OverviewPageProps> = ({
                       {renderLedBadge(row.led_color)}
                       <div className="text-right font-mono">
                         <div className="text-[10px] uppercase text-[#77827D]">Total Stok Baris</div>
-                        <div className="text-sm font-bold text-[#263238] tabular-nums">
+                        <div className="text-sm font-bold text-[#1C100C] tabular-nums">
                           {row.estimatedStock} / {row.capacity} Kardus ({row.occupancyPct}%)
                         </div>
                       </div>
                       <StatusBadge status={row.status} />
                       <button
                         onClick={() => onInspectRow(row.rowId)}
-                        className="px-2.5 py-1 text-xs font-mono bg-white border border-[#E3E7E5] hover:border-[#172B3A] text-[#172B3A] rounded-sm"
+                        className="px-2.5 py-1 text-xs font-mono bg-white border border-[#E3E7E5] hover:border-orange-500 hover:text-orange-600 text-[#1C100C] rounded-sm transition-colors"
                       >
                         Periksa
                       </button>
@@ -291,9 +297,9 @@ export const OverviewPage: React.FC<OverviewPageProps> = ({
                     <div className="sm:w-28 shrink-0 bg-white border border-[#E3E7E5] px-2.5 py-1.5 rounded-sm font-mono flex sm:block justify-between items-center">
                       <div className="text-[10px] text-[#77827D] flex items-center gap-1.5 sm:justify-between">
                         <span>{row.leftSensorId} (Kiri)</span>
-                        <span className="w-1.5 h-1.5 rounded-full bg-[#66856A]" />
+                        <span className="w-1.5 h-1.5 rounded-full bg-emerald-500" />
                       </div>
-                      <div className="text-xs font-bold text-[#172B3A] tabular-nums sm:mt-0.5">
+                      <div className="text-xs font-bold text-[#1C100C] tabular-nums sm:mt-0.5">
                         {row.leftDistanceCm} cm
                       </div>
                     </div>
@@ -301,7 +307,7 @@ export const OverviewPage: React.FC<OverviewPageProps> = ({
                     {/* Visual Shelf Representation */}
                     <div className="flex-1 h-11 bg-white border border-[#E3E7E5] rounded-sm relative flex items-center overflow-hidden min-h-[44px]">
                       {row.estimatedStock === 0 ? (
-                        <div className="w-full h-full flex items-center justify-center text-[10px] font-mono text-[#77827D] italic bg-[#172B3A]/[0.02]">
+                        <div className="w-full h-full flex items-center justify-center text-[10px] font-mono text-[#77827D] italic bg-orange-950/[0.02]">
                           — BARIS KOSONG (0 KARDUS) —
                         </div>
                       ) : (
@@ -316,7 +322,7 @@ export const OverviewPage: React.FC<OverviewPageProps> = ({
                               {!isAlignedLeft && (
                                 <div
                                   style={{ width: `${emptyPct}%` }}
-                                  className="h-full flex items-center justify-center border-r border-dashed border-[#172B3A]/30 bg-[#172B3A]/[0.03] text-[10px] font-mono text-[#77827D] overflow-hidden transition-all duration-500 ease-out"
+                                  className="h-full flex items-center justify-center border-r border-dashed border-orange-900/30 bg-orange-900/[0.03] text-[10px] font-mono text-[#77827D] overflow-hidden transition-all duration-500 ease-out"
                                 >
                                   {row.leftDistanceCm > 0 && `◄ ${row.leftDistanceCm} cm`}
                                 </div>
@@ -342,7 +348,7 @@ export const OverviewPage: React.FC<OverviewPageProps> = ({
                               {isAlignedLeft && (
                                 <div
                                   style={{ width: `${emptyPct}%` }}
-                                  className="h-full flex items-center justify-center border-l border-dashed border-[#172B3A]/30 bg-[#172B3A]/[0.03] text-[10px] font-mono text-[#77827D] overflow-hidden transition-all duration-500 ease-out"
+                                  className="h-full flex items-center justify-center border-l border-dashed border-orange-900/30 bg-orange-900/[0.03] text-[10px] font-mono text-[#77827D] overflow-hidden transition-all duration-500 ease-out"
                                 >
                                   {row.rightDistanceCm > 0 && `${row.rightDistanceCm} cm ►`}
                                 </div>
@@ -356,10 +362,10 @@ export const OverviewPage: React.FC<OverviewPageProps> = ({
                     {/* Right Sensor Tag */}
                     <div className="sm:w-28 shrink-0 bg-white border border-[#E3E7E5] px-2.5 py-1.5 rounded-sm font-mono flex sm:block justify-between items-center sm:text-right">
                       <div className="text-[10px] text-[#77827D] flex items-center gap-1.5 sm:justify-between">
-                        <span className="w-1.5 h-1.5 rounded-full bg-[#66856A]" />
+                        <span className="w-1.5 h-1.5 rounded-full bg-emerald-500" />
                         <span>{row.rightSensorId} (Kanan)</span>
                       </div>
-                      <div className="text-xs font-bold text-[#172B3A] tabular-nums sm:mt-0.5">
+                      <div className="text-xs font-bold text-[#1C100C] tabular-nums sm:mt-0.5">
                         {row.rightDistanceCm} cm
                       </div>
                     </div>
@@ -392,7 +398,7 @@ export const OverviewPage: React.FC<OverviewPageProps> = ({
               </div>
               <button
                 onClick={() => onNavigate('sensors')}
-                className="text-xs font-mono text-[#172B3A] hover:underline"
+                className="text-xs font-mono font-semibold text-orange-600 hover:text-orange-700 hover:underline"
               >
                 Konfigurasi →
               </button>
@@ -403,8 +409,8 @@ export const OverviewPage: React.FC<OverviewPageProps> = ({
               <div className="p-3.5 bg-[#F5F6F4] border border-[#E3E7E5] rounded-sm">
                 <div className="flex items-center justify-between">
                   <div className="flex items-center gap-2">
-                    <Flame className="w-4 h-4 text-[#172B3A]" />
-                    <span className="text-xs font-bold font-mono text-[#263238]">
+                    <Flame className="w-4 h-4 text-orange-600" />
+                    <span className="text-xs font-bold font-mono text-[#1C100C]">
                       Monitoring Kebocoran Gas
                     </span>
                   </div>
@@ -413,7 +419,7 @@ export const OverviewPage: React.FC<OverviewPageProps> = ({
 
                 <div className="mt-3 flex items-baseline justify-between">
                   <div>
-                    <div className="text-2xl font-bold font-mono text-[#263238] tabular-nums">
+                    <div className="text-2xl font-bold font-mono text-[#1C100C] tabular-nums">
                       {envData.gasPpm} <span className="text-xs font-normal text-[#77827D]">ppm</span>
                     </div>
                     <div className="text-[11px] font-mono text-[#77827D]">
@@ -434,7 +440,7 @@ export const OverviewPage: React.FC<OverviewPageProps> = ({
                         ? 'bg-[#C85C54]'
                         : gasStatus === 'Warning'
                         ? 'bg-[#D6A34A]'
-                        : 'bg-[#66856A]'
+                        : 'bg-emerald-600'
                     }`}
                     style={{ width: `${Math.min(100, (envData.gasPpm / 800) * 100)}%` }}
                   />
@@ -444,7 +450,7 @@ export const OverviewPage: React.FC<OverviewPageProps> = ({
               {/* Temperature & Humidity Monitoring Box */}
               <div className="p-3.5 bg-[#F5F6F4] border border-[#E3E7E5] rounded-sm">
                 <div className="flex items-center justify-between mb-2">
-                  <span className="text-xs font-bold font-mono text-[#263238]">
+                  <span className="text-xs font-bold font-mono text-[#1C100C]">
                     Monitoring Suhu &amp; Kelembaban
                   </span>
                   <span className="text-[10px] font-mono px-1.5 py-0.5 bg-white border border-[#E3E7E5] text-[#77827D]">
@@ -454,19 +460,19 @@ export const OverviewPage: React.FC<OverviewPageProps> = ({
                 <div className="grid grid-cols-2 gap-3 pt-1">
                   <div className="bg-white p-2.5 border border-[#E3E7E5] rounded-sm">
                     <div className="text-[10px] font-mono uppercase text-[#77827D] flex items-center gap-1">
-                      <Thermometer className="w-3 h-3 text-[#172B3A]" />
+                      <Thermometer className="w-3 h-3 text-orange-600" />
                       Suhu Sekitar
                     </div>
-                    <div className="text-lg font-bold font-mono text-[#263238] mt-1 tabular-nums">
+                    <div className="text-lg font-bold font-mono text-[#1C100C] mt-1 tabular-nums">
                       {envData.temperatureC.toFixed(1)} °C
                     </div>
                   </div>
                   <div className="bg-white p-2.5 border border-[#E3E7E5] rounded-sm">
                     <div className="text-[10px] font-mono uppercase text-[#77827D] flex items-center gap-1">
-                      <Droplets className="w-3 h-3 text-[#172B3A]" />
+                      <Droplets className="w-3 h-3 text-orange-600" />
                       Kelembaban Udara
                     </div>
-                    <div className="text-lg font-bold font-mono text-[#263238] mt-1 tabular-nums">
+                    <div className="text-lg font-bold font-mono text-[#1C100C] mt-1 tabular-nums">
                       {envData.humidityRh} %RH
                     </div>
                   </div>
@@ -498,7 +504,7 @@ export const OverviewPage: React.FC<OverviewPageProps> = ({
                         type="monotone"
                         dataKey="temp"
                         name="Suhu (°C)"
-                        stroke="#172B3A"
+                        stroke="#EA580C"
                         strokeWidth={2}
                         dot={{ r: 2 }}
                       />
@@ -519,7 +525,7 @@ export const OverviewPage: React.FC<OverviewPageProps> = ({
       <div className="bg-white border border-[#E3E7E5] rounded-sm">
         <div className="px-5 py-4 border-b border-[#E3E7E5] flex items-center justify-between">
           <div>
-            <h2 className="text-sm font-bold text-[#263238] uppercase tracking-wider font-mono">
+            <h2 className="text-sm font-bold text-[#1C100C] uppercase tracking-wider font-mono">
               Aktivitas Inventaris &amp; Log Sensor Terbaru
             </h2>
             <p className="text-xs text-[#77827D] mt-0.5">
@@ -528,7 +534,7 @@ export const OverviewPage: React.FC<OverviewPageProps> = ({
           </div>
           <button
             onClick={() => onNavigate('history')}
-            className="text-xs font-mono font-semibold text-[#172B3A] hover:underline flex items-center gap-1"
+            className="text-xs font-mono font-semibold text-orange-600 hover:text-orange-700 hover:underline flex items-center gap-1"
           >
             <span>Lihat Buku Besar Lengkap ({inventoryHistory.length})</span>
             <ChevronRight className="w-3.5 h-3.5" />
@@ -540,7 +546,7 @@ export const OverviewPage: React.FC<OverviewPageProps> = ({
           {inventoryHistory.slice(0, 5).map((tx) => (
             <div key={tx.id} className="p-4 space-y-2 text-xs font-mono">
               <div className="flex items-center justify-between">
-                <span className="font-bold text-[#172B3A]">{tx.rackId} • {tx.rowId}</span>
+                <span className="font-bold text-[#1C100C]">{tx.rackId} • {tx.rowId}</span>
                 <StatusBadge status={tx.eventType} />
               </div>
               <div className="flex items-center justify-between text-[#77827D]">
