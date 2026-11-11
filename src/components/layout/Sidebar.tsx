@@ -107,7 +107,7 @@ export const Sidebar: React.FC<SidebarProps> = ({
                   <span className="w-1.5 h-1.5 rounded-full bg-orange-500 animate-ping inline-block" />
                 </div>
                 <div className="text-[10px] font-mono text-amber-200/60 mt-1 tracking-tight">
-                  IIoT WMS v2.4 • RACK-001
+                  
                 </div>
               </div>
             </div>
