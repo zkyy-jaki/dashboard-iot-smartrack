@@ -328,8 +328,10 @@ export const RackMonitoringPage: React.FC<RackMonitoringPageProps> = ({
                 {/* Gas Monitoring */}
                 <div className="p-2 bg-white border border-[#E3E7E5] rounded-sm text-[9px] sm:text-[10px] font-mono shadow-sm relative">
                   <div className="w-2 sm:w-3 h-[2px] bg-[#2E180E] absolute -left-2 sm:-left-3 top-4" />
-                  <div className="font-bold text-[#1C100C] truncate">Sensor Gas</div>
-                  <div className="text-xs font-bold text-orange-700 mt-0.5">{envData.gasPpm} ppm</div>
+                  <div className="font-bold text-[#1C100C] truncate">Sensor Gas (MQ-2)</div>
+                  <div className="text-xs font-bold text-orange-700 mt-0.5">
+                    {telemetryPayload?.environment?.gas_raw ?? envData.gasPpm} ADC
+                  </div>
                   <div className="mt-1">
                     <StatusBadge status={gasStatus} />
                   </div>

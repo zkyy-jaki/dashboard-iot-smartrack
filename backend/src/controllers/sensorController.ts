@@ -17,7 +17,7 @@ export async function listSensors(req: Request, res: Response): Promise<void> {
     const sensors = await prisma.sensor.findMany({ orderBy: { sensorId: 'asc' } });
 
     const dtos: SensorStatus[] = sensors.map((s) => ({
-      id: s.id,
+      id: s.sensorId,
       sensorId: s.sensorId,
       name: s.name,
       type: s.type,

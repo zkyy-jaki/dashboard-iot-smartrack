@@ -174,7 +174,7 @@ export interface EnvironmentData {
   temperatureC: number;
   humidityRh: number;
   gasPpm: number;
-  gasStatus: 'Normal' | 'Warning' | 'Danger' | 'SENSOR FAULT';
+  gasStatus: 'Normal' | 'Warning' | 'Danger';
   soundSpeedMs: number;
   gasWarningThreshold: number;
   gasDangerThreshold: number;

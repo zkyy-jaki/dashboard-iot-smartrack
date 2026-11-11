@@ -180,9 +180,9 @@ export default function App() {
         heightCm: 15,
         description: 'Auto fallback product'
       };
-      const leftSensor = sensors.find((s) => s.id === row.leftSensorId);
-      const rightSensor = sensors.find((s) => s.id === row.rightSensorId);
-      const sensorsOnline = Boolean(leftSensor?.online && rightSensor?.online);
+      const leftSensor = sensors.find((s) => s.id === row.leftSensorId || (s as any).sensorId === row.leftSensorId);
+      const rightSensor = sensors.find((s) => s.id === row.rightSensorId || (s as any).sensorId === row.rightSensorId);
+      const sensorsOnline = Boolean((leftSensor?.online ?? true) && (rightSensor?.online ?? true));
 
       // Ambil nilai yang sudah dihitung langsung oleh ESP32 / Backend
       const floor = telemetryPayload?.floors?.find((f) => f.floor === row.rowNumber) || telemetryPayload?.floors?.[idx];
@@ -229,9 +229,20 @@ export default function App() {
 
   // Compute Gas Condition based on thresholds
   const gasStatus = useMemo(() => {
-    const gasSensor = sensors.find((s) => s.id === 'GAS-01');
-    if (!gasSensor?.online) return 'SENSOR FAULT';
-    if (telemetryPayload?.environment?.safety_state === 'ALARM_TRIGGERED') return 'Danger';
+    // 1. Jika ada live telemetri dari ESP32, prioritaskan status nyata dari hardware
+    if (telemetryPayload?.environment) {
+      if (telemetryPayload.environment.safety_state === 'ALARM_TRIGGERED' || telemetryPayload.environment.hazard_detected) {
+        return 'Danger';
+      }
+      const rawGas = telemetryPayload.environment.gas_raw;
+      if (rawGas >= envData.gasDangerThreshold) return 'Danger';
+      if (rawGas >= envData.gasWarningThreshold) return 'Warning';
+      return 'Normal';
+    }
+
+    // 2. Evaluasi berdasarkan pembacaan lokal / fallback
+    const gasSensor = sensors.find((s) => s.id === 'GAS-01' || (s as any).sensorId === 'GAS-01');
+    if (gasSensor && !gasSensor.online) return 'SENSOR FAULT';
     if (envData.gasPpm >= envData.gasDangerThreshold) return 'Danger';
     if (envData.gasPpm >= envData.gasWarningThreshold) return 'Warning';
     return 'Normal';
@@ -317,9 +328,9 @@ export default function App() {
           if (row.rowId !== rowId) return row;
 
           const product = products.find((p) => p.sku === row.sku) || { lengthCm: 20 };
-          const leftSensor = sensors.find((s) => s.id === row.leftSensorId);
-          const rightSensor = sensors.find((s) => s.id === row.rightSensorId);
-          const sensorsOnline = Boolean(leftSensor?.online && rightSensor?.online);
+          const leftSensor = sensors.find((s) => s.id === row.leftSensorId || (s as any).sensorId === row.leftSensorId);
+          const rightSensor = sensors.find((s) => s.id === row.rightSensorId || (s as any).sensorId === row.rightSensorId);
+          const sensorsOnline = Boolean((leftSensor?.online ?? true) && (rightSensor?.online ?? true));
 
           const prevCalc = calculateRowStock(
             row.rowSpanCm,

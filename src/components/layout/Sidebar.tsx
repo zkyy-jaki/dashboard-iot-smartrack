@@ -245,7 +245,7 @@ export const Sidebar: React.FC<SidebarProps> = ({
             </div>
 
             {/* Broker & Protocol Card */}
-            <div className="bg-[#120603]/80 p-2 rounded-xs border border-orange-500/15 space-y-1">
+            {/* <div className="bg-[#120603]/80 p-2 rounded-xs border border-orange-500/15 space-y-1">
               <div className="flex items-center justify-between text-[9px] font-mono text-stone-400">
                 <span>Broker MQTT (TLS):</span>
                 <span className="text-amber-400 font-semibold">EMQX Cloud</span>
@@ -260,7 +260,7 @@ export const Sidebar: React.FC<SidebarProps> = ({
                 <span>Topik:</span>
                 <span className="text-orange-200/80 font-mono truncate">small_warehouse/telemetry</span>
               </div>
-            </div>
+            </div> */}
 
             {/* Active Sensor Counter */}
             <div className="flex items-center justify-between text-[10px] font-mono text-stone-300 pt-1 border-t border-orange-500/15">

@@ -120,7 +120,12 @@ export const IoTApiService = {
       const res = await fetch(`${this.baseUrl}/sensors`);
       if (!res.ok) throw new Error(`HTTP error ${res.status}`);
       const json = await res.json();
-      return json.data || json;
+      const rawList = json.data || json;
+      if (!Array.isArray(rawList)) return null;
+      return rawList.map((s: any) => ({
+        ...s,
+        id: s.sensorId || s.id,
+      }));
     } catch (err) {
       console.warn('[IoTApiService] Gagal fetch sensors dari API.', err);
       return null;
